@@ -1,0 +1,1030 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TLE 6 · Palaisdaan: Fish Farming &amp; Fish Anatomy</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@400;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --deep:#0F3D3E;
+    --water:#1F7A8C;
+    --water-light:#4FA3B5;
+    --algae:#6E9C4B;
+    --sun:#F2A65A;
+    --coral:#E76F51;
+    --foam:#F3F7F1;
+    --card:#FFFFFF;
+    --ink:#123332;
+    --ink-soft:#3B5957;
+    --line:#D8E6DE;
+    --good:#3C8A5B;
+    --bad:#C4453B;
+    --radius:18px;
+    --wave-fill:0%;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    font-family:'Nunito',sans-serif;
+    background:var(--foam);
+    color:var(--ink);
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3,h4{font-family:'Fredoka',sans-serif; color:var(--deep); margin:0 0 .4em;}
+  .eyebrow{
+    font-family:'JetBrains Mono',monospace;
+    font-size:.72rem;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    color:var(--water);
+    font-weight:600;
+  }
+  p{margin:0 0 1em;}
+  ::selection{background:var(--sun); color:var(--deep);}
+
+  /* ---------- HEADER ---------- */
+  header#siteHeader{
+    position:fixed; top:0; left:0; right:0; z-index:100;
+    background:linear-gradient(180deg, var(--deep) 0%, #123f40 100%);
+    color:#fff;
+    box-shadow:0 6px 18px rgba(8,30,30,.18);
+    transform:translateY(0);
+    transition:transform .35s ease;
+  }
+  header#siteHeader.hide-header{ transform:translateY(-100%); }
+  .header-top{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:12px 20px 6px;
+    max-width:1100px; margin:0 auto;
+  }
+  .brand{display:flex; align-items:center; gap:10px;}
+  .brand-fish{width:30px; height:30px; flex:none;}
+  .brand-text .eyebrow{color:#BFE3D6;}
+  .brand-text h1{font-size:1.05rem; color:#fff; margin:0;}
+  .module-meta{
+    font-family:'JetBrains Mono',monospace;
+    font-size:.68rem; color:#BFE3D6; text-align:right; line-height:1.4;
+  }
+  nav.tabbar{
+    max-width:1100px; margin:0 auto;
+    display:flex; gap:4px;
+    padding:6px 20px 10px;
+    position:relative;
+  }
+  .tab{
+    position:relative;
+    flex:1;
+    border:none; background:transparent; color:#BFE3D6;
+    font-family:'Nunito',sans-serif; font-weight:700; font-size:.86rem;
+    padding:10px 8px 12px;
+    cursor:pointer;
+    border-radius:10px 10px 0 0;
+    transition:color .2s ease, background .2s ease;
+    text-align:center;
+  }
+  .tab .tab-day{
+    display:block; font-family:'JetBrains Mono',monospace;
+    font-size:.65rem; letter-spacing:.1em; opacity:.8; margin-bottom:2px;
+  }
+  .tab:hover{color:#fff;}
+  .tab.active{color:#fff; background:rgba(255,255,255,.08);}
+  .tab-indicator{
+    position:absolute; bottom:0; height:3px; border-radius:3px;
+    background:var(--sun);
+    transition:left .3s ease, width .3s ease;
+  }
+  .tab-fish{
+    position:absolute; bottom:2px; transform:translateX(-50%) scaleX(-1);
+    transition:left .3s ease; font-size:14px; line-height:1;
+  }
+
+  /* water-level progress rail */
+  .rail{
+    position:fixed; right:10px; top:50%; transform:translateY(-50%);
+    width:14px; height:160px; border-radius:10px;
+    background:#E3EEE7; border:2px solid var(--water-light);
+    overflow:hidden; z-index:90; display:none;
+  }
+  .rail-fill{
+    position:absolute; bottom:0; left:0; right:0;
+    height:var(--wave-fill);
+    background:linear-gradient(180deg, var(--water-light), var(--water));
+    transition:height .12s linear;
+  }
+  @media(min-width:720px){ .rail{display:block;} }
+
+  main{ padding-top:112px; }
+  .day{ display:none; }
+  .day.active{ display:block; }
+
+  .wrap{ max-width:760px; margin:0 auto; padding:0 20px 40px; }
+
+  /* ---------- HERO ---------- */
+  .hero{
+    padding:46px 20px 60px;
+    color:#fff;
+    position:relative;
+    overflow:hidden;
+  }
+  .hero-inner{max-width:760px; margin:0 auto; position:relative; z-index:2;}
+  .hero .eyebrow{color:rgba(255,255,255,.85);}
+  .hero h2{color:#fff; font-size:1.9rem; max-width:520px;}
+  .hero p.lead{color:rgba(255,255,255,.9); max-width:520px; font-size:1.02rem;}
+  .hero-wave{
+    position:absolute; bottom:-2px; left:0; width:100%; height:60px;
+    display:block;
+  }
+
+  /* ---------- SECTION / CARD ---------- */
+  section.block{ margin:34px 0; }
+  .card{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:22px 24px;
+    box-shadow:0 2px 10px rgba(18,51,50,.05);
+  }
+  .obj-list{ margin:0; padding-left:1.1em; }
+  .obj-list li{ margin-bottom:6px; }
+
+  .divider{
+    display:flex; align-items:center; gap:10px; margin:38px 0 18px;
+    color:var(--water); font-family:'JetBrains Mono',monospace;
+    font-size:.72rem; letter-spacing:.12em; text-transform:uppercase;
+  }
+  .divider::after{ content:""; flex:1; height:1px; background:var(--line); }
+
+  .figure{
+    background:#EFF6F1; border:1px dashed var(--water-light);
+    border-radius:var(--radius); padding:14px; text-align:center;
+  }
+  .figure svg{ max-width:100%; height:auto; }
+  .figure figcaption{
+    font-family:'JetBrains Mono',monospace; font-size:.72rem; color:var(--ink-soft);
+    margin-top:8px;
+  }
+
+  .pill-note{
+    display:inline-block; background:#FDECD8; color:#8A4B10;
+    border-radius:20px; padding:4px 12px; font-size:.78rem; font-weight:700;
+    margin:2px 0 14px;
+  }
+
+  /* checklist activity */
+  .check-item{
+    display:flex; gap:10px; align-items:flex-start;
+    padding:10px 12px; border-radius:12px; border:1px solid var(--line);
+    margin-bottom:8px; background:#fff; cursor:pointer;
+  }
+  .check-item input{ margin-top:3px; }
+  .check-item.correct{ border-color:var(--good); background:#EAF6EE; }
+  .check-item.incorrect{ border-color:var(--bad); background:#FBEBEA; }
+  .check-fb{ font-size:.82rem; margin-top:4px; display:none; font-weight:700; }
+  .check-item.correct .check-fb, .check-item.incorrect .check-fb{ display:block; }
+  .check-item.correct .check-fb{ color:var(--good); }
+  .check-item.incorrect .check-fb{ color:var(--bad); }
+
+  /* match activity */
+  .match-grid{ display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+  .match-col{ display:flex; flex-direction:column; gap:8px; }
+  .match-item{
+    border:1px solid var(--line); background:#fff; border-radius:12px;
+    padding:10px 12px; cursor:pointer; font-size:.9rem; font-weight:600;
+    transition:all .15s ease;
+  }
+  .match-item.selected{ border-color:var(--water); background:#EAF4F5; }
+  .match-item.matched{ border-color:var(--good); background:#EAF6EE; cursor:default; color:var(--good); }
+  .match-item.shake{ animation:shake .3s; border-color:var(--bad); }
+  @keyframes shake{ 0%,100%{transform:translateX(0);} 25%{transform:translateX(-4px);} 75%{transform:translateX(4px);} }
+
+  /* diagram label activity */
+  .label-wrap{ display:flex; flex-wrap:wrap; gap:8px; margin-top:14px; }
+  .label-btn{
+    border:1px solid var(--water); color:var(--water); background:#fff;
+    border-radius:20px; padding:7px 14px; font-weight:700; font-size:.82rem;
+    cursor:pointer; transition:all .15s ease;
+  }
+  .label-btn.active-select{ background:var(--water); color:#fff; }
+  .label-btn.done{ background:var(--good); border-color:var(--good); color:#fff; cursor:default; opacity:.75; }
+  .dot{ cursor:pointer; }
+  .dot.matched{ fill:var(--good) !important; }
+  .dot.flash{ fill:var(--bad) !important; }
+  .dot-label{ font-family:'JetBrains Mono',monospace; font-size:11px; fill:#fff; text-anchor:middle; pointer-events:none; }
+  .diagram-caption{ font-size:.85rem; color:var(--ink-soft); margin-top:10px; }
+  .progress-note{ font-size:.82rem; font-weight:700; color:var(--water); margin-top:10px; }
+
+  /* reflection */
+  textarea.reflect{
+    width:100%; min-height:90px; border-radius:12px; border:1px solid var(--line);
+    padding:12px; font-family:'Nunito',sans-serif; font-size:.92rem; resize:vertical;
+  }
+  .reveal-btn, .btn{
+    background:var(--water); color:#fff; border:none; border-radius:30px;
+    padding:10px 20px; font-weight:700; font-size:.88rem; cursor:pointer;
+    transition:background .15s ease, transform .1s ease;
+  }
+  .reveal-btn:hover, .btn:hover{ background:var(--deep); }
+  .btn:active{ transform:scale(.97); }
+  .btn.ghost{ background:transparent; border:2px solid var(--water); color:var(--water); }
+  .sample-answer{
+    display:none; margin-top:10px; padding:12px 14px; background:#EAF4F5;
+    border-left:4px solid var(--water); border-radius:8px; font-size:.9rem;
+  }
+
+  /* quiz */
+  .quiz-card{
+    background:#0F3D3E; color:#fff; border-radius:24px; padding:28px 24px 30px;
+    margin-top:20px;
+  }
+  .quiz-card h3{ color:#fff; }
+  .quiz-card .eyebrow{ color:var(--sun); }
+  .q-block{ background:rgba(255,255,255,.06); border-radius:14px; padding:16px 16px 12px; margin-bottom:14px; }
+  .q-block .q-level{
+    font-family:'JetBrains Mono',monospace; font-size:.65rem; letter-spacing:.08em;
+    color:var(--sun); text-transform:uppercase; margin-bottom:4px; display:inline-block;
+  }
+  .q-block p.q-text{ color:#fff; font-weight:700; margin:2px 0 10px; }
+  .opt{
+    display:flex; gap:10px; align-items:flex-start; padding:9px 10px;
+    border-radius:10px; margin-bottom:6px; cursor:pointer;
+    border:1px solid rgba(255,255,255,.14); background:rgba(255,255,255,.03);
+    font-size:.9rem;
+  }
+  .opt:hover{ background:rgba(255,255,255,.08); }
+  .opt input{ margin-top:3px; accent-color:var(--sun); }
+  .opt.opt-correct{ border-color:var(--good); background:rgba(60,138,91,.28); }
+  .opt.opt-wrong{ border-color:var(--bad); background:rgba(196,69,59,.28); }
+  .quiz-actions{ display:flex; gap:10px; align-items:center; margin-top:8px; flex-wrap:wrap; }
+  .score-banner{
+    display:none; margin-top:14px; padding:14px 16px; border-radius:14px;
+    background:#fff; color:var(--deep); font-weight:800; font-family:'Fredoka',sans-serif;
+  }
+  .next-btn-wrap{ text-align:center; margin:36px 0 60px; }
+
+  @media(max-width:640px){
+    main{ padding-top:104px; }
+    .match-grid{ grid-template-columns:1fr; }
+    .hero h2{ font-size:1.5rem; }
+    .tab{ font-size:.74rem; padding:9px 4px 10px; }
+  }
+  @media (prefers-reduced-motion: reduce){
+    *{ transition:none !important; animation:none !important; scroll-behavior:auto !important; }
+  }
+</style>
+</head>
+<body>
+
+<header id="siteHeader">
+  <div class="header-top">
+    <div class="brand">
+      <svg class="brand-fish" viewBox="0 0 60 40"><path d="M2,20 C2,8 18,2 34,2 C44,2 50,8 56,14 L58,4 L54,20 L58,36 L50,26 C44,32 34,38 20,38 C10,38 2,32 2,20 Z" fill="#F2A65A"/><circle cx="16" cy="16" r="2.4" fill="#0F3D3E"/></svg>
+      <div class="brand-text">
+        <span class="eyebrow">TLE 6 · ADM Module</span>
+        <h1>Palaisdaan: Fish Farming &amp; Fish Anatomy</h1>
+      </div>
+    </div>
+    <div class="module-meta">4-DAY SELF-PACED LESSON<br>Agri-Fishery Arts</div>
+  </div>
+  <nav class="tabbar" id="tabbar">
+    <button class="tab active" data-day="1"><span class="tab-day">DAY 1</span>Site &amp; Water</button>
+    <button class="tab" data-day="2"><span class="tab-day">DAY 2</span>Pond &amp; Feeding</button>
+    <button class="tab" data-day="3"><span class="tab-day">DAY 3</span>Outside a Fish</button>
+    <button class="tab" data-day="4"><span class="tab-day">DAY 4</span>Inside a Fish</button>
+    <div class="tab-indicator" id="tabIndicator"></div>
+  </nav>
+</header>
+
+<div class="rail"><div class="rail-fill" id="railFill"></div></div>
+
+<main>
+
+<!-- ============================================================ DAY 1 -->
+<section class="day active" id="day1">
+  <div class="hero" style="background:linear-gradient(135deg,#1F7A8C,#123f40);">
+    <div class="hero-inner">
+      <span class="eyebrow">Day 1 of 4</span>
+      <h2>Choosing a Good Home for Fish: Site &amp; Water Requirements</h2>
+      <p class="lead">Before a single fingerling ever touches the water, a fish farmer must ask: is this the right place, and is this the right water? Today you'll find out what makes a natural fish pond succeed — or fail.</p>
+    </div>
+    <svg class="hero-wave" viewBox="0 0 1200 60" preserveAspectRatio="none"><path d="M0,30 C300,60 900,0 1200,30 L1200,60 L0,60 Z" fill="#F3F7F1"></path></svg>
+  </div>
+
+  <div class="wrap">
+    <section class="block">
+      <div class="card">
+        <span class="eyebrow">Learning objectives</span>
+        <h3>By the end of today, you will be able to:</h3>
+        <ul class="obj-list">
+          <li>Identify the basic requirements for natural fish raising (site, soil, water, sunlight).</li>
+          <li>Explain why each requirement matters for fish survival and growth.</li>
+          <li>Judge whether a given pond site is suitable and defend your reasoning.</li>
+        </ul>
+      </div>
+    </section>
+
+    <div class="divider">Warm-Up</div>
+    <section class="block">
+      <div class="card">
+        <p><strong>Think first:</strong> Imagine you are given a small piece of land beside a creek in your barangay and asked, "Can we raise bangus (milkfish) or tilapia here?" What is the very first thing you would check before saying yes? Keep your answer in mind — you'll revisit it at the end of the lesson.</p>
+      </div>
+    </section>
+
+    <div class="divider">Lesson</div>
+    <section class="block">
+      <h3>What does a fish pond really need?</h3>
+      <p><strong>Natural fish raising</strong> (palaisdaan) means growing fish mostly on the food that occurs naturally in the pond — plankton, algae, and small organisms — with the farmer managing the environment rather than feeding fish entirely by hand. For this system to work, the site itself has to cooperate.</p>
+
+      <p><strong>1. Site selection.</strong> A good pond site sits on low, flat land that is <em>not</em> prone to flash floods, since a flood can wash fish away or bring in polluted runoff. It should be reasonably close to a dependable water source and to roads, so farmers can bring in fingerlings and later transport their harvest.</p>
+
+      <p><strong>2. Soil type.</strong> The pond bottom and dikes need soil that holds water rather than letting it drain away. <strong>Clay loam soil</strong> is ideal because it compacts well and seals the pond, unlike sandy or gravelly soil, which lets water seep out.</p>
+
+      <p><strong>3. Water supply.</strong> The water must be sufficient in volume and clean — free from industrial waste, strong chemicals, or heavy silt. Farmers check simple signs: normal color and smell, and, when possible, pH and dissolved oxygen levels, since fish breathe through the oxygen dissolved in water.</p>
+
+      <p><strong>4. Sunlight.</strong> Sunlight is actually a quiet partner in natural fish raising — it drives photosynthesis in algae and plankton, which become the fish's natural food. But a pond that is scorched by sun all day, with no shade at all, can overheat and lose oxygen, stressing the fish. Balance matters more than maximum exposure.</p>
+
+      <div class="figure">
+        <svg viewBox="0 0 500 200" width="100%">
+          <rect x="0" y="140" width="500" height="60" fill="#B8D8C4"/>
+          <path d="M40,140 C40,90 120,80 250,80 C380,80 460,90 460,140 Z" fill="#6FB7C9"/>
+          <path d="M40,140 L20,180 L480,180 L460,140 Z" fill="#8C6A4B"/>
+          <circle cx="430" cy="40" r="22" fill="#F2A65A"/>
+          <path d="M60,120 q20,-10 40,0 M120,115 q20,-10 40,0 M200,110 q20,-10 40,0" stroke="#fff" stroke-width="3" fill="none" opacity=".5"/>
+        </svg>
+        <figcaption>A pond profile: flat land, water-holding clay-loam dikes, a steady water source, and balanced sunlight.</figcaption>
+      </div>
+    </section>
+
+    <div class="divider">Activity 1 · Site Screening Checklist</div>
+    <section class="block">
+      <div class="card">
+        <p>Check only the boxes that describe a <strong>true requirement</strong> for a good natural fish pond site. Then click <em>Check My Answers</em>.</p>
+        <div id="checklistBox"></div>
+        <button class="btn" id="checkChecklistBtn" style="margin-top:8px;">Check My Answers</button>
+        <p class="progress-note" id="checklistScore"></p>
+      </div>
+    </section>
+
+    <div class="divider">Wrap-Up</div>
+    <section class="block">
+      <div class="card">
+        <p>Revisit your warm-up answer. Would you add anything now? A strong site combines <strong>land, soil, water, and light</strong> working together — remove any one and the whole system struggles.</p>
+      </div>
+    </section>
+
+    <div class="quiz-card" id="quiz1">
+      <span class="eyebrow">Day 1 Check-Up</span>
+      <h3>5-Item Test: Site &amp; Water Requirements</h3>
+      <div id="quiz1Body"></div>
+      <div class="quiz-actions">
+        <button class="btn" id="quiz1Submit">Submit Test</button>
+        <button class="btn ghost" id="quiz1Retry" style="display:none;">Try Again</button>
+      </div>
+      <div class="score-banner" id="quiz1Score"></div>
+    </div>
+
+    <div class="next-btn-wrap">
+      <button class="btn" onclick="goToDay(2)">Continue to Day 2 →</button>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ DAY 2 -->
+<section class="day" id="day2">
+  <div class="hero" style="background:linear-gradient(135deg,#4E7A2F,#1F7A8C);">
+    <div class="hero-inner">
+      <span class="eyebrow">Day 2 of 4</span>
+      <h2>From Empty Pond to Living Pond: Construction, Stocking &amp; Feeding</h2>
+      <p class="lead">A good site is only the start. Today you'll learn how a pond is shaped, how it's filled with the right fish, and how it's fed and fertilized so it keeps producing.</p>
+    </div>
+    <svg class="hero-wave" viewBox="0 0 1200 60" preserveAspectRatio="none"><path d="M0,30 C300,60 900,0 1200,30 L1200,60 L0,60 Z" fill="#F3F7F1"></path></svg>
+  </div>
+
+  <div class="wrap">
+    <section class="block">
+      <div class="card">
+        <span class="eyebrow">Learning objectives</span>
+        <h3>By the end of today, you will be able to:</h3>
+        <ul class="obj-list">
+          <li>Describe the basic parts and construction requirements of a fish pond.</li>
+          <li>Explain stocking, feeding, and fertilization practices in natural fish raising.</li>
+          <li>Predict what happens when stocking or feeding is done incorrectly.</li>
+        </ul>
+      </div>
+    </section>
+
+    <div class="divider">Warm-Up</div>
+    <section class="block">
+      <div class="card">
+        <p><strong>Quick guess:</strong> If a fish pond is like a small farm underwater, what do you think plays the role of "soil fertilizer" for the fish's natural food? Keep guessing as you read.</p>
+      </div>
+    </section>
+
+    <div class="divider">Lesson</div>
+    <section class="block">
+      <h3>Building and filling the pond</h3>
+      <p><strong>Pond construction</strong> requires sturdy <strong>dikes</strong> (the earth walls that hold water in), a <strong>water inlet</strong> to let clean water enter, and a <strong>water outlet</strong> to drain or manage water level. Some farms also build a separate, shallower <strong>nursery pond</strong> for very young fish before moving them to a larger <strong>rearing pond</strong> to grow.</p>
+
+      <p><strong>Stocking</strong> means introducing young fish, called <strong>fingerlings</strong>, into the pond at the right <em>stocking density</em> — the number of fish per square meter. Too few wastes space and natural food; too many causes crowding, competition for oxygen, and stunted growth.</p>
+
+      <p><strong>Fertilization</strong> comes next. Farmers often apply organic fertilizer (like composted animal manure) or inorganic fertilizer to the pond before or during stocking. This isn't food for the fish directly — it nourishes the plankton and algae that the fish then eat, which is the heart of "natural" fish raising.</p>
+
+      <p><strong>Feeding</strong> can be entirely natural (relying on plankton) or supplemented with extra feed, especially as fish grow larger and natural food alone isn't enough. Either way, farmers watch feeding behavior daily — fish that ignore food may signal poor water quality or illness.</p>
+
+      <p><strong>Water management</strong> means keeping the water at a healthy depth, replacing stale water when needed, and watching for oxygen drops — often worst in the early morning, after algae have used up oxygen overnight instead of producing it.</p>
+
+      <span class="pill-note">Remember: fertilize the water, not the fish — the plankton do the rest.</span>
+    </section>
+
+    <div class="divider">Activity 2 · Match the Term</div>
+    <section class="block">
+      <div class="card">
+        <p>Click a term on the left, then click its matching definition on the right.</p>
+        <div class="match-grid" id="matchGrid"></div>
+        <p class="progress-note" id="matchProgress"></p>
+      </div>
+    </section>
+
+    <div class="divider">Wrap-Up</div>
+    <section class="block">
+      <div class="card">
+        <p>A natural fish pond behaves like a small ecosystem: dikes hold the water, fertilizer feeds the plankton, plankton feeds the fish, and the farmer manages density and water quality to keep the balance healthy.</p>
+      </div>
+    </section>
+
+    <div class="quiz-card" id="quiz2">
+      <span class="eyebrow">Day 2 Check-Up</span>
+      <h3>5-Item Test: Pond Construction, Stocking &amp; Feeding</h3>
+      <div id="quiz2Body"></div>
+      <div class="quiz-actions">
+        <button class="btn" id="quiz2Submit">Submit Test</button>
+        <button class="btn ghost" id="quiz2Retry" style="display:none;">Try Again</button>
+      </div>
+      <div class="score-banner" id="quiz2Score"></div>
+    </div>
+
+    <div class="next-btn-wrap">
+      <button class="btn" onclick="goToDay(3)">Continue to Day 3 →</button>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ DAY 3 -->
+<section class="day" id="day3">
+  <div class="hero" style="background:linear-gradient(135deg,#0F3D3E,#1F7A8C);">
+    <div class="hero-inner">
+      <span class="eyebrow">Day 3 of 4</span>
+      <h2>Outside a Fish: External Anatomy</h2>
+      <p class="lead">Every fin, scale, and gill cover on a fish has a job. Today you'll look closely at a fish's outside and connect its shape to how it swims, breathes, and senses the world.</p>
+    </div>
+    <svg class="hero-wave" viewBox="0 0 1200 60" preserveAspectRatio="none"><path d="M0,30 C300,60 900,0 1200,30 L1200,60 L0,60 Z" fill="#F3F7F1"></path></svg>
+  </div>
+
+  <div class="wrap">
+    <section class="block">
+      <div class="card">
+        <span class="eyebrow">Learning objectives</span>
+        <h3>By the end of today, you will be able to:</h3>
+        <ul class="obj-list">
+          <li>Identify the external parts of a fish and their functions.</li>
+          <li>Explain how each external part helps the fish survive in water.</li>
+          <li>Infer a fish's swimming behavior from its fin arrangement.</li>
+        </ul>
+      </div>
+    </section>
+
+    <div class="divider">Warm-Up</div>
+    <section class="block">
+      <div class="card">
+        <p><strong>Observe:</strong> Picture a fish swimming. Which part do you think does the most work to push it forward — and which parts do you think just keep it from tipping over?</p>
+      </div>
+    </section>
+
+    <div class="divider">Lesson</div>
+    <section class="block">
+      <h3>Parts of a fish, outside in</h3>
+      <p>The <strong>mouth</strong> takes in food and its position (facing up, forward, or down) hints at what and where the fish eats. The <strong>eyes</strong> give vision without eyelids, since fish don't need to blink underwater.</p>
+      <p>Behind the eye sits the <strong>operculum</strong>, a hard gill cover that protects the delicate gills underneath and pumps water over them so the fish can breathe continuously, even while resting.</p>
+      <p>Fish have several kinds of <strong>fins</strong>, and each has a distinct role:</p>
+      <ul class="obj-list">
+        <li><strong>Dorsal fin</strong> (top) — keeps the fish upright and prevents rolling.</li>
+        <li><strong>Pectoral fins</strong> (sides) — steer, brake, and help the fish move up or down.</li>
+        <li><strong>Pelvic fins</strong> (belly) — add balance and stability.</li>
+        <li><strong>Caudal fin</strong> (tail) — the main engine, sweeping side to side to push the fish forward.</li>
+      </ul>
+      <p>Running along the fish's side is the <strong>lateral line</strong>, a row of sensory cells that detect vibrations and pressure changes in the water — essentially letting the fish "feel" movement from predators, prey, or other fish nearby, even in murky water.</p>
+      <p>Finally, <strong>scales</strong> cover the body, offering protection, while a thin layer of mucus reduces drag in the water and helps guard against infection.</p>
+    </section>
+
+    <div class="divider">Activity 3 · Label the Fish (External)</div>
+    <section class="block">
+      <div class="card">
+        <p>Click a part name below, then click the matching numbered dot on the diagram.</p>
+        <div class="figure">
+          <svg id="extFishSvg" viewBox="0 0 500 220" width="100%">
+            <path d="M60,120 C60,80 120,50 230,50 C320,50 380,70 430,100 L480,70 L460,120 L480,170 L430,140 C380,170 320,190 230,190 C120,190 60,160 60,120 Z" fill="#3F9CAE" stroke="#0F3D3E" stroke-width="2"/>
+            <path d="M120,90 q30,-14 50,0" stroke="#0F3D3E" stroke-width="2" fill="none" opacity=".5"/>
+            <line x1="70" y1="122" x2="440" y2="122" stroke="#EAF6F6" stroke-width="1.5" opacity=".6"/>
+          </svg>
+          <figcaption>Numbered dots mark external parts — match each label to a dot.</figcaption>
+        </div>
+        <div class="label-wrap" id="extLabelWrap"></div>
+        <p class="progress-note" id="extProgress"></p>
+      </div>
+    </section>
+
+    <div class="divider">Wrap-Up</div>
+    <section class="block">
+      <div class="card">
+        <p>Notice how form follows function: a strong tail for power, side and belly fins for balance, and a sensitive lateral line for awareness — every external part supports survival.</p>
+      </div>
+    </section>
+
+    <div class="quiz-card" id="quiz3">
+      <span class="eyebrow">Day 3 Check-Up</span>
+      <h3>5-Item Test: External Anatomy of Fish</h3>
+      <div id="quiz3Body"></div>
+      <div class="quiz-actions">
+        <button class="btn" id="quiz3Submit">Submit Test</button>
+        <button class="btn ghost" id="quiz3Retry" style="display:none;">Try Again</button>
+      </div>
+      <div class="score-banner" id="quiz3Score"></div>
+    </div>
+
+    <div class="next-btn-wrap">
+      <button class="btn" onclick="goToDay(4)">Continue to Day 4 →</button>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ DAY 4 -->
+<section class="day" id="day4">
+  <div class="hero" style="background:linear-gradient(135deg,#1F7A8C,#6E9C4B);">
+    <div class="hero-inner">
+      <span class="eyebrow">Day 4 of 4</span>
+      <h2>Inside a Fish — and Bringing It All Together</h2>
+      <p class="lead">What's happening beneath the scales keeps a fish alive: breathing, floating, digesting. Today you'll explore internal anatomy, then connect four days of learning into one big picture.</p>
+    </div>
+    <svg class="hero-wave" viewBox="0 0 1200 60" preserveAspectRatio="none"><path d="M0,30 C300,60 900,0 1200,30 L1200,60 L0,60 Z" fill="#F3F7F1"></path></svg>
+  </div>
+
+  <div class="wrap">
+    <section class="block">
+      <div class="card">
+        <span class="eyebrow">Learning objectives</span>
+        <h3>By the end of today, you will be able to:</h3>
+        <ul class="obj-list">
+          <li>Identify key internal organs of a fish and their functions.</li>
+          <li>Explain how water quality directly affects internal organ function.</li>
+          <li>Connect fish anatomy knowledge to real fish-farming decisions.</li>
+        </ul>
+      </div>
+    </section>
+
+    <div class="divider">Warm-Up</div>
+    <section class="block">
+      <div class="card">
+        <p><strong>Recall:</strong> On Day 1 you learned that fish need clean, oxygen-rich water. Which internal organ do you think depends on that oxygen the most? Hold that thought.</p>
+      </div>
+    </section>
+
+    <div class="divider">Lesson</div>
+    <section class="block">
+      <h3>What's working under the scales</h3>
+      <p>Internally, the <strong>gills</strong> are made of thin filaments packed with blood vessels — this is where oxygen dissolved in water passes into the fish's blood, and carbon dioxide passes back out. It's the same job the operculum protects from the outside.</p>
+      <p>The <strong>heart</strong>, a simple two-chambered pump, moves blood first to the gills for oxygen, then out to the rest of the body.</p>
+      <p>The <strong>swim bladder</strong> (air bladder) is a gas-filled sac that lets a fish hold its position at a certain depth without constantly swimming — like an internal buoyancy control.</p>
+      <p>Food travels through the <strong>stomach</strong> and <strong>intestine</strong> for digestion, aided by the <strong>liver</strong>, while the <strong>kidney</strong> filters wastes and helps the fish balance salts and water in its body. A <strong>backbone (spinal cord)</strong> runs along the top, protecting the main nerve pathway and supporting the body's structure.</p>
+      <p>Here's the connection back to Day 1: if pond water is polluted or low in oxygen, it's the gills and heart that suffer first — which is exactly why site selection and water quality were the very first things a fish farmer had to get right.</p>
+    </section>
+
+    <div class="divider">Activity 4 · Label the Fish (Internal)</div>
+    <section class="block">
+      <div class="card">
+        <p>Click an organ name, then click its matching numbered dot inside the fish diagram.</p>
+        <div class="figure">
+          <svg id="intFishSvg" viewBox="0 0 500 220" width="100%">
+            <path d="M60,120 C60,80 120,50 230,50 C320,50 380,70 430,100 L480,70 L460,120 L480,170 L430,140 C380,170 320,190 230,190 C120,190 60,160 60,120 Z" fill="#DCEFE1" stroke="#0F3D3E" stroke-width="2"/>
+          </svg>
+          <figcaption>Numbered dots mark internal organs — match each label to a dot.</figcaption>
+        </div>
+        <div class="label-wrap" id="intLabelWrap"></div>
+        <p class="progress-note" id="intProgress"></p>
+      </div>
+    </section>
+
+    <div class="divider">Activity 5 · Diagnose the Pond (Reflection)</div>
+    <section class="block">
+      <div class="card">
+        <p><strong>Scenario:</strong> A farmer's tilapia are gathering at the surface every morning, gulping air, and growth has slowed over the past two weeks. Using what you learned across all four days, write your diagnosis: what is likely wrong, and what should the farmer check or change?</p>
+        <textarea class="reflect" id="reflectionBox" placeholder="Type your reasoning here..."></textarea>
+        <div style="margin-top:10px;">
+          <button class="reveal-btn" id="revealSampleBtn">Show a Sample Answer</button>
+        </div>
+        <div class="sample-answer" id="sampleAnswer">
+          <strong>Sample reasoning:</strong> Fish gasping at the surface usually points to low dissolved oxygen — often from overcrowding, too much organic waste, or an algae die-off overnight, which matches the Day 1–2 water and pond management lessons. Because oxygen enters through the gills (Day 4), stressed gills can also explain slowed growth, since the fish is spending energy just trying to breathe instead of growing. The farmer should test water quality, check stocking density, and consider adding water or aeration rather than simply feeding more.
+        </div>
+      </div>
+    </section>
+
+    <div class="divider">Wrap-Up</div>
+    <section class="block">
+      <div class="card">
+        <p>Natural fish raising and fish anatomy are two sides of the same lesson: choosing the right site and water keeps the very organs you studied today healthy, and understanding those organs helps you understand <em>why</em> the site requirements matter in the first place.</p>
+      </div>
+    </section>
+
+    <div class="quiz-card" id="quiz4">
+      <span class="eyebrow">Day 4 Check-Up</span>
+      <h3>5-Item Test: Internal Anatomy &amp; Putting It Together</h3>
+      <div id="quiz4Body"></div>
+      <div class="quiz-actions">
+        <button class="btn" id="quiz4Submit">Submit Test</button>
+        <button class="btn ghost" id="quiz4Retry" style="display:none;">Try Again</button>
+      </div>
+      <div class="score-banner" id="quiz4Score"></div>
+    </div>
+
+    <div class="next-btn-wrap">
+      <button class="btn" onclick="goToDay(1)">🎉 Module complete — Review Day 1</button>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<script>
+/* ============================= TAB / SCROLL LOGIC ============================= */
+const header = document.getElementById('siteHeader');
+const tabs = document.querySelectorAll('.tab');
+const indicator = document.getElementById('tabIndicator');
+const railFill = document.getElementById('railFill');
+let lastScrollY = window.scrollY;
+let currentDay = 1;
+
+function positionIndicator(){
+  const activeTab = document.querySelector('.tab.active');
+  if(!activeTab) return;
+  indicator.style.left = activeTab.offsetLeft + 'px';
+  indicator.style.width = activeTab.offsetWidth + 'px';
+}
+
+function goToDay(n){
+  currentDay = n;
+  document.querySelectorAll('.day').forEach(d => d.classList.remove('active'));
+  document.getElementById('day'+n).classList.add('active');
+  tabs.forEach(t => t.classList.toggle('active', t.dataset.day == n));
+  positionIndicator();
+  window.scrollTo(0,0);
+  header.classList.remove('hide-header');
+}
+
+tabs.forEach(t => t.addEventListener('click', () => goToDay(t.dataset.day)));
+window.addEventListener('resize', positionIndicator);
+
+window.addEventListener('scroll', () => {
+  const y = window.scrollY;
+  if(y > lastScrollY && y > 120){
+    header.classList.add('hide-header');
+  } else {
+    header.classList.remove('hide-header');
+  }
+  lastScrollY = y;
+
+  const activeSection = document.getElementById('day'+currentDay);
+  const rect = activeSection.getBoundingClientRect();
+  const total = activeSection.offsetHeight - window.innerHeight;
+  const scrolled = Math.min(Math.max(-rect.top, 0), total);
+  const pct = total > 0 ? (scrolled/total)*100 : 0;
+  railFill.style.setProperty('--x', pct);
+  railFill.style.height = pct + '%';
+}, {passive:true});
+
+/* ============================= SHUFFLE HELPER ============================= */
+function shuffle(arr){
+  for(let i = arr.length -1; i>0; i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [arr[i],arr[j]] = [arr[j],arr[i]];
+  }
+  return arr;
+}
+
+/* ============================= CHECKLIST ACTIVITY (DAY 1) ============================= */
+const checklistItems = [
+  {text:"A steady supply of clean water", correct:true, fb:"Correct — water quality and volume are essential."},
+  {text:"Clay loam soil that holds water well", correct:true, fb:"Correct — this soil type keeps the pond from leaking."},
+  {text:"A site that regularly experiences flash floods", correct:false, fb:"Not a requirement — flooding risks washing fish and pollutants into the pond."},
+  {text:"Balanced sunlight with some shade available", correct:true, fb:"Correct — sunlight supports natural food but needs balance."},
+  {text:"A pond dug in loose, sandy soil for faster drainage", correct:false, fb:"Not ideal — sandy soil drains water away instead of holding it."},
+  {text:"Fish species suited to the local climate and water", correct:true, fb:"Correct — matching species to conditions supports survival and growth."}
+];
+function renderChecklist(){
+  const box = document.getElementById('checklistBox');
+  box.innerHTML = '';
+  shuffle(checklistItems.slice()).forEach((item, idx) => {
+    const div = document.createElement('label');
+    div.className = 'check-item';
+    div.innerHTML = `<input type="checkbox" data-correct="${item.correct}">
+      <div><div>${item.text}</div><div class="check-fb">${item.fb}</div></div>`;
+    box.appendChild(div);
+  });
+}
+renderChecklist();
+document.getElementById('checkChecklistBtn').addEventListener('click', () => {
+  const items = document.querySelectorAll('#checklistBox .check-item');
+  let correctCount = 0;
+  items.forEach(item => {
+    const cb = item.querySelector('input');
+    const isCorrectReq = cb.dataset.correct === 'true';
+    const checked = cb.checked;
+    item.classList.remove('correct','incorrect');
+    if((isCorrectReq && checked) || (!isCorrectReq && !checked)){
+      item.classList.add('correct');
+      correctCount++;
+    } else {
+      item.classList.add('incorrect');
+    }
+  });
+  document.getElementById('checklistScore').textContent = `You got ${correctCount} of ${items.length} correct.`;
+});
+
+/* ============================= MATCH ACTIVITY (DAY 2) ============================= */
+const matchPairs = [
+  {term:"Fingerlings", def:"Young fish used to stock a pond"},
+  {term:"Fertilization", def:"Adding nutrients to boost plankton growth"},
+  {term:"Stocking density", def:"Number of fish placed per unit of pond area"},
+  {term:"Dikes", def:"Earth walls that hold pond water in"},
+  {term:"Water management", def:"Controlling water depth, exchange, and quality"}
+];
+let matchState = { selectedTerm:null, selectedDef:null, matchedCount:0 };
+function renderMatch(){
+  matchState = { selectedTerm:null, selectedDef:null, matchedCount:0 };
+  const grid = document.getElementById('matchGrid');
+  grid.innerHTML = '';
+  const termCol = document.createElement('div'); termCol.className='match-col';
+  const defCol = document.createElement('div'); defCol.className='match-col';
+  shuffle(matchPairs.slice()).forEach(p => {
+    const el = document.createElement('div');
+    el.className='match-item'; el.textContent=p.term; el.dataset.key=p.term;
+    el.addEventListener('click', ()=>selectMatch(el,'term',p.term));
+    termCol.appendChild(el);
+  });
+  shuffle(matchPairs.slice()).forEach(p => {
+    const el = document.createElement('div');
+    el.className='match-item'; el.textContent=p.def; el.dataset.key=p.term;
+    el.addEventListener('click', ()=>selectMatch(el,'def',p.term));
+    defCol.appendChild(el);
+  });
+  grid.appendChild(termCol); grid.appendChild(defCol);
+  document.getElementById('matchProgress').textContent = `Matched 0 of ${matchPairs.length}`;
+}
+function selectMatch(el, side, key){
+  if(el.classList.contains('matched')) return;
+  if(side==='term'){
+    if(matchState.selectedTerm) matchState.selectedTerm.el.classList.remove('selected');
+    matchState.selectedTerm = {el, key};
+    el.classList.add('selected');
+  } else {
+    if(matchState.selectedDef) matchState.selectedDef.el.classList.remove('selected');
+    matchState.selectedDef = {el, key};
+    el.classList.add('selected');
+  }
+  if(matchState.selectedTerm && matchState.selectedDef){
+    if(matchState.selectedTerm.key === matchState.selectedDef.key){
+      matchState.selectedTerm.el.classList.remove('selected'); matchState.selectedTerm.el.classList.add('matched');
+      matchState.selectedDef.el.classList.remove('selected'); matchState.selectedDef.el.classList.add('matched');
+      matchState.matchedCount++;
+      document.getElementById('matchProgress').textContent = `Matched ${matchState.matchedCount} of ${matchPairs.length}`;
+    } else {
+      [matchState.selectedTerm.el, matchState.selectedDef.el].forEach(e=>{
+        e.classList.add('shake');
+        setTimeout(()=>{e.classList.remove('shake','selected');},350);
+      });
+    }
+    matchState.selectedTerm = null; matchState.selectedDef = null;
+  }
+}
+renderMatch();
+
+/* ============================= DIAGRAM LABEL ACTIVITY (DAY 3 & 4) ============================= */
+function setupLabelActivity(svgId, wrapId, progressId, parts){
+  const svg = document.getElementById(svgId);
+  const wrap = document.getElementById(wrapId);
+  const progress = document.getElementById(progressId);
+  let selectedPart = null;
+  let matched = 0;
+
+  // draw dots
+  shuffle(parts.map((p,i)=>({...p, order:i}))).forEach((p,i)=>{
+    // keep original position mapping via parts array (not shuffled draw order) -- draw using original coordinates
+  });
+  parts.forEach((p, i) => {
+    const g = document.createElementNS('http://www.w3.org/2000/svg','g');
+    const circle = document.createElementNS('http://www.w3.org/2000/svg','circle');
+    circle.setAttribute('cx', p.x); circle.setAttribute('cy', p.y); circle.setAttribute('r', 13);
+    circle.setAttribute('fill', '#E76F51'); circle.setAttribute('stroke', '#fff'); circle.setAttribute('stroke-width','2');
+    circle.classList.add('dot'); circle.dataset.answer = p.key;
+    const text = document.createElementNS('http://www.w3.org/2000/svg','text');
+    text.setAttribute('x', p.x); text.setAttribute('y', p.y+4);
+    text.classList.add('dot-label'); text.textContent = (i+1);
+    g.appendChild(circle); g.appendChild(text);
+    svg.appendChild(g);
+    circle.addEventListener('click', () => {
+      if(circle.classList.contains('matched')) return;
+      if(!selectedPart) return;
+      if(selectedPart.key === p.key){
+        circle.classList.add('matched');
+        selectedPart.btn.classList.remove('active-select');
+        selectedPart.btn.classList.add('done');
+        matched++;
+        progress.textContent = `Matched ${matched} of ${parts.length}`;
+        selectedPart = null;
+      } else {
+        circle.classList.add('flash');
+        setTimeout(()=>circle.classList.remove('flash'),350);
+      }
+    });
+  });
+
+  shuffle(parts.slice()).forEach(p => {
+    const btn = document.createElement('button');
+    btn.className='label-btn'; btn.textContent = p.label; btn.dataset.key = p.key;
+    btn.addEventListener('click', ()=>{
+      if(btn.classList.contains('done')) return;
+      document.querySelectorAll('#'+wrapId+' .label-btn').forEach(b=>b.classList.remove('active-select'));
+      btn.classList.add('active-select');
+      selectedPart = {key:p.key, btn};
+    });
+    wrap.appendChild(btn);
+  });
+  progress.textContent = `Matched 0 of ${parts.length}`;
+}
+
+setupLabelActivity('extFishSvg','extLabelWrap','extProgress', [
+  {key:'mouth', label:'Mouth', x:65, y:112},
+  {key:'eye', label:'Eye', x:112, y:88},
+  {key:'operculum', label:'Operculum (Gill Cover)', x:150, y:98},
+  {key:'dorsal', label:'Dorsal Fin', x:230, y:52},
+  {key:'pectoral', label:'Pectoral Fin', x:175, y:140},
+  {key:'pelvic', label:'Pelvic Fin', x:250, y:172},
+  {key:'caudal', label:'Caudal Fin (Tail)', x:462, y:118},
+  {key:'lateral', label:'Lateral Line', x:320, y:122}
+]);
+
+setupLabelActivity('intFishSvg','intLabelWrap','intProgress', [
+  {key:'gills', label:'Gills', x:135, y:100},
+  {key:'heart', label:'Heart', x:170, y:125},
+  {key:'swim', label:'Swim Bladder', x:250, y:85},
+  {key:'stomach', label:'Stomach', x:250, y:135},
+  {key:'intestine', label:'Intestine', x:310, y:150},
+  {key:'liver', label:'Liver', x:210, y:150},
+  {key:'kidney', label:'Kidney', x:300, y:75},
+  {key:'spine', label:'Backbone (Spinal Cord)', x:320, y:62}
+]);
+
+/* ============================= QUIZ ENGINE ============================= */
+function renderQuiz(bodyId, quizKey, questions){
+  const body = document.getElementById(bodyId);
+  body.innerHTML = '';
+  questions.forEach((q, qi) => {
+    const opts = q.choices.map((c,i)=>({text:c, correct:i===q.correctIndex}));
+    shuffle(opts);
+    const qDiv = document.createElement('div');
+    qDiv.className='q-block';
+    qDiv.dataset.qi = qi;
+    let optsHtml = '';
+    opts.forEach((o, oi) => {
+      optsHtml += `<label class="opt" data-correct="${o.correct}">
+        <input type="radio" name="${quizKey}_q${qi}" value="${oi}">
+        <span>${o.text}</span>
+      </label>`;
+    });
+    qDiv.innerHTML = `<span class="q-level">${q.level}</span>
+      <p class="q-text">${qi+1}. ${q.text}</p>
+      ${optsHtml}`;
+    body.appendChild(qDiv);
+  });
+}
+
+function gradeQuiz(bodyId, scoreId, submitBtn, retryBtn){
+  const body = document.getElementById(bodyId);
+  const qBlocks = body.querySelectorAll('.q-block');
+  let score = 0;
+  qBlocks.forEach(qb => {
+    const opts = qb.querySelectorAll('.opt');
+    const selected = qb.querySelector('input:checked');
+    opts.forEach(o => {
+      o.classList.remove('opt-correct','opt-wrong');
+      const isCorrect = o.dataset.correct === 'true';
+      const input = o.querySelector('input');
+      if(isCorrect) o.classList.add('opt-correct');
+      if(input.checked && !isCorrect) o.classList.add('opt-wrong');
+      input.disabled = true;
+    });
+    if(selected){
+      const parentOpt = selected.closest('.opt');
+      if(parentOpt.dataset.correct === 'true') score++;
+    }
+  });
+  const scoreBox = document.getElementById(scoreId);
+  scoreBox.style.display = 'block';
+  let msg = '';
+  const pct = score / qBlocks.length;
+  if(pct === 1) msg = "Perfect score! You've mastered this lesson.";
+  else if(pct >= 0.6) msg = "Good work! Review the highlighted items to strengthen your understanding.";
+  else msg = "Keep going — revisit the lesson above, then try again.";
+  scoreBox.textContent = `Score: ${score} / ${qBlocks.length} — ${msg}`;
+  submitBtn.style.display = 'none';
+  retryBtn.style.display = 'inline-block';
+}
+
+const quizData = {
+  quiz1: [
+    {level:"Remembering", text:"Which soil type is best for building a natural fish pond because it holds water well?",
+     choices:["Clay loam soil","Sandy soil","Rocky soil","Gravel soil"], correctIndex:0},
+    {level:"Understanding", text:"Why must a fish pond site have access to sunlight but not be fully exposed all day?",
+     choices:["Sunlight helps natural food like plankton grow, but too much can overheat the water and reduce oxygen","Sunlight is only needed so the farmer can see the fish","Fish do not need any light at all","Shade makes pond water toxic to fish"], correctIndex:0},
+    {level:"Applying", text:"A farmer wants to build a pond near a river. Which water quality sign should worry them before stocking fish?",
+     choices:["The water has a strange odor and grayish color from a nearby factory","The water flows gently downstream","The water is slightly cool in the early morning","Small wild fish are already swimming in the water"], correctIndex:0},
+    {level:"Analyzing (HOTS)", text:"Site A is on low, flat land near a stream. Site B is on a steep hillside far from any water source. Which site is more suitable, and why?",
+     choices:["Site A, because flat land holds water better and is closer to a reliable water supply","Site B, because hills provide a nicer view for the farmer","Both sites are equally suitable for a fish pond","Site B, because steep land drains water faster"], correctIndex:0},
+    {level:"Evaluating (HOTS)", text:"A community raising bangus only checks their pond's water once a month. What is the best recommendation to improve their practice?",
+     choices:["Monitor water quality more regularly, such as weekly, to catch problems early","Stop checking the water completely since fish can adapt to anything","Only check the water right before harvesting","Add more fish to make up for possible losses"], correctIndex:0}
+  ],
+  quiz2: [
+    {level:"Remembering", text:"What is the term for young fish used to stock a pond?",
+     choices:["Fingerlings","Broodstock","Spawners","Hatchlings only"], correctIndex:0},
+    {level:"Understanding", text:"Why do fish farmers apply organic fertilizer, like animal manure, to a pond before stocking fish?",
+     choices:["To promote the growth of natural food such as plankton and algae for the fish","To make the pond water taste better","To kill all the fish eggs in the pond","To permanently change the color of the water"], correctIndex:0},
+    {level:"Applying", text:"A 500-square-meter pond has a recommended stocking density. If a farmer stocks far more tilapia fingerlings than recommended, what is the most likely result?",
+     choices:["Overcrowding and competition for oxygen and food, leading to stunted growth or fish kill","The fish will automatically grow bigger and faster","Nothing changes in the pond","The pond will need less water than before"], correctIndex:0},
+    {level:"Analyzing (HOTS)", text:"A farmer notices fish gasping at the water's surface early in the morning. Which combination of factors most likely explains this?",
+     choices:["Low dissolved oxygen, possibly from overcrowding, excess organic matter, or overnight algae die-off","The fish are simply playing at the surface","The pond has too little algae growing in it","The water is unusually clear and pure"], correctIndex:0},
+    {level:"Creating (HOTS)", text:"Which set of weekly tasks best reflects good natural fish pond management?",
+     choices:["Check water quality, monitor fish behavior, feed appropriately, and remove excess algae or debris","Add new fish every day regardless of pond size","Drain the entire pond completely every week","Visit the pond only once a month"], correctIndex:0}
+  ],
+  quiz3: [
+    {level:"Remembering", text:"Which fin is primarily responsible for pushing a fish forward through the water?",
+     choices:["Caudal fin (tail fin)","Dorsal fin","Pelvic fin","Anal fin"], correctIndex:0},
+    {level:"Understanding", text:"What is the main function of the operculum (gill cover)?",
+     choices:["It protects the gills and helps pump water over them for breathing","It helps the fish smell food from far away","It is mainly used for swimming forward","It stores extra food for later digestion"], correctIndex:0},
+    {level:"Applying", text:"If a fish's lateral line were damaged, which ability would most likely be affected?",
+     choices:["Sensing vibrations and movement in the water, such as nearby predators or prey","Breathing underwater through the gills","Seeing colors clearly","Digesting food properly"], correctIndex:0},
+    {level:"Analyzing (HOTS)", text:"A fish has fins mostly on the top and bottom center of its body plus a strong tail fin. What can you infer about how it swims?",
+     choices:["It likely swims in fast, strong forward bursts using its tail for power while other fins keep it balanced","It cannot swim at all","It only moves sideways, never forward","It floats without any control over its movement"], correctIndex:0},
+    {level:"Evaluating (HOTS)", text:"A classmate claims that fish scales are only for decoration and serve no real purpose. How would you best respond?",
+     choices:["Disagree — scales protect the fish's body, and with mucus, help reduce drag and prevent infection","Agree — scales truly serve no purpose at all","Scales are found on all fish and are always unimportant","Scales exist only to help fish breathe underwater"], correctIndex:0}
+  ],
+  quiz4: [
+    {level:"Remembering", text:"Which internal organ allows a fish to control its buoyancy, helping it float or sink in water?",
+     choices:["Swim bladder","Liver","Kidney","Spinal cord"], correctIndex:0},
+    {level:"Understanding", text:"How do a fish's gills perform respiration?",
+     choices:["Gill filaments absorb dissolved oxygen from water and release carbon dioxide back into it","Gills store food for later digestion","Gills pump blood throughout the entire body","Gills help the fish see clearly underwater"], correctIndex:0},
+    {level:"Applying", text:"A pond has very low dissolved oxygen. Which internal system of the fish would be most directly stressed by this condition?",
+     choices:["The respiratory system, since gills need well-oxygenated water to function properly","The reproductive system only","The skeletal system alone","The scales covering the body"], correctIndex:0},
+    {level:"Analyzing (HOTS)", text:"Which statement best connects fish anatomy to choosing a good pond site?",
+     choices:["Knowing that gills need well-oxygenated water helps farmers choose clean, flowing sites and avoid stagnant, polluted ponds","Anatomy has nothing to do with pond site selection","Farmers only need to know pond size, not fish biology","Fish anatomy only matters after the fish is harvested"], correctIndex:0},
+    {level:"Creating (HOTS)", text:"A farmer is training new workers. Which single piece of advice best combines natural fish raising practices with fish anatomy knowledge?",
+     choices:["Maintain clean, well-oxygenated water and monitor fish behavior, since healthy gills and organs depend on good water quality","Focus only on feeding, since anatomy does not matter","Ignore water quality as long as the fish look active","Only anatomy matters, not pond conditions"], correctIndex:0}
+  ]
+};
+
+function initQuiz(num){
+  const bodyId = `quiz${num}Body`;
+  const scoreId = `quiz${num}Score`;
+  const submitBtn = document.getElementById(`quiz${num}Submit`);
+  const retryBtn = document.getElementById(`quiz${num}Retry`);
+  renderQuiz(bodyId, `quiz${num}`, quizData[`quiz${num}`]);
+  document.getElementById(scoreId).style.display='none';
+  submitBtn.style.display='inline-block';
+  retryBtn.style.display='none';
+
+  submitBtn.onclick = () => {
+    const body = document.getElementById(bodyId);
+    const total = body.querySelectorAll('.q-block').length;
+    const answered = body.querySelectorAll('.q-block input:checked').length;
+    if(answered < total){
+      alert(`Please answer all ${total} questions before submitting.`);
+      return;
+    }
+    gradeQuiz(bodyId, scoreId, submitBtn, retryBtn);
+  };
+  retryBtn.onclick = () => initQuiz(num);
+}
+[1,2,3,4].forEach(initQuiz);
+
+/* ============================= REFLECTION REVEAL ============================= */
+document.getElementById('revealSampleBtn').addEventListener('click', () => {
+  const el = document.getElementById('sampleAnswer');
+  el.style.display = el.style.display === 'block' ? 'none' : 'block';
+});
+
+/* ============================= INIT ============================= */
+window.addEventListener('load', positionIndicator);
+positionIndicator();
+</script>
+</body>
+</html>

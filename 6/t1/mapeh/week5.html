@@ -1,0 +1,1531 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+<title>Sining ng Bayan: MAPEH 6 Arts ADM</title>
+<style>
+:root{
+  --paper:#f4ecd8;
+  --paper-dark:#e8dcc0;
+  --ink:#2b2116;
+  --ink-soft:#5a4a37;
+  --gold:#c9a227;
+  --gold-deep:#9c7d1a;
+  --maroon:#7a2331;
+  --maroon-deep:#5c1523;
+  --navy:#1f3a5f;
+  --navy-deep:#152944;
+  --bronze:#6b5b3e;
+  --bronze-deep:#4d4128;
+  --sepia:#7a5230;
+  --sepia-deep:#5a3b21;
+  --marigold:#c98a13;
+  --marigold-deep:#9c6a0d;
+  --green-ok:#2e7d4f;
+  --red-no:#b13a2f;
+  --radius:16px;
+  --day-color: var(--maroon);
+  --day-color-deep: var(--maroon-deep);
+  --shadow: 0 6px 18px rgba(43,33,22,0.18);
+}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  background:
+    radial-gradient(circle at 10% 10%, rgba(201,162,39,0.08), transparent 40%),
+    radial-gradient(circle at 90% 90%, rgba(122,35,49,0.06), transparent 40%),
+    var(--paper);
+  color:var(--ink);
+  font-size:18px;
+  line-height:1.55;
+  min-height:100vh;
+}
+h1,h2,h3,h4{
+  font-family: Georgia, "Times New Roman", serif;
+  color:var(--ink);
+  margin:0 0 .5em 0;
+  letter-spacing:.3px;
+}
+button{font-family:inherit;}
+.app{display:flex; min-height:100vh;}
+
+/* ===== SIDEBAR ===== */
+.sidebar{
+  width:280px;
+  min-width:280px;
+  background: linear-gradient(180deg, var(--maroon) 0%, var(--maroon-deep) 100%);
+  color:#fff;
+  padding:22px 16px;
+  transition: margin-left .28s ease, transform .28s ease;
+  position:relative;
+  z-index:40;
+}
+.sidebar.collapsed{margin-left:-280px;}
+.brand{
+  display:flex; align-items:center; gap:10px;
+  padding-bottom:16px; margin-bottom:16px;
+  border-bottom:2px solid rgba(255,255,255,0.25);
+}
+.brand-emblem{
+  width:44px; height:44px; border-radius:50%;
+  background: radial-gradient(circle at 35% 30%, var(--gold), var(--gold-deep));
+  display:flex; align-items:center; justify-content:center;
+  font-size:22px; box-shadow: inset 0 0 0 3px rgba(255,255,255,0.5);
+  flex-shrink:0;
+}
+.brand-text{font-family:Georgia, serif; font-weight:bold; font-size:17px; line-height:1.2;}
+.brand-sub{font-size:12px; opacity:.85; font-weight:normal;}
+
+.overall-progress{
+  background:rgba(255,255,255,0.12);
+  border-radius:12px; padding:12px; margin-bottom:18px;
+}
+.overall-progress-label{font-size:13px; opacity:.9; margin-bottom:6px; display:flex; justify-content:space-between;}
+.overall-bar{height:10px; background:rgba(0,0,0,0.25); border-radius:8px; overflow:hidden;}
+.overall-bar-fill{height:100%; background:linear-gradient(90deg, var(--gold), #ffe08a); width:0%; transition:width .4s ease;}
+.overall-stats{display:flex; gap:14px; margin-top:10px; font-size:13px;}
+.overall-stat{display:flex; align-items:center; gap:4px;}
+
+.nav-list{list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:8px;}
+.nav-btn{
+  width:100%; text-align:left; padding:14px 14px;
+  background:rgba(255,255,255,0.08);
+  border:2px solid transparent;
+  border-radius:12px; color:#fff; cursor:pointer;
+  font-size:16px; font-weight:600;
+  display:flex; align-items:center; justify-content:space-between; gap:8px;
+  transition:.15s ease;
+}
+.nav-btn:hover{background:rgba(255,255,255,0.18);}
+.nav-btn.active{background:var(--gold); color:var(--maroon-deep); border-color:#fff;}
+.nav-day-label{display:flex; flex-direction:column;}
+.nav-day-title{font-size:12px; font-weight:normal; opacity:.85;}
+.nav-btn.active .nav-day-title{opacity:.8;}
+.nav-check{
+  width:26px; height:26px; border-radius:50%; flex-shrink:0;
+  background:rgba(255,255,255,0.15); display:flex; align-items:center; justify-content:center;
+  font-size:14px; border:2px solid rgba(255,255,255,0.4);
+}
+.nav-check.done{background:var(--green-ok); border-color:#fff;}
+
+.sidebar-footer{margin-top:22px; font-size:12px; opacity:.75; line-height:1.5;}
+
+.sidebar-toggle{
+  position:fixed; top:16px; left:16px; z-index:50;
+  width:48px; height:48px; border-radius:12px;
+  background:var(--maroon); color:#fff; border:none; cursor:pointer;
+  font-size:22px; box-shadow:var(--shadow);
+  display:flex; align-items:center; justify-content:center;
+}
+.sidebar-toggle:active{transform:scale(.94);}
+
+.sidebar-scrim{display:none;}
+
+/* ===== MAIN ===== */
+.main{flex:1; min-width:0; padding:20px 18px 80px; max-width:900px; margin:0 auto; width:100%;}
+.main-top-space{height:56px;}
+
+.welcome-card{
+  background:linear-gradient(135deg, var(--paper-dark), var(--paper));
+  border:3px solid var(--gold);
+  border-radius:var(--radius); padding:28px 22px; text-align:center; box-shadow:var(--shadow);
+}
+.welcome-card h1{font-size:28px;}
+.welcome-emblem{font-size:52px; margin-bottom:10px;}
+.day-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:14px; margin-top:22px;}
+.day-card{
+  background:#fff; border-radius:14px; padding:16px; text-align:left; cursor:pointer;
+  border:3px solid var(--paper-dark); box-shadow:var(--shadow); transition:.15s ease;
+}
+.day-card:hover{transform:translateY(-3px); border-color:var(--gold);}
+.day-card-num{font-family:Georgia,serif; font-size:26px; font-weight:bold; color:var(--maroon);}
+.day-card-title{font-weight:600; margin-top:4px; font-size:15px;}
+
+/* Lesson header */
+.lesson-header{
+  background:linear-gradient(135deg, var(--day-color), var(--day-color-deep));
+  color:#fff; border-radius:var(--radius); padding:22px; margin-bottom:18px; box-shadow:var(--shadow);
+  position:relative; overflow:hidden;
+}
+.lesson-header::after{
+  content:""; position:absolute; right:-40px; top:-40px; width:160px; height:160px; border-radius:50%;
+  background:rgba(255,255,255,0.08);
+}
+.lesson-eyebrow{font-size:13px; letter-spacing:1.5px; text-transform:uppercase; opacity:.9; font-weight:700;}
+.lesson-header h1{color:#fff; font-size:26px; margin-top:4px;}
+.lesson-header p{opacity:.95; margin:6px 0 0;}
+.day-progress-track{height:10px; background:rgba(0,0,0,0.25); border-radius:8px; margin-top:14px; overflow:hidden;}
+.day-progress-fill{height:100%; background:var(--gold); width:0%; transition:width .4s ease;}
+.day-progress-steps{display:flex; justify-content:space-between; font-size:11px; margin-top:6px; opacity:.9; font-weight:600;}
+
+.section-block{
+  background:#fff; border-radius:var(--radius); padding:20px; margin-bottom:16px; box-shadow:var(--shadow);
+  border-left:8px solid var(--day-color);
+}
+.section-tag{
+  display:inline-flex; align-items:center; gap:8px;
+  background:var(--day-color); color:#fff; padding:5px 14px; border-radius:20px;
+  font-size:13px; font-weight:700; letter-spacing:.5px; text-transform:uppercase; margin-bottom:12px;
+}
+.section-block h2{font-size:21px; color:var(--day-color-deep);}
+.objectives-list{margin:0; padding-left:22px;}
+.objectives-list li{margin-bottom:6px;}
+.encourage{
+  background:var(--paper-dark); border-left:5px solid var(--gold); border-radius:8px;
+  padding:10px 14px; font-size:15px; margin:12px 0; font-style:italic; color:var(--ink-soft);
+}
+.content-text p{margin:0 0 12px;}
+.content-text strong{color:var(--day-color-deep);}
+
+/* Cards / click reveal */
+.card-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:12px; margin-top:14px;}
+.flip-card{
+  background:var(--paper-dark); border-radius:14px; border:2px dashed var(--day-color);
+  padding:16px; cursor:pointer; min-height:120px; display:flex; flex-direction:column; justify-content:center;
+  transition:.2s ease;
+}
+.flip-card:hover{background:#fff9ea;}
+.flip-card.revealed{background:#fff; border-style:solid;}
+.flip-card-front{font-weight:700; font-size:16px; display:flex; align-items:center; gap:8px;}
+.flip-card-back{display:none; margin-top:8px; font-size:15px; color:var(--ink-soft);}
+.flip-card.revealed .flip-card-back{display:block;}
+.flip-card.revealed .flip-card-front{color:var(--day-color-deep);}
+.tap-hint{font-size:12px; opacity:.6; margin-top:6px;}
+
+/* Sorting */
+.sort-wrap{margin-top:14px;}
+.sort-pool{display:flex; flex-wrap:wrap; gap:10px; padding:12px; background:var(--paper-dark); border-radius:12px; min-height:56px;}
+.sort-chip{
+  background:#fff; border:2px solid var(--day-color); color:var(--ink); padding:9px 14px; border-radius:20px;
+  cursor:pointer; font-size:14px; font-weight:600; box-shadow:0 2px 4px rgba(0,0,0,0.08);
+}
+.sort-chip:active{transform:scale(.96);}
+.sort-bins{display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:12px;}
+@media(max-width:520px){.sort-bins{grid-template-columns:1fr;}}
+.sort-bin{background:#fff; border:3px solid var(--day-color); border-radius:12px; padding:12px; min-height:110px;}
+.sort-bin h4{margin:0 0 8px; color:var(--day-color-deep); font-size:15px;}
+.sort-bin .sort-chip{display:inline-block; margin:3px; cursor:default; font-size:13px;}
+
+/* Matching (tap to match) */
+.match-wrap{display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-top:14px;}
+@media(max-width:520px){.match-wrap{grid-template-columns:1fr;}}
+.match-col h4{font-size:14px; color:var(--day-color-deep); margin-bottom:8px;}
+.match-item{
+  background:#fff; border:2px solid var(--day-color); border-radius:10px; padding:12px; margin-bottom:8px;
+  cursor:pointer; font-weight:600; font-size:15px; transition:.15s ease;
+}
+.match-item.selected{background:var(--gold); border-color:var(--gold-deep);}
+.match-item.matched{background:#e4f5e9; border-color:var(--green-ok); color:var(--green-ok); cursor:default;}
+.match-item.wrong-flash{background:#fbe3e0; border-color:var(--red-no);}
+
+/* Memory game */
+.memory-grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(110px,1fr)); gap:10px; margin-top:14px;}
+.mem-card{
+  aspect-ratio:1/1; background:linear-gradient(135deg,var(--day-color),var(--day-color-deep)); border-radius:10px;
+  display:flex; align-items:center; justify-content:center; color:#fff; font-size:26px; cursor:pointer;
+  box-shadow:var(--shadow); user-select:none;
+}
+.mem-card.flipped, .mem-card.matched{background:#fff; color:var(--ink); font-size:12px; text-align:center; padding:6px; font-weight:700;}
+.mem-card.matched{background:#e4f5e9; color:var(--green-ok); cursor:default;}
+
+/* Sequence puzzle */
+.seq-list{list-style:none; margin:14px 0 0; padding:0; display:flex; flex-direction:column; gap:8px;}
+.seq-item{
+  background:#fff; border:2px solid var(--day-color); border-radius:10px; padding:12px 14px;
+  display:flex; align-items:center; gap:10px; font-weight:600;
+}
+.seq-num{background:var(--day-color); color:#fff; width:26px; height:26px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:13px; flex-shrink:0;}
+.seq-controls{display:flex; gap:6px;}
+.seq-btn{border:none; background:var(--paper-dark); border-radius:8px; width:34px; height:34px; cursor:pointer; font-size:16px; font-weight:bold;}
+.seq-btn:active{transform:scale(.9);}
+
+/* MCQ practice + quiz */
+.mcq-block{margin-top:14px;}
+.mcq-q{font-weight:700; margin-bottom:10px; font-size:16px;}
+.mcq-choices{display:flex; flex-direction:column; gap:9px;}
+.mcq-choice{
+  background:#fff; border:2px solid var(--day-color); border-radius:10px; padding:12px 14px;
+  cursor:pointer; font-size:15px; text-align:left; transition:.15s ease;
+}
+.mcq-choice:hover{background:var(--paper-dark);}
+.mcq-choice.correct{background:#e4f5e9; border-color:var(--green-ok); color:var(--green-ok); font-weight:700;}
+.mcq-choice.incorrect{background:#fbe3e0; border-color:var(--red-no); color:var(--red-no); font-weight:700;}
+.mcq-choice[disabled]{cursor:default;}
+.mcq-feedback{margin-top:10px; padding:12px; border-radius:10px; font-size:14px; display:none;}
+.mcq-feedback.show{display:block;}
+.mcq-feedback.ok{background:#e4f5e9; color:var(--green-ok);}
+.mcq-feedback.no{background:#fbe3e0; color:var(--red-no);}
+.retry-btn{margin-top:8px; background:var(--day-color); color:#fff; border:none; padding:8px 16px; border-radius:20px; font-size:13px; cursor:pointer; font-weight:700;}
+
+.tf-row{display:flex; gap:10px; margin-top:10px;}
+.tf-btn{flex:1; padding:14px; border-radius:10px; border:2px solid var(--day-color); background:#fff; font-weight:700; cursor:pointer; font-size:15px;}
+.tf-btn.correct{background:#e4f5e9; border-color:var(--green-ok);}
+.tf-btn.incorrect{background:#fbe3e0; border-color:var(--red-no);}
+
+/* Reflection */
+textarea.reflect-input{
+  width:100%; min-height:90px; border-radius:10px; border:2px solid var(--day-color); padding:12px;
+  font-size:15px; font-family:inherit; resize:vertical; margin-top:8px;
+}
+.reflect-saved{font-size:13px; color:var(--green-ok); font-weight:700; margin-top:6px; display:none;}
+.reflect-saved.show{display:block;}
+
+/* Buttons general */
+.primary-btn{
+  background:var(--day-color); color:#fff; border:none; padding:13px 22px; border-radius:24px;
+  font-size:16px; font-weight:700; cursor:pointer; box-shadow:var(--shadow); margin-top:14px;
+}
+.primary-btn:active{transform:scale(.97);}
+.primary-btn:disabled{opacity:.5; cursor:not-allowed;}
+.ghost-btn{
+  background:transparent; color:var(--day-color); border:2px solid var(--day-color); padding:10px 18px;
+  border-radius:24px; font-weight:700; cursor:pointer; font-size:14px;
+}
+
+/* Points toast */
+.points-toast{
+  position:fixed; top:20px; right:20px; background:var(--gold); color:var(--maroon-deep); font-weight:800;
+  padding:10px 18px; border-radius:24px; box-shadow:var(--shadow); z-index:100; font-size:15px;
+  animation: toastPop .9s ease forwards;
+}
+@keyframes toastPop{
+  0%{opacity:0; transform:translateY(-10px) scale(.9);}
+  15%{opacity:1; transform:translateY(0) scale(1);}
+  80%{opacity:1;}
+  100%{opacity:0; transform:translateY(-6px);}
+}
+
+/* Quiz results */
+.quiz-summary{text-align:center; padding:20px;}
+.score-circle{
+  width:130px; height:130px; border-radius:50%; margin:14px auto; display:flex; flex-direction:column;
+  align-items:center; justify-content:center; background:conic-gradient(var(--gold) var(--pct,0%), var(--paper-dark) 0);
+  position:relative;
+}
+.score-circle-inner{
+  width:98px; height:98px; border-radius:50%; background:#fff; display:flex; flex-direction:column;
+  align-items:center; justify-content:center; font-weight:800;
+}
+.score-circle-inner .big{font-size:26px; color:var(--day-color-deep);}
+.score-circle-inner .small{font-size:11px; color:var(--ink-soft);}
+.medal{font-size:52px; margin-top:6px;}
+.day-complete-badge{
+  display:inline-flex; align-items:center; gap:8px; background:var(--green-ok); color:#fff; padding:8px 16px;
+  border-radius:20px; font-weight:700; margin-top:10px;
+}
+
+/* Confetti */
+.confetti-piece{
+  position:fixed; top:-20px; width:9px; height:14px; z-index:200; opacity:.95;
+  animation-name: confettiFall; animation-timing-function: linear; animation-fill-mode:forwards;
+}
+@keyframes confettiFall{
+  to{ transform:translateY(105vh) rotate(540deg); opacity:0; }
+}
+
+.stars-row{font-size:22px; letter-spacing:4px; margin:8px 0;}
+.star-off{opacity:.25;}
+
+@media(max-width:760px){
+  body{font-size:16.5px;}
+  .sidebar{position:fixed; top:0; left:0; height:100vh; overflow-y:auto; margin-left:-280px; box-shadow:var(--shadow);}
+  .sidebar.open{margin-left:0;}
+  .sidebar-scrim.show{display:block; position:fixed; inset:0; background:rgba(0,0,0,0.4); z-index:35;}
+  .main{padding-top:70px;}
+  .lesson-header h1{font-size:22px;}
+}
+</style>
+</head>
+<body>
+
+<button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle menu">&#9776;</button>
+<div class="sidebar-scrim" id="scrim"></div>
+
+<div class="app">
+  <nav class="sidebar" id="sidebar">
+    <div class="brand">
+      <div class="brand-emblem">&#127912;</div>
+      <div class="brand-text">Sining ng Bayan
+        <div class="brand-sub">MAPEH 6 &middot; Arts ADM</div>
+      </div>
+    </div>
+
+    <div class="overall-progress">
+      <div class="overall-progress-label"><span>Overall Progress</span><span id="overallPct">0%</span></div>
+      <div class="overall-bar"><div class="overall-bar-fill" id="overallBarFill"></div></div>
+      <div class="overall-stats">
+        <div class="overall-stat">&#11088; <span id="starCount">0</span></div>
+        <div class="overall-stat">&#127942; <span id="badgeCount">0</span>/5</div>
+        <div class="overall-stat">&#9998; <span id="ptsCount">0</span> pts</div>
+      </div>
+    </div>
+
+    <ul class="nav-list" id="navList"></ul>
+
+    <div class="sidebar-footer">
+      Grade 6 MAPEH (Arts)<br>
+      Competency: Interpret conventional concepts, processes, and practices in creative work inspired by 19th Century / Philippine Revolutionary and American Period performing and visual arts.
+    </div>
+  </nav>
+
+  <main class="main" id="main"></main>
+</div>
+
+<script>
+/* =========================================================
+   DATA
+========================================================= */
+const THEME = {
+  1:{c:'--maroon', d:'--maroon-deep', name:'Maroon'},
+  2:{c:'--navy', d:'--navy-deep', name:'Navy'},
+  3:{c:'--bronze', d:'--bronze-deep', name:'Bronze'},
+  4:{c:'--sepia', d:'--sepia-deep', name:'Sepia'},
+  5:{c:'--marigold', d:'--marigold-deep', name:'Marigold'}
+};
+
+function shuffle(arr){
+  const a = arr.slice();
+  for(let i=a.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [a[i],a[j]] = [a[j],a[i]];
+  }
+  return a;
+}
+
+const DAYS = [
+/* ============================== DAY 1 ============================== */
+{
+  id:1,
+  title:"Art as Protest: The Revolutionary Period",
+  eyebrow:"Day 1 &middot; 19th Century & the Philippine Revolution (1872&ndash;1898)",
+  objectives:[
+    "Identify important visual and performing art forms during the Philippine Revolutionary Period.",
+    "Describe the artists, artworks, and practices connected to this period.",
+    "Value art as a way Filipinos expressed love of country under Spanish rule."
+  ],
+  engage:{
+    hook:"In 1884, a Filipino painter won a gold medal in Madrid &mdash; against Spanish painters, in Spain! His painting was so powerful that it made Spaniards see the suffering of colonized people. Who was he, and what did he paint?",
+    reveal:{
+      front:"&#128065;&#65039; Tap to reveal the mystery painting",
+      back:"That artist was <strong>Juan Luna</strong>, and his winning masterpiece was the <strong>Spoliarium</strong> &mdash; a huge canvas showing dead and dying gladiators being dragged away in a Roman arena. Filipino patriots like Jose Rizal saw it as a hidden symbol of the Filipino people suffering under colonizers."
+    }
+  },
+  explore:{
+    intro:"Tap each card to uncover the people and art forms that shaped this exciting, dangerous period in our history.",
+    cards:[
+      {front:"&#127912; Juan Luna", back:"Painter of the Spoliarium (1884). Used Western academic realism &mdash; dramatic lighting, real anatomy &mdash; to hide a message about Filipino suffering inside a scene from ancient Rome."},
+      {front:"&#127912; Felix Resurreccion Hidalgo", back:"Painted Las V&iacute;rgenes Cristianas Expuestas al Populacho (Christian Virgins Exposed to the Populace). Like Luna, he used a historical/religious scene to symbolize the oppression of Filipinos."},
+      {front:"&#127925; Kundiman", back:"A gentle, romantic Filipino song usually about love &mdash; but during the Revolution, many kundiman were written with hidden double meanings: the 'beloved' really meant the beloved motherland, Inang Bayan."},
+      {front:"&#127917; Zarzuela (Sarswela)", back:"A stage play that mixes singing, dancing, and drama (borrowed from Spain but made very Filipino). Many zarzuelas quietly criticized Spanish abuses through relatable stories and comedy."}
+    ]
+  },
+  explain:{
+    html:`
+      <p><strong>The Philippine Revolutionary Period</strong> began around 1872, when three priests (Gomburza) were unjustly executed, sparking outrage. It grew through the writings of Jos&eacute; Rizal, the founding of the Katipunan by Andr&eacute;s Bonifacio in 1892, and the outbreak of the Philippine Revolution in 1896.</p>
+      <p>Because Spanish authorities censored anything openly rebellious, Filipino artists became clever. In <strong>visual arts</strong>, painters like Juan Luna and Felix Hidalgo used <strong>academic realism</strong> &mdash; the polished, detailed European painting style taught in Spanish art schools &mdash; but chose subjects from history, mythology, or religion that secretly mirrored the Filipino experience of oppression.</p>
+      <p>In <strong>performing arts</strong>, the <strong>kundiman</strong> used soft melodies and poetic lyrics to hide patriotic feeling inside love songs, while the <strong>zarzuela</strong> used relatable stories, music, and comedy on stage to reach ordinary Filipinos who could not read Rizal's novels. Rondalla ensembles (using bandurria and guitar) also provided the musical heartbeat of town fiestas and gatherings.</p>
+      <p>These <strong>processes and practices</strong> &mdash; realistic oil painting with symbolic subjects, and music-drama with hidden nationalist meaning &mdash; are what make Revolutionary Period art so special: beautiful on the surface, powerful underneath.</p>
+    `
+  },
+  elaborate:{
+    type:"match",
+    intro:"Match each artist or art form to what they are best known for. Tap one item on the left, then its pair on the right.",
+    pairs:[
+      {left:"Juan Luna", right:"Painted the Spoliarium"},
+      {left:"Felix Resurreccion Hidalgo", right:"Painted Las V&iacute;rgenes Cristianas"},
+      {left:"Kundiman", right:"Love song with hidden patriotic meaning"},
+      {left:"Zarzuela", right:"Musical stage play with drama & comedy"}
+    ],
+    scenario:{
+      q:"A Revolutionary-era artist wants to criticize Spanish abuses but cannot say so openly. What is the SMARTEST practice for them to use, based on what you learned?",
+      choices:[
+        "Paint a historical or religious scene that secretly symbolizes the Filipino struggle.",
+        "Write an open letter naming Spanish officials directly.",
+        "Refuse to make any art until the revolution is over.",
+        "Copy a Spanish painting exactly with no changes."
+      ],
+      correctIndex:0,
+      explain:"Using symbolism through historical or religious subjects (like Luna and Hidalgo did) let artists express protest safely &mdash; a real practice of the period."
+    }
+  },
+  quiz:[
+    {q:"Who painted the Spoliarium?", choices:["Juan Luna","Fernando Amorsolo","Andr\u00e9s Bonifacio","Felix Resurreccion Hidalgo"], correct:"Juan Luna", explain:"Juan Luna painted the Spoliarium in 1884 and won a gold medal in Madrid."},
+    {q:"What is a kundiman?", choices:["A Filipino love song, sometimes with hidden patriotic meaning","A type of Spanish dance","A Revolutionary-era newspaper","A Katipunan secret code"], correct:"A Filipino love song, sometimes with hidden patriotic meaning", explain:"Kundiman songs used romantic language that could also symbolize love of country."},
+    {q:"Why did Revolutionary Period painters often choose historical or religious subjects instead of clearly Filipino ones?", choices:["To hide messages of protest from Spanish censors","Because they had no talent for local scenes","Because Filipino subjects were not allowed to be painted at all","Because it was cheaper to paint historical scenes"], correct:"To hide messages of protest from Spanish censors", explain:"Symbolic subjects let artists criticize colonization safely, without open rebellion."},
+    {q:"Which of these BEST describes a zarzuela?", choices:["A stage play combining singing, dancing, and drama","A solitary painting technique","A type of Spanish coin","A Katipunan military uniform"], correct:"A stage play combining singing, dancing, and drama", explain:"Zarzuela is Filipino musical theater that often carried social commentary."},
+    {q:"What historical event is closely linked to the START of the Revolutionary Period discussed in this lesson?", choices:["The execution of Gomburza in 1872","The end of World War II","The founding of UP School of Fine Arts","The first EDSA Revolution"], correct:"The execution of Gomburza in 1872", explain:"The unjust execution of Gomburza in 1872 helped spark the growing movement toward revolution."}
+  ]
+},
+
+/* ============================== DAY 2 ============================== */
+{
+  id:2,
+  title:"A New Ruler, A New Canvas: The American Period",
+  eyebrow:"Day 2 &middot; The American Period (1898&ndash;1946)",
+  objectives:[
+    "Describe the characteristics of Philippine visual and performing arts during the American Period.",
+    "Identify key artists, art forms, and institutions that emerged during this time.",
+    "Explain how a new colonial influence reshaped Filipino artistic expression."
+  ],
+  engage:{
+    tf:{
+      intro:"Quick warm-up! Before we start, guess: TRUE or FALSE?",
+      statements:[
+        {s:"The Americans built public schools all over the Philippines and taught in English.", answer:true, explain:"True! American teachers called Thomasites set up the public school system."},
+        {s:"During the American Period, Filipino art completely disappeared.", answer:false, explain:"False! Filipino art continued and even flourished with new styles, techniques, and institutions."}
+      ]
+    }
+  },
+  explore:{
+    intro:"Tap each card to discover how art changed when a new colonizer arrived.",
+    cards:[
+      {front:"&#127912; Fernando Amorsolo", back:"The Philippines' first National Artist. Famous for sunlit, idyllic paintings of rural life (dalagang bukid, farmers) using his signature glowing backlighting technique."},
+      {front:"&#127891; UP School of Fine Arts", back:"Established in 1908 &mdash; the first formal, government-supported art school in the country, training generations of Filipino painters and sculptors."},
+      {front:"&#127917; Bodabil (Vaudeville)", back:"American-style variety stage shows mixing comedy, song, and dance numbers &mdash; hugely popular entertainment introduced through American influence."},
+      {front:"&#127908; Balagtasan", back:"A poetic joust in Filipino (named after poet Francisco Balagtas), started in 1924. It flourished thanks to new freedoms of expression under American rule."}
+    ]
+  },
+  explain:{
+    html:`
+      <p>After the Philippine-American War, the United States governed the Philippines from 1898 to 1946. American teachers called <strong>Thomasites</strong> built public schools nationwide and taught in <strong>English</strong>, exposing Filipinos to new ideas, technology, and pop culture.</p>
+      <p>In <strong>visual arts</strong>, the <strong>UP School of Fine Arts</strong> (1908) gave Filipino artists formal, structured training for the first time. <strong>Fernando Amorsolo</strong> became the country's first National Artist, famous for <strong>genre painting</strong> &mdash; scenes of everyday rural Filipino life &mdash; painted with his signature glowing, backlit sunlight technique that made the countryside look warm and peaceful.</p>
+      <p>In <strong>performing arts</strong>, American entertainment culture introduced <strong>bodabil (vaudeville)</strong>, energetic variety shows with comedy, music, and dance &mdash; very different from the more formal zarzuela. Meanwhile, uniquely Filipino traditions like <strong>Balagtasan</strong> (a debate in verse) and the continuing <strong>kundiman</strong> proved that Filipino artistic identity did not disappear &mdash; it adapted.</p>
+      <p>Notice the shift in <strong>process and purpose</strong>: art moved from hidden protest (needed under Spanish censorship) toward open celebration of everyday Filipino life and entertainment &mdash; even while operating under a new colonial system.</p>
+    `
+  },
+  elaborate:{
+    type:"sort",
+    intro:"Sort each item into the correct historical period. Tap a chip, then tap the bin where it belongs.",
+    bins:[
+      {id:"rev", label:"Revolutionary Period (1872\u20131898)"},
+      {id:"am", label:"American Period (1898\u20131946)"}
+    ],
+    items:[
+      {label:"Juan Luna's Spoliarium", bin:"rev"},
+      {label:"Fernando Amorsolo's sunlit farm scenes", bin:"am"},
+      {label:"UP School of Fine Arts founded", bin:"am"},
+      {label:"Zarzuela hiding protest in drama", bin:"rev"},
+      {label:"Bodabil variety shows", bin:"am"},
+      {label:"Kundiman as coded patriotic love song", bin:"rev"}
+    ],
+    scenario:{
+      q:"A young Filipino artist in 1910 wants FORMAL training in painting techniques. Where would this lesson suggest they go?",
+      choices:[
+        "The newly-founded UP School of Fine Arts",
+        "A Spanish church seminary",
+        "A Katipunan secret meeting",
+        "There was no way to get formal art training then"
+      ],
+      correctIndex:0,
+      explain:"The UP School of Fine Arts, founded in 1908, was the first formal art school for Filipinos."
+    }
+  },
+  quiz:[
+    {q:"Who is known as the Philippines' first National Artist, famous for sunlit rural scenes?", choices:["Fernando Amorsolo","Juan Luna","Andr\u00e9s Bonifacio","Francisco Balagtas"], correct:"Fernando Amorsolo", explain:"Amorsolo's backlit, golden countryside paintings made him the first National Artist."},
+    {q:"What institution, founded in 1908, gave Filipinos formal art education?", choices:["UP School of Fine Arts","Katipunan Academy","Ateneo Music Conservatory","Manila Zarzuela House"], correct:"UP School of Fine Arts", explain:"It was the first government-supported fine arts school in the country."},
+    {q:"What is bodabil?", choices:["An American-style variety stage show with comedy, song, and dance","A type of Filipino oil painting","A secret Katipunan document","A religious procession"], correct:"An American-style variety stage show with comedy, song, and dance", explain:"Bodabil (vaudeville) was popular entertainment introduced through American influence."},
+    {q:"How did the PURPOSE of Filipino art generally shift from the Revolutionary to the American Period?", choices:["From hidden protest toward open, everyday and entertainment themes","From painting to no visual art at all","From Filipino subjects to only American subjects","From music to only silent film"], correct:"From hidden protest toward open, everyday and entertainment themes", explain:"With less need to hide messages, art embraced everyday life, beauty, and entertainment."},
+    {q:"Which pair correctly matches an art form with its period?", choices:["Bodabil \u2014 American Period","Spoliarium \u2014 American Period","UP School of Fine Arts \u2014 Revolutionary Period","Kundiman \u2014 invented only in American Period"], correct:"Bodabil \u2014 American Period", explain:"Bodabil was introduced through American colonial influence after 1898."}
+  ]
+},
+
+/* ============================== DAY 3 ============================== */
+{
+  id:3,
+  title:"Two Eras, One Filipino Spirit: Comparing the Periods",
+  eyebrow:"Day 3 &middot; Comparing Concepts, Processes & Practices",
+  objectives:[
+    "Compare and contrast the concepts, processes, and practices of Revolutionary and American Period arts.",
+    "Analyze how historical context shaped the purpose and style of Filipino artworks.",
+    "Appreciate the continuity and change in Filipino artistic identity across both periods."
+  ],
+  engage:{
+    hook:"Look at these two ideas: a painting of dying gladiators secretly about Filipino suffering, and a painting of a smiling farm girl in golden sunlight. Both are 'Filipino art' &mdash; but they feel completely different. Why?",
+    reveal:{
+      front:"&#128064; Tap to think it through",
+      back:"Because the <strong>historical context</strong> shaped the <strong>purpose</strong> of the art! Under strict Spanish censorship, artists had to hide protest inside symbolism. Under American rule, artists had more freedom to simply celebrate everyday Filipino beauty and life. Same Filipino spirit &mdash; different context, different concept."
+    }
+  },
+  explore:{
+    type:"sort",
+    intro:"Let's compare! Sort each concept, process, or practice into the period it BEST fits &mdash; or 'Both Periods' if it's true for both.",
+    bins:[
+      {id:"rev", label:"Revolutionary Period"},
+      {id:"am", label:"American Period"},
+      {id:"both", label:"Both Periods"}
+    ],
+    items:[
+      {label:"Art often carried hidden political messages", bin:"rev"},
+      {label:"Art often celebrated everyday rural life openly", bin:"am"},
+      {label:"Used realistic, detailed painting techniques", bin:"both"},
+      {label:"Performing arts reflected Filipino identity", bin:"both"},
+      {label:"Formal government art school was established", bin:"am"},
+      {label:"Art was created under strict foreign censorship", bin:"rev"}
+    ]
+  },
+  explain:{
+    html:`
+      <p>When we <strong>interpret</strong> conventional concepts, processes, and practices, we look at three things: (1) the <strong>concept</strong> &mdash; the big idea or purpose; (2) the <strong>process</strong> &mdash; how it was made or performed; and (3) the <strong>practice</strong> &mdash; the tradition or convention the artist followed.</p>
+      <p><strong>Concept:</strong> Revolutionary art often carried a hidden nationalist message; American Period art more openly celebrated Filipino life, beauty, and entertainment.</p>
+      <p><strong>Process:</strong> Both periods used careful, realistic techniques (Luna's academic realism, Amorsolo's backlighting) &mdash; but American Period art also benefited from new formal training at the UP School of Fine Arts.</p>
+      <p><strong>Practice:</strong> Zarzuela (Revolutionary/early American) and bodabil (American) both mixed music, drama, and performance &mdash; but zarzuela leaned toward subtle social commentary, while bodabil leaned toward lighthearted entertainment.</p>
+      <p>The one thing that <strong>never changed</strong>: Filipino artists, no matter the colonizer, kept finding creative ways to express identity, emotion, and community &mdash; whether through a hidden symbol or an open smile.</p>
+    `
+  },
+  elaborate:{
+    type:"memory",
+    intro:"Memory Game! Flip two cards at a time to match each artist/art form to its correct period.",
+    pairs:[
+      {a:"Juan Luna", b:"Revolutionary Period"},
+      {a:"Fernando Amorsolo", b:"American Period"},
+      {a:"Zarzuela", b:"Revolutionary Period"},
+      {a:"Bodabil", b:"American Period"}
+    ]
+  },
+  quiz:[
+    {q:"What does 'concept' mean when interpreting an artwork?", choices:["The big idea or purpose behind the work","The exact date it was painted","The frame used to display it","The artist's birthplace"], correct:"The big idea or purpose behind the work", explain:"Concept refers to the underlying idea or message an artwork communicates."},
+    {q:"Which is TRUE of BOTH the Revolutionary and American Periods?", choices:["Performing arts reflected Filipino identity","Both had a formal government art school","Both hid all messages from censors","Both used only religious subjects"], correct:"Performing arts reflected Filipino identity", explain:"Whether through kundiman, zarzuela, or bodabil, performing arts always reflected Filipino identity."},
+    {q:"Why did Revolutionary Period art rely more on hidden symbolism than American Period art?", choices:["Because of strict Spanish colonial censorship","Because Filipino artists had no imagination yet","Because there were no painters during that time","Because symbolism was required by American law"], correct:"Because of strict Spanish colonial censorship", explain:"Strict censorship under Spain forced artists to hide protest inside symbolic subjects."},
+    {q:"A song about love that secretly means love of country is an example of art using...", choices:["Symbolism to express a hidden concept","A completely random, meaningless practice","A modern digital process","An American-introduced practice only"], correct:"Symbolism to express a hidden concept", explain:"This is exactly how many kundiman worked during the Revolutionary Period."},
+    {q:"What changed the MOST between the two periods in terms of process?", choices:["Filipino artists gained access to formal art education","Filipino artists stopped using paint entirely","Music was banned during the American period","Painting became illegal after 1898"], correct:"Filipino artists gained access to formal art education", explain:"The UP School of Fine Arts (1908) gave Filipino artists formal training for the first time."}
+  ]
+},
+
+/* ============================== DAY 4 ============================== */
+{
+  id:4,
+  title:"Reading Between the Lines: Interpreting Artworks",
+  eyebrow:"Day 4 &middot; Interpreting Concepts, Processes & Practices",
+  objectives:[
+    "Apply a simple framework (Subject, Technique, Context, Message) to interpret an artwork or performance.",
+    "Interpret the meaning behind a selected work from the Revolutionary or American Period.",
+    "Explain how form and content work together to communicate a message."
+  ],
+  engage:{
+    hook:"Imagine you only see a close-up: a chained wrist, dim torchlight, tired faces. What painting could this be from, and what might it mean?",
+    reveal:{
+      front:"&#128269; Tap to zoom out and reveal",
+      back:"That's a detail from the <strong>Spoliarium</strong>! A single close-up detail already tells us so much: suffering, darkness, struggle. That's the power of learning to <strong>interpret</strong> &mdash; even small clues reveal big meanings."
+    }
+  },
+  explore:{
+    type:"sequence",
+    intro:"Here is a simple 4-step framework for interpreting ANY artwork or performance: Subject, Technique, Context, Message (S-T-C-M). The steps got mixed up &mdash; put them back in the correct order using the arrows.",
+    correctOrder:[
+      {key:"subject", label:"SUBJECT \u2014 What do you see or hear? (people, objects, sounds, story)"},
+      {key:"technique", label:"TECHNIQUE \u2014 How was it made or performed? (style, medium, structure)"},
+      {key:"context", label:"CONTEXT \u2014 When and why was it created? (historical background)"},
+      {key:"message", label:"MESSAGE \u2014 What is the artwork telling us? (meaning, purpose)"}
+    ]
+  },
+  explain:{
+    html:`
+      <p>Let's practice the <strong>S-T-C-M framework</strong> using the Spoliarium:</p>
+      <p><strong>Subject:</strong> Dead and dying gladiators being dragged from an arena.<br>
+      <strong>Technique:</strong> Academic realism &mdash; dramatic lighting, detailed anatomy, oil on a massive canvas.<br>
+      <strong>Context:</strong> Painted in 1884 under Spanish colonization, when open protest was dangerous.<br>
+      <strong>Message:</strong> A symbol of the suffering of the Filipino people under colonial rule.</p>
+      <p>Now let's try an Amorsolo painting: <strong>Subject</strong> &mdash; a farm girl carrying fruit under golden sunlight. <strong>Technique</strong> &mdash; Amorsolo's signature backlighting, warm colors, smooth brushwork. <strong>Context</strong> &mdash; painted during the American Period, when there was more freedom to depict everyday rural beauty. <strong>Message</strong> &mdash; pride and appreciation for simple, joyful Filipino rural life.</p>
+      <p>Notice how the SAME framework reveals two very different messages &mdash; because context changes everything!</p>
+    `
+  },
+  elaborate:{
+    type:"scenario_mcq",
+    intro:"Practice interpreting a NEW example using S-T-C-M. A kundiman from 1898 has these lyrics (paraphrased): a singer begs a 'beloved' not to be abandoned, promising eternal devotion, sung softly with guitar accompaniment during a wartime gathering.",
+    questions:[
+      {q:"What is most likely the TRUE 'beloved' being addressed, given the context?", choices:["The Filipino motherland (Inang Bayan)","A random stranger","A foreign colonizer","Nobody in particular"], correct:0, explain:"Given the wartime context, the 'beloved' likely symbolizes the homeland."},
+      {q:"What TECHNIQUE detail is mentioned in the description?", choices:["Sung softly with guitar accompaniment","Painted using oil on canvas","Performed with fireworks","Written entirely in English"], correct:0, explain:"The technique described is the gentle vocal style with guitar accompaniment, typical of kundiman."},
+      {q:"What is the best MESSAGE interpretation of this kundiman?", choices:["A hidden declaration of love and loyalty to country","A simple children's lullaby with no deeper meaning","An advertisement for a local fiesta","A complaint about food shortage"], correct:0, explain:"Combining subject, technique, and context reveals a message of patriotic devotion hidden in a love song."}
+    ]
+  },
+  quiz:[
+    {q:"In the S-T-C-M framework, what does 'Subject' refer to?", choices:["What you see or hear in the work","When it was created","Why the artist made it","The award it won"], correct:"What you see or hear in the work", explain:"Subject is the visible or audible content \u2014 people, objects, sounds, or story."},
+    {q:"What does 'Context' help us understand about an artwork?", choices:["The historical background","Only the artist's favorite color","The size of the canvas only","The exact price of the artwork"], correct:"The historical background of when and why it was made", explain:"Context connects the work to its historical moment, which shapes its meaning."},
+    {q:"Why might the SAME framework (S-T-C-M) give very different messages for two different artworks?", choices:["Because context and subject change, changing the meaning","Because the framework is different every time","Because artworks have no real meaning","Because only technique matters"], correct:"Because context and subject change, changing the meaning", explain:"Different subjects and contexts lead to different interpreted messages, even using the same framework."},
+    {q:"A painting shows a joyful farm scene in golden light, made during the American Period. What is the MOST likely message?", choices:["Pride and appreciation of everyday Filipino rural life","Hidden protest against strict spanish colonizers","A warning about a near coming war","An advertisement for imported goods"], correct:"Pride and appreciation of everyday Filipino rural life", explain:"Given the technique (Amorsolo-style lighting) and context (American Period), this reflects celebration of rural life."},
+    {q:"Why is TECHNIQUE an important part of interpreting an artwork?", choices:["Because it affects the feeling and meaning","Because technique never affects meaning","Because only famous artists use technique","Because technique replaces the need for context"], correct:"Because HOW something is made affects the feeling and meaning it communicates", explain:"The way a work is made \u2014 lighting, style, structure \u2014 shapes how its message is felt."}
+  ]
+},
+
+/* ============================== DAY 5 ============================== */
+{
+  id:5,
+  title:"Your Turn to Create: Performance Task",
+  eyebrow:"Day 5 &middot; Creating & Interpreting Your Own Work",
+  objectives:[
+    "Create an original creative work inspired by the Revolutionary or American Period.",
+    "Interpret your own creative work using the concepts, processes, and practices learned this week.",
+    "Reflect on the value of Philippine art history to Filipino identity today."
+  ],
+  engage:{
+    reflect:{
+      prompt:"Before we create, reflect: Out of everything you learned this week (Luna's hidden protest, Amorsolo's golden fields, kundiman, zarzuela, bodabil...), what inspires YOU the most, and why?"
+    }
+  },
+  explore:{
+    intro:"Tap each card to see inspiration ideas for three possible creative tracks. You will choose ONE for your performance task.",
+    cards:[
+      {front:"&#127912; Track A: Visual Art", back:"Plan a painting or drawing idea inspired by either period &mdash; e.g., a scene showing a hidden protest symbol (Revolutionary-style) OR a joyful everyday scene with warm lighting (American-style, Amorsolo-inspired)."},
+      {front:"&#127925; Track B: Music/Lyrics", back:"Write a short kundiman-style verse (4\u20138 lines) &mdash; a love song that secretly (or openly) expresses love for the Philippines, family, or community."},
+      {front:"&#127917; Track C: Performance", back:"Plan a short skit or tableau (cuadro plastico / zarzuela-inspired) with 2\u20134 characters that shows a moment of struggle or celebration from Filipino life."}
+    ]
+  },
+  explain:{
+    html:`
+      <p><strong>Performance Task:</strong> Create ONE original creative work (Visual Art, Music/Lyrics, or Performance) inspired by the 19th Century, Revolutionary, or American Period &mdash; then interpret your OWN work using the S-T-C-M framework from Day 4.</p>
+      <p><strong>Rubric (how your work will be checked):</strong></p>
+      <p>1. <strong>Connection to Period</strong> &mdash; Clearly inspired by Revolutionary or American Period arts.<br>
+      2. <strong>Use of Concepts/Processes/Practices</strong> &mdash; Shows understanding of techniques or traditions learned this week.<br>
+      3. <strong>Creativity</strong> &mdash; Original and thoughtfully made.<br>
+      4. <strong>Interpretation</strong> &mdash; You can explain your own Subject, Technique, Context, and Message.</p>
+      <p>Use the planning organizer below to draft your idea. There are no wrong answers here &mdash; just bring your Filipino creativity!</p>
+    `
+  },
+  elaborate:{
+    type:"planner",
+    intro:"Fill in your creative plan. Choose your track, then answer each box. This is your own creative work &mdash; have fun with it!"
+  },
+  quiz:[
+    {q:"In the performance task rubric, what does 'Connection to Period' check for?", choices:["Whether your work is clearly inspired by the Revolutionary or American Period","Whether your work uses digital tools","Whether your work is longer than one page","Whether your work copies Juan Luna exactly"], correct:"Whether your work is clearly inspired by the Revolutionary or American Period", explain:"This criterion checks that your creative work draws clear inspiration from the periods studied."},
+    {q:"After creating your work, what should you be able to explain using the S-T-C-M framework?", choices:["Your own Subject, Technique, Context, and Message","Only the price of materials used","Only your teacher's opinion","Nothing \u2014 interpretation is not required"], correct:"Your own Subject, Technique, Context, and Message", explain:"Interpreting your own work with S-T-C-M is part of the performance task."},
+    {q:"If you choose Track B (Music/Lyrics), what style of song would best fit the Revolutionary Period inspiration?", choices:["A kundiman with a hidden patriotic meaning","A bodabil comedy number","A modern pop song about social media","An American vaudeville jingle"], correct:"A kundiman with a hidden patriotic meaning", explain:"Kundiman-style lyrics with hidden patriotic meaning connect best to the Revolutionary Period."},
+    {q:"Why is it valuable to study and recreate art from these two periods today?", choices:["It helps us understand and appreciate Filipino identity and history","It has no real value today","It is only useful for passing exams","It replaces the need to learn about current events"], correct:"It helps us understand and appreciate Filipino identity and history", explain:"Studying our art history builds appreciation for how Filipino identity has been expressed through time."},
+    {q:"Which BEST shows 'Creativity' as described in the rubric?", choices:["An original idea thoughtfully developed by the learner","An exact copy of the Spoliarium","A blank page with no plan","Someone else's completed artwork"], correct:"An original idea thoughtfully developed by the learner", explain:"Creativity means making something original and thoughtful, not copying existing work."}
+  ]
+}
+];
+
+/* =========================================================
+   STATE
+========================================================= */
+const state = {
+  currentDay: null,
+  completed: new Set(),
+  points: 0,
+  stars: 0,
+  dayProgress: {} // dayId -> {engage,explore,explain,elaborate,evaluate} booleans
+};
+DAYS.forEach(d=> state.dayProgress[d.id] = {engage:false, explore:false, explain:false, elaborate:false, evaluate:false});
+
+function awardPoints(n){
+  state.points += n;
+  state.stars = Math.floor(state.points/20);
+  showToast('+'+n+' points! \u2b50');
+  updateSidebarStats();
+}
+function showToast(msg){
+  const t = document.createElement('div');
+  t.className='points-toast';
+  t.textContent = msg;
+  document.body.appendChild(t);
+  setTimeout(()=>t.remove(), 900);
+}
+function markStep(dayId, step){
+  state.dayProgress[dayId][step] = true;
+  updateHeaderProgress(dayId);
+}
+function isDayFullyDone(dayId){
+  const p = state.dayProgress[dayId];
+  return p.engage && p.explore && p.explain && p.elaborate && p.evaluate;
+}
+
+/* =========================================================
+   SIDEBAR
+========================================================= */
+function renderSidebar(){
+  const list = document.getElementById('navList');
+  list.innerHTML='';
+  DAYS.forEach(d=>{
+    const li = document.createElement('li');
+    const btn = document.createElement('button');
+    btn.className = 'nav-btn' + (state.currentDay===d.id ? ' active' : '');
+    btn.innerHTML = `<span class="nav-day-label">Day ${d.id}<span class="nav-day-title">${d.title}</span></span>
+      <span class="nav-check ${state.completed.has(d.id)?'done':''}">${state.completed.has(d.id)?'&#10003;':d.id}</span>`;
+    btn.onclick = ()=>{ openDay(d.id); if(window.innerWidth<=760) closeMobileSidebar(); };
+    li.appendChild(btn);
+    list.appendChild(li);
+  });
+  updateSidebarStats();
+}
+function updateSidebarStats(){
+  document.getElementById('starCount').textContent = state.stars;
+  document.getElementById('badgeCount').textContent = state.completed.size;
+  document.getElementById('ptsCount').textContent = state.points;
+  const pct = Math.round((state.completed.size/5)*100);
+  document.getElementById('overallPct').textContent = pct+'%';
+  document.getElementById('overallBarFill').style.width = pct+'%';
+}
+
+/* =========================================================
+   HOME
+========================================================= */
+function renderHome(){
+  state.currentDay = null;
+  const main = document.getElementById('main');
+  main.innerHTML = `
+    <div class="main-top-space"></div>
+    <div class="welcome-card">
+      <div class="welcome-emblem">&#127917;&#127912;&#127925;</div>
+      <h1>Sining ng Bayan</h1>
+      <p>Interpreting the concepts, processes, and practices of Philippine art inspired by the 19th Century, the Revolutionary Period, and the American Period.</p>
+      <p style="font-size:14px; color:var(--ink-soft);">Choose a day below to begin your journey through Filipino art history!</p>
+      <div class="day-grid" id="homeGrid"></div>
+    </div>
+  `;
+  const grid = document.getElementById('homeGrid');
+  DAYS.forEach(d=>{
+    const card = document.createElement('div');
+    card.className='day-card';
+    card.onclick = ()=>openDay(d.id);
+    card.innerHTML = `<div class="day-card-num">Day ${d.id} ${state.completed.has(d.id)?'&#9989;':''}</div><div class="day-card-title">${d.title}</div>`;
+    grid.appendChild(card);
+  });
+  renderSidebar();
+}
+
+/* =========================================================
+   DAY RENDER
+========================================================= */
+function openDay(dayId){
+  state.currentDay = dayId;
+  const day = DAYS.find(d=>d.id===dayId);
+  const theme = THEME[dayId];
+  document.documentElement.style.setProperty('--day-color', `var(${theme.c})`);
+  document.documentElement.style.setProperty('--day-color-deep', `var(${theme.d})`);
+
+  const main = document.getElementById('main');
+  main.innerHTML = `
+    <div class="main-top-space"></div>
+    <div class="lesson-header">
+      <div class="lesson-eyebrow">${day.eyebrow}</div>
+      <h1>${day.title}</h1>
+      <p>45-minute lesson &middot; Follow ENGAGE &rarr; EXPLORE &rarr; EXPLAIN &rarr; ELABORATE &rarr; EVALUATE</p>
+      <div class="day-progress-track"><div class="day-progress-fill" id="dayProgFill"></div></div>
+      <div class="day-progress-steps">
+        <span>Engage</span><span>Explore</span><span>Explain</span><span>Elaborate</span><span>Evaluate</span>
+      </div>
+    </div>
+
+    <div class="section-block">
+      <span class="section-tag">1&#65039;&#8419; Engage</span>
+      <h2>Let's Get Curious!</h2>
+      <div id="engageArea"></div>
+    </div>
+
+    <div class="section-block">
+      <span class="section-tag">2&#65039;&#8419; Explore</span>
+      <h2>Discover the Details</h2>
+      <div id="exploreArea"></div>
+    </div>
+
+    <div class="section-block">
+      <span class="section-tag">3&#65039;&#8419; Explain</span>
+      <h2>Let's Learn Together</h2>
+      <div id="explainArea"></div>
+    </div>
+
+    <div class="section-block">
+      <span class="section-tag">4&#65039;&#8419; Elaborate</span>
+      <h2>Apply What You Know</h2>
+      <div id="elaborateArea"></div>
+    </div>
+
+    <div class="section-block">
+      <span class="section-tag">5&#65039;&#8419; Evaluate</span>
+      <h2>Show What You Learned</h2>
+      <div id="evaluateArea"></div>
+    </div>
+  `;
+
+  buildEngage(day);
+  buildExplore(day);
+  buildExplain(day);
+  buildElaborate(day);
+  buildEvaluate(day);
+  updateHeaderProgress(dayId);
+  renderSidebar();
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+function updateHeaderProgress(dayId){
+  const fill = document.getElementById('dayProgFill');
+  if(!fill || state.currentDay!==dayId) return;
+  const p = state.dayProgress[dayId];
+  const steps = ['engage','explore','explain','elaborate','evaluate'];
+  const done = steps.filter(s=>p[s]).length;
+  fill.style.width = (done/5*100)+'%';
+  if(done===5 && !state.completed.has(dayId)){
+    state.completed.add(dayId);
+    celebrateDay();
+    renderSidebar();
+  }
+}
+
+/* ---------- ENGAGE ---------- */
+function buildEngage(day){
+  const area = document.getElementById('engageArea');
+  area.innerHTML='';
+  const e = day.engage;
+
+  if(e.hook && e.reveal){
+    const p = document.createElement('p');
+    p.className='content-text';
+    p.innerHTML = e.hook;
+    area.appendChild(p);
+    const card = buildSingleReveal(e.reveal, ()=>markStep(day.id,'engage'));
+    area.appendChild(card);
+  }
+  if(e.tf){
+    const intro = document.createElement('p');
+    intro.className='content-text';
+    intro.innerHTML = e.tf.intro;
+    area.appendChild(intro);
+    let answered = 0;
+    e.tf.statements.forEach((st,i)=>{
+      const wrap = document.createElement('div');
+      wrap.style.marginBottom='14px';
+      wrap.innerHTML = `<p style="font-weight:600;">${i+1}. ${st.s}</p>`;
+      const row = document.createElement('div');
+      row.className='tf-row';
+      ['True','False'].forEach(label=>{
+        const btn = document.createElement('button');
+        btn.className='tf-btn';
+        btn.textContent = label;
+        btn.onclick = ()=>{
+          const correct = (label==='True')===st.answer;
+          [...row.children].forEach(b=>b.disabled=true);
+          btn.classList.add(correct?'correct':'incorrect');
+          if(correct){ awardPoints(5); }
+          const fb = document.createElement('div');
+          fb.className='mcq-feedback show '+(correct?'ok':'no');
+          fb.textContent = (correct?'Correct! ':'Not quite. ') + st.explain;
+          wrap.appendChild(fb);
+          answered++;
+          if(answered===e.tf.statements.length) markStep(day.id,'engage');
+        };
+        row.appendChild(btn);
+      });
+      wrap.appendChild(row);
+      area.appendChild(wrap);
+    });
+  }
+  if(e.reflect){
+    const wrap = document.createElement('div');
+    wrap.innerHTML = `<p class="content-text">${e.reflect.prompt}</p>
+      <textarea class="reflect-input" placeholder="Type your thoughts here..."></textarea>
+      <div><button class="ghost-btn" style="margin-top:8px;">Save my reflection</button></div>
+      <div class="reflect-saved">Saved! Thank you for sharing your thoughts. &#128156;</div>`;
+    const btn = wrap.querySelector('button');
+    const saved = wrap.querySelector('.reflect-saved');
+    const ta = wrap.querySelector('textarea');
+    btn.onclick = ()=>{
+      if(ta.value.trim().length>0){
+        saved.classList.add('show');
+        awardPoints(5);
+        markStep(day.id,'engage');
+      }
+    };
+    area.appendChild(wrap);
+  }
+  const enc = document.createElement('div');
+  enc.className='encourage';
+  enc.textContent = "Great start! Every explorer of history begins with a question. \u2728";
+  area.appendChild(enc);
+}
+
+function buildSingleReveal(reveal, onReveal){
+  const card = document.createElement('div');
+  card.className='flip-card';
+  card.style.maxWidth='520px';
+  card.innerHTML = `<div class="flip-card-front">${reveal.front}</div><div class="flip-card-back">${reveal.back}</div><div class="tap-hint">Tap the card</div>`;
+  card.onclick = ()=>{
+    if(!card.classList.contains('revealed')){
+      card.classList.add('revealed');
+      awardPoints(5);
+      onReveal && onReveal();
+    }
+  };
+  return card;
+}
+
+/* ---------- EXPLORE ---------- */
+function buildExplore(day){
+  const area = document.getElementById('exploreArea');
+  area.innerHTML='';
+  const ex = day.explore;
+
+  if(ex.cards){
+    const intro = document.createElement('p');
+    intro.className='content-text';
+    intro.innerHTML = ex.intro;
+    area.appendChild(intro);
+    const grid = document.createElement('div');
+    grid.className='card-grid';
+    let revealedCount=0;
+    ex.cards.forEach(c=>{
+      const card = document.createElement('div');
+      card.className='flip-card';
+      card.innerHTML = `<div class="flip-card-front">${c.front}</div><div class="flip-card-back">${c.back}</div><div class="tap-hint">Tap to reveal</div>`;
+      card.onclick = ()=>{
+        if(!card.classList.contains('revealed')){
+          card.classList.add('revealed');
+          awardPoints(5);
+          revealedCount++;
+          if(revealedCount===ex.cards.length) markStep(day.id,'explore');
+        }
+      };
+      grid.appendChild(card);
+    });
+    area.appendChild(grid);
+  }
+
+  if(ex.type==='sort'){
+    area.appendChild(buildSortActivity(ex, ()=>markStep(day.id,'explore')));
+  }
+
+  if(ex.type==='sequence'){
+    area.appendChild(buildSequenceActivity(ex, ()=>markStep(day.id,'explore')));
+  }
+}
+
+/* ---------- EXPLAIN ---------- */
+function buildExplain(day){
+  const area = document.getElementById('explainArea');
+  area.innerHTML = `<div class="content-text">${day.explain.html}</div>
+    <div class="encourage">Take your time re-reading if needed &mdash; understanding the WHY makes everything else easier! &#128161;</div>
+    <button class="primary-btn" id="explainDoneBtn">I understand this &mdash; Continue</button>`;
+  document.getElementById('explainDoneBtn').onclick = function(){
+    this.disabled=true;
+    this.textContent = 'Marked as Read \u2713';
+    awardPoints(10);
+    markStep(day.id,'explain');
+  };
+}
+
+/* ---------- ELABORATE ---------- */
+function buildElaborate(day){
+  const area = document.getElementById('elaborateArea');
+  area.innerHTML='';
+  const el = day.elaborate;
+
+  if(el.type==='match'){
+    const intro = document.createElement('p');
+    intro.className='content-text';
+    intro.innerHTML = el.intro;
+    area.appendChild(intro);
+    area.appendChild(buildMatchActivity(el.pairs, ()=>{
+      if(el.scenario) buildScenarioMCQ(area, el.scenario, day);
+      else markStep(day.id,'elaborate');
+    }));
+  }
+  else if(el.type==='sort'){
+    const intro = document.createElement('p');
+    intro.className='content-text';
+    intro.innerHTML = el.intro;
+    area.appendChild(intro);
+    area.appendChild(buildSortActivity(el, ()=>{
+      if(el.scenario) buildScenarioMCQ(area, el.scenario, day);
+      else markStep(day.id,'elaborate');
+    }));
+  }
+  else if(el.type==='memory'){
+    const intro = document.createElement('p');
+    intro.className='content-text';
+    intro.innerHTML = el.intro;
+    area.appendChild(intro);
+    area.appendChild(buildMemoryGame(el.pairs, ()=>markStep(day.id,'elaborate')));
+  }
+  else if(el.type==='scenario_mcq'){
+    const intro = document.createElement('p');
+    intro.className='content-text';
+    intro.innerHTML = el.intro;
+    area.appendChild(intro);
+    buildMultiScenarioMCQ(area, el.questions, day);
+  }
+  else if(el.type==='planner'){
+    buildPlanner(area, el, day);
+  }
+}
+
+function buildScenarioMCQ(area, scenario, day){
+  const wrap = document.createElement('div');
+  wrap.style.marginTop='18px';
+  wrap.innerHTML = `<div class="mcq-block"><div class="mcq-q">${scenario.q}</div><div class="mcq-choices"></div><div class="mcq-feedback"></div></div>`;
+  const choicesEl = wrap.querySelector('.mcq-choices');
+  const fb = wrap.querySelector('.mcq-feedback');
+  scenario.choices.forEach((c,i)=>{
+    const b = document.createElement('button');
+    b.className='mcq-choice';
+    b.textContent=c;
+    b.onclick = ()=>{
+      [...choicesEl.children].forEach(x=>x.disabled=true);
+      if(i===scenario.correctIndex){
+        b.classList.add('correct');
+        fb.classList.add('show','ok');
+        fb.textContent = 'Correct! '+scenario.explain;
+        awardPoints(10);
+        markStep(day.id,'elaborate');
+      } else {
+        b.classList.add('incorrect');
+        choicesEl.children[scenario.correctIndex].classList.add('correct');
+        fb.classList.add('show','no');
+        fb.textContent = 'Not quite. '+scenario.explain;
+        markStep(day.id,'elaborate');
+      }
+    };
+    choicesEl.appendChild(b);
+  });
+  area.appendChild(wrap);
+}
+
+function buildMultiScenarioMCQ(area, questions, day){
+  let doneCount=0;
+  questions.forEach((q,idx)=>{
+    const wrap = document.createElement('div');
+    wrap.className='mcq-block';
+    wrap.style.marginBottom='16px';
+    wrap.innerHTML = `<div class="mcq-q">${idx+1}. ${q.q}</div><div class="mcq-choices"></div><div class="mcq-feedback"></div>`;
+    const choicesEl = wrap.querySelector('.mcq-choices');
+    const fb = wrap.querySelector('.mcq-feedback');
+    q.choices.forEach((c,i)=>{
+      const b = document.createElement('button');
+      b.className='mcq-choice';
+      b.textContent=c;
+      b.onclick = ()=>{
+        [...choicesEl.children].forEach(x=>x.disabled=true);
+        if(i===q.correct){
+          b.classList.add('correct');
+          fb.classList.add('show','ok');
+          fb.textContent='Correct! '+q.explain;
+          awardPoints(8);
+        } else {
+          b.classList.add('incorrect');
+          choicesEl.children[q.correct].classList.add('correct');
+          fb.classList.add('show','no');
+          fb.textContent='Not quite. '+q.explain;
+        }
+        doneCount++;
+        if(doneCount===questions.length) markStep(day.id,'elaborate');
+      };
+      choicesEl.appendChild(b);
+    });
+    area.appendChild(wrap);
+  });
+}
+
+function buildSortActivity(cfg, onComplete){
+  const wrap = document.createElement('div');
+  wrap.className='sort-wrap';
+  const pool = document.createElement('div');
+  pool.className='sort-pool';
+  const bins = document.createElement('div');
+  bins.className='sort-bins';
+  if(cfg.bins.length===3) bins.style.gridTemplateColumns='1fr';
+
+  let selected = null;
+  let placedCount = 0;
+  const items = shuffle(cfg.items);
+
+  const binEls = {};
+  cfg.bins.forEach(b=>{
+    const binEl = document.createElement('div');
+    binEl.className='sort-bin';
+    binEl.innerHTML = `<h4>${b.label}</h4>`;
+    binEl.onclick = ()=>{
+      if(selected){
+        const correct = selected.dataset.bin === b.id;
+        if(correct){
+          selected.classList.remove('wrong-flash');
+          selected.style.cursor='default';
+          selected.onclick=null;
+          binEl.appendChild(selected);
+          awardPoints(5);
+          placedCount++;
+          selected = null;
+          if(placedCount===items.length) onComplete();
+        } else {
+          selected.classList.add('wrong-flash');
+          setTimeout(()=>selected && selected.classList.remove('wrong-flash'),500);
+        }
+      }
+    };
+    bins.appendChild(binEl);
+    binEls[b.id]=binEl;
+  });
+
+  items.forEach(it=>{
+    const chip = document.createElement('div');
+    chip.className='sort-chip';
+    chip.textContent = it.label;
+    chip.dataset.bin = it.bin;
+    chip.onclick = (ev)=>{
+      ev.stopPropagation();
+      if(selected) selected.classList.remove('selected');
+      selected = chip;
+      chip.classList.add('selected');
+    };
+    pool.appendChild(chip);
+  });
+
+  wrap.appendChild(pool);
+  wrap.appendChild(bins);
+  return wrap;
+}
+
+function buildMatchActivity(pairs, onComplete){
+  const wrap = document.createElement('div');
+  wrap.className='match-wrap';
+  const leftCol = document.createElement('div');
+  leftCol.className='match-col';
+  leftCol.innerHTML='<h4>Column A</h4>';
+  const rightCol = document.createElement('div');
+  rightCol.className='match-col';
+  rightCol.innerHTML='<h4>Column B</h4>';
+
+  const leftItems = pairs.map((p,i)=>({text:p.left, id:i}));
+  const rightItems = shuffle(pairs.map((p,i)=>({text:p.right, id:i})));
+
+  let selectedLeft = null;
+  let matchedCount = 0;
+
+  leftItems.forEach(item=>{
+    const el = document.createElement('div');
+    el.className='match-item';
+    el.textContent = item.text;
+    el.onclick = ()=>{
+      if(el.classList.contains('matched')) return;
+      [...leftCol.querySelectorAll('.match-item')].forEach(x=>x.classList.remove('selected'));
+      el.classList.add('selected');
+      selectedLeft = {id:item.id, el};
+    };
+    leftCol.appendChild(el);
+  });
+
+  rightItems.forEach(item=>{
+    const el = document.createElement('div');
+    el.className='match-item';
+    el.textContent = item.text;
+    el.onclick = ()=>{
+      if(el.classList.contains('matched') || !selectedLeft) return;
+      if(item.id === selectedLeft.id){
+        el.classList.add('matched');
+        selectedLeft.el.classList.remove('selected');
+        selectedLeft.el.classList.add('matched');
+        awardPoints(6);
+        matchedCount++;
+        selectedLeft = null;
+        if(matchedCount===pairs.length) onComplete();
+      } else {
+        el.classList.add('wrong-flash');
+        setTimeout(()=>el.classList.remove('wrong-flash'),500);
+      }
+    };
+    rightCol.appendChild(el);
+  });
+
+  wrap.appendChild(leftCol);
+  wrap.appendChild(rightCol);
+  return wrap;
+}
+
+function buildMemoryGame(pairs, onComplete){
+  const wrap = document.createElement('div');
+  let cards = [];
+  pairs.forEach((p,i)=>{
+    cards.push({label:p.a, group:i});
+    cards.push({label:p.b, group:i});
+  });
+  cards = shuffle(cards);
+  const grid = document.createElement('div');
+  grid.className='memory-grid';
+  let flipped = [];
+  let lock = false;
+  let matchedGroups = new Set();
+
+  cards.forEach(c=>{
+    const cardEl = document.createElement('div');
+    cardEl.className='mem-card';
+    cardEl.innerHTML = '&#10022;';
+    cardEl.onclick = ()=>{
+      if(lock || cardEl.classList.contains('flipped') || cardEl.classList.contains('matched')) return;
+      cardEl.classList.add('flipped');
+      cardEl.textContent = c.label;
+      flipped.push({el:cardEl, group:c.group});
+      if(flipped.length===2){
+        lock = true;
+        setTimeout(()=>{
+          if(flipped[0].group === flipped[1].group){
+            flipped.forEach(f=>{f.el.classList.remove('flipped'); f.el.classList.add('matched');});
+            matchedGroups.add(flipped[0].group);
+            awardPoints(8);
+            if(matchedGroups.size===pairs.length) onComplete();
+          } else {
+            flipped.forEach(f=>{f.el.classList.remove('flipped'); f.el.innerHTML='&#10022;';});
+          }
+          flipped=[];
+          lock=false;
+        },700);
+      }
+    };
+    grid.appendChild(cardEl);
+  });
+  wrap.appendChild(grid);
+  return wrap;
+}
+
+function buildSequenceActivity(cfg, onComplete){
+  const wrap = document.createElement('div');
+  const intro = document.createElement('p');
+  intro.className='content-text';
+  intro.innerHTML = cfg.intro;
+  wrap.appendChild(intro);
+
+  let order = shuffle(cfg.correctOrder);
+  const list = document.createElement('ul');
+  list.className='seq-list';
+  let checked=false;
+
+  function render(){
+    list.innerHTML='';
+    order.forEach((item,idx)=>{
+      const li = document.createElement('li');
+      li.className='seq-item';
+      li.innerHTML = `<span class="seq-num">${idx+1}</span><span style="flex:1;">${item.label}</span>
+        <span class="seq-controls">
+          <button class="seq-btn" data-dir="up" ${idx===0?'disabled':''}>&#8593;</button>
+          <button class="seq-btn" data-dir="down" ${idx===order.length-1?'disabled':''}>&#8595;</button>
+        </span>`;
+      li.querySelector('[data-dir="up"]').onclick = ()=>{
+        if(idx>0){ [order[idx-1],order[idx]]=[order[idx],order[idx-1]]; render(); }
+      };
+      li.querySelector('[data-dir="down"]').onclick = ()=>{
+        if(idx<order.length-1){ [order[idx+1],order[idx]]=[order[idx],order[idx+1]]; render(); }
+      };
+      list.appendChild(li);
+    });
+  }
+  render();
+  wrap.appendChild(list);
+
+  const checkBtn = document.createElement('button');
+  checkBtn.className='primary-btn';
+  checkBtn.textContent='Check My Order';
+  const fb = document.createElement('div');
+  fb.className='mcq-feedback';
+  checkBtn.onclick = ()=>{
+    const correct = order.every((item,idx)=>item.key===cfg.correctOrder[idx].key);
+    fb.classList.add('show');
+    if(correct){
+      fb.classList.add('ok');
+      fb.classList.remove('no');
+      fb.textContent = 'Perfect order! Subject \u2192 Technique \u2192 Context \u2192 Message. Great thinking!';
+      awardPoints(12);
+      if(!checked){ checked=true; onComplete(); }
+      checkBtn.disabled=true;
+    } else {
+      fb.classList.add('no');
+      fb.classList.remove('ok');
+      fb.textContent = 'Not quite in order yet. Use the arrows to rearrange, then check again!';
+    }
+  };
+  wrap.appendChild(checkBtn);
+  wrap.appendChild(fb);
+  return wrap;
+}
+
+function buildPlanner(area, el, day){
+  const intro = document.createElement('p');
+  intro.className='content-text';
+  intro.innerHTML = el.intro;
+  area.appendChild(intro);
+
+  const trackWrap = document.createElement('div');
+  trackWrap.innerHTML = `
+    <div class="tf-row" style="flex-wrap:wrap;">
+      <button class="tf-btn" data-track="A">&#127912; Visual Art</button>
+      <button class="tf-btn" data-track="B">&#127925; Music/Lyrics</button>
+      <button class="tf-btn" data-track="C">&#127917; Performance</button>
+    </div>
+    <div id="plannerFields" style="margin-top:14px;"></div>
+  `;
+  area.appendChild(trackWrap);
+  const fieldsArea = trackWrap.querySelector('#plannerFields');
+  const fields = [
+    {key:'title', label:'Title of your creative work'},
+    {key:'inspo', label:'Which period inspired you, and why?'},
+    {key:'desc', label:'Describe your work (what will it show, say, or sing?)'},
+    {key:'stcm', label:'Interpret your OWN work using Subject-Technique-Context-Message'}
+  ];
+  let filledCount = {};
+  function selectTrack(track, btn){
+    [...trackWrap.querySelectorAll('.tf-btn')].forEach(b=>b.classList.remove('correct'));
+    btn.classList.add('correct');
+    fieldsArea.innerHTML='';
+    filledCount = {};
+    fields.forEach(f=>{
+      const box = document.createElement('div');
+      box.style.marginBottom='12px';
+      box.innerHTML = `<label style="font-weight:700; font-size:14px; color:var(--day-color-deep);">${f.label}</label>
+        <textarea class="reflect-input" style="min-height:60px;"></textarea>`;
+      const ta = box.querySelector('textarea');
+      ta.oninput = ()=>{
+        filledCount[f.key] = ta.value.trim().length>3;
+        checkPlannerComplete();
+      };
+      fieldsArea.appendChild(box);
+    });
+    const saveBtn = document.createElement('button');
+    saveBtn.className='primary-btn';
+    saveBtn.textContent='Save My Plan';
+    saveBtn.onclick = ()=>{
+      awardPoints(15);
+      markStep(day.id,'elaborate');
+      saveBtn.disabled=true;
+      saveBtn.textContent='Plan Saved \u2713';
+    };
+    fieldsArea.appendChild(saveBtn);
+  }
+  function checkPlannerComplete(){}
+  trackWrap.querySelectorAll('.tf-btn').forEach(b=>{
+    b.onclick = ()=>selectTrack(b.dataset.track, b);
+  });
+}
+
+/* ---------- EVALUATE ---------- */
+function buildEvaluate(day){
+  const area = document.getElementById('evaluateArea');
+  area.innerHTML = `<p class="content-text">Answer all 5 questions below. Choices are shuffled every time you open this lesson. You can retry if you get one wrong!</p>
+    <div id="quizQuestions"></div>
+    <button class="primary-btn" id="submitQuizBtn">Submit My Answers</button>
+    <div id="quizResult"></div>`;
+
+  const qArea = document.getElementById('quizQuestions');
+  const shuffledQuestions = shuffle(day.quiz);
+  const answers = {}; // idx -> {chosen, correct}
+
+  shuffledQuestions.forEach((q,idx)=>{
+    const qWrap = document.createElement('div');
+    qWrap.className='mcq-block';
+    qWrap.style.marginBottom='18px';
+    qWrap.dataset.qidx = idx;
+    const choices = shuffle(q.choices);
+    qWrap.innerHTML = `<div class="mcq-q">${idx+1}. ${q.q}</div><div class="mcq-choices"></div><div class="mcq-feedback"></div>`;
+    const choicesEl = qWrap.querySelector('.mcq-choices');
+    const fb = qWrap.querySelector('.mcq-feedback');
+    choices.forEach(choiceText=>{
+      const b = document.createElement('button');
+      b.className='mcq-choice';
+      b.textContent = choiceText;
+      b.onclick = ()=>{
+        [...choicesEl.children].forEach(x=>x.disabled=true);
+        const isCorrect = choiceText === q.correct;
+        if(isCorrect){
+          b.classList.add('correct');
+        } else {
+          b.classList.add('incorrect');
+          [...choicesEl.children].find(x=>x.textContent===q.correct).classList.add('correct');
+        }
+        fb.classList.add('show', isCorrect?'ok':'no');
+        fb.textContent = (isCorrect?'Correct! ':'The correct answer is shown above. ') + q.explain;
+        if(!isCorrect){
+          const retry = document.createElement('button');
+          retry.className='retry-btn';
+          retry.textContent='Try Again';
+          retry.onclick = ()=>{
+            [...choicesEl.children].forEach(x=>{x.disabled=false; x.classList.remove('correct','incorrect');});
+            fb.classList.remove('show','ok','no');
+            fb.textContent='';
+            retry.remove();
+            answers[idx] = null;
+          };
+          fb.appendChild(document.createElement('br'));
+          fb.appendChild(retry);
+        }
+        answers[idx] = isCorrect;
+      };
+      choicesEl.appendChild(b);
+    });
+    qArea.appendChild(qWrap);
+  });
+
+  document.getElementById('submitQuizBtn').onclick = ()=>{
+    const total = shuffledQuestions.length;
+    const answered = Object.keys(answers).filter(k=>answers[k]!==null && answers[k]!==undefined).length;
+    if(answered < total){
+      const resultDiv = document.getElementById('quizResult');
+      resultDiv.innerHTML = `<div class="mcq-feedback show no">Please answer all ${total} questions before submitting (retry any you got wrong first).</div>`;
+      return;
+    }
+    const correctCount = Object.values(answers).filter(v=>v===true).length;
+    const pct = Math.round((correctCount/total)*100);
+    let medal = '\ud83c\udf1f', msg='Keep practicing \u2014 you are learning something new every day!';
+    if(pct===100){ medal='\ud83c\udfc6'; msg='PERFECT SCORE! You are a true Sining ng Bayan scholar!'; }
+    else if(pct>=80){ medal='\ud83e\udd47'; msg='Excellent work! You really understood the lesson!'; }
+    else if(pct>=60){ medal='\ud83c\udf96\ufe0f'; msg='Good job! Review the Explain section to strengthen your understanding.'; }
+    else { medal='\ud83d\udcda'; msg='Nice try! Revisit the lesson above, then you\'ll do even better.'; }
+
+    const starsEarned = Math.max(1, Math.round(pct/20));
+    let starsHtml='';
+    for(let i=1;i<=5;i++){ starsHtml += `<span class="${i<=starsEarned?'':'star-off'}">&#11088;</span>`; }
+
+    document.getElementById('quizResult').innerHTML = `
+      <div class="quiz-summary">
+        <div class="score-circle" style="--pct:${pct}%;"><div class="score-circle-inner"><div class="big">${correctCount}/${total}</div><div class="small">CORRECT</div></div></div>
+        <div class="medal">${medal}</div>
+        <div class="stars-row">${starsHtml}</div>
+        <h3>${msg}</h3>
+        <div class="day-complete-badge">&#9989; Day ${day.id} Complete!</div>
+      </div>
+    `;
+    awardPoints(correctCount*10);
+    markStep(day.id,'evaluate');
+    document.getElementById('submitQuizBtn').disabled = true;
+  };
+}
+
+/* =========================================================
+   CELEBRATION
+========================================================= */
+function celebrateDay(){
+  const colors = ['#c9a227','#7a2331','#1f3a5f','#6b5b3e','#c98a13','#2e7d4f'];
+  for(let i=0;i<60;i++){
+    const piece = document.createElement('div');
+    piece.className='confetti-piece';
+    piece.style.left = Math.random()*100+'vw';
+    piece.style.background = colors[Math.floor(Math.random()*colors.length)];
+    piece.style.animationDuration = (2+Math.random()*1.5)+'s';
+    piece.style.animationDelay = (Math.random()*0.4)+'s';
+    document.body.appendChild(piece);
+    setTimeout(()=>piece.remove(), 4000);
+  }
+  showToast('\ud83c\udf89 Day Complete! Badge earned!');
+}
+
+/* =========================================================
+   SIDEBAR TOGGLE
+========================================================= */
+const sidebar = document.getElementById('sidebar');
+const scrim = document.getElementById('scrim');
+document.getElementById('sidebarToggle').onclick = ()=>{
+  if(window.innerWidth<=760){
+    sidebar.classList.toggle('open');
+    scrim.classList.toggle('show');
+  } else {
+    sidebar.classList.toggle('collapsed');
+  }
+};
+scrim.onclick = closeMobileSidebar;
+function closeMobileSidebar(){
+  sidebar.classList.remove('open');
+  scrim.classList.remove('show');
+}
+
+/* =========================================================
+   INIT
+========================================================= */
+renderHome();
+</script>
+</body>
+</html>

@@ -1,0 +1,1261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Grade 6 ICT – Web Conferencing</title>
+<style>
+:root {
+  --indigo:#1E1B4B; --indigo-med:#2D2A6E; --indigo-light:#EEEEFF;
+  --blue:#3B82F6; --blue-light:#EFF6FF; --blue-dark:#1D4ED8;
+  --violet:#8B5CF6; --violet-light:#F5F3FF; --violet-dark:#6D28D9;
+  --lime:#22C55E; --lime-light:#F0FDF4; --lime-dark:#15803D;
+  --amber:#F59E0B; --amber-light:#FFFBEB;
+  --rose:#F43F5E; --rose-light:#FFF1F2;
+  --cyan:#06B6D4; --cyan-light:#ECFEFF;
+  --white:#F8FAFF; --card:#FFFFFF;
+  --text:#1E1B4B; --muted:#64748B;
+  --radius:18px; --shadow:0 4px 24px rgba(30,27,75,.10);
+  --shadow-hover:0 8px 32px rgba(30,27,75,.18);
+  --font:'Segoe UI',system-ui,Arial,sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:var(--font);background:var(--white);color:var(--text);min-height:100vh;}
+
+/* ── HEADER ── */
+.app-header{
+  background:linear-gradient(135deg,var(--indigo) 0%,var(--indigo-med) 55%,#3730A3 100%);
+  color:#fff;padding:18px 24px 0;position:sticky;top:0;z-index:100;
+  box-shadow:0 2px 24px rgba(0,0,0,.3);
+}
+.header-top{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:14px;}
+.header-brand{display:flex;align-items:center;gap:14px;}
+.video-icon-anim{width:44px;height:44px;background:var(--blue);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.4rem;animation:vcam 2.8s ease-in-out infinite;flex-shrink:0;}
+@keyframes vcam{0%,100%{box-shadow:0 0 0 0 rgba(59,130,246,.4);}50%{box-shadow:0 0 0 8px rgba(59,130,246,.0);}}
+.header-brand h1{font-size:clamp(1rem,2.4vw,1.5rem);font-weight:900;letter-spacing:.3px;}
+.header-brand p{font-size:.75rem;opacity:.75;margin-top:2px;}
+.header-controls{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+.mode-toggle{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.12);border-radius:50px;padding:6px 14px;cursor:pointer;border:1.5px solid rgba(255,255,255,.25);transition:.2s;font-size:.82rem;font-weight:700;color:#fff;white-space:nowrap;user-select:none;}
+.mode-toggle:hover{background:rgba(255,255,255,.22);}
+.mode-pip{width:10px;height:10px;border-radius:50%;background:var(--amber);margin-right:2px;display:inline-block;}
+.print-btn{background:rgba(255,255,255,.15);color:#fff;border:1.5px solid rgba(255,255,255,.25);padding:7px 16px;border-radius:50px;font-weight:700;font-size:.82rem;cursor:pointer;transition:.2s;}
+.print-btn:hover{background:rgba(255,255,255,.28);}
+
+/* ── TABS ── */
+.tabs{display:flex;gap:4px;}
+.tab-btn{flex:1;padding:11px 10px 13px;border:none;background:rgba(255,255,255,.08);color:rgba(255,255,255,.7);font-size:clamp(.78rem,1.9vw,.92rem);font-weight:800;border-radius:12px 12px 0 0;cursor:pointer;transition:.2s;border-bottom:3px solid transparent;letter-spacing:.2px;}
+.tab-btn:hover{background:rgba(255,255,255,.18);color:#fff;}
+.tab-btn.active{background:#fff;color:var(--indigo);border-bottom:3px solid var(--blue);}
+
+/* ── PROGRESS BAR ── */
+.progress-bar-wrap{background:var(--card);padding:10px 20px;box-shadow:0 2px 12px rgba(0,0,0,.07);position:sticky;top:86px;z-index:90;border-bottom:2px solid var(--indigo-light);}
+.progress-stages{display:flex;align-items:center;justify-content:center;overflow-x:auto;}
+.stage-item{display:flex;align-items:center;}
+.stage-dot{display:flex;flex-direction:column;align-items:center;cursor:pointer;padding:4px 8px;border-radius:10px;transition:.2s;min-width:68px;}
+.stage-dot:hover{background:var(--indigo-light);}
+.stage-circle{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.95rem;font-weight:800;border:3px solid #ddd;background:#fff;color:#aaa;transition:.3s;}
+.stage-circle.done{background:var(--lime);border-color:var(--lime);color:#fff;}
+.stage-circle.active{background:var(--blue);border-color:var(--blue);color:#fff;animation:pulseB .9s ease-in-out infinite alternate;}
+@keyframes pulseB{from{box-shadow:0 0 0 2px rgba(59,130,246,.2);}to{box-shadow:0 0 0 7px rgba(59,130,246,.07);}}
+.stage-label{font-size:.58rem;font-weight:800;color:var(--muted);margin-top:3px;text-transform:uppercase;letter-spacing:.5px;}
+.stage-label.done{color:var(--lime-dark);}
+.stage-label.active{color:var(--blue);}
+.stage-connector{width:30px;height:3px;background:#e2e8f0;transition:.3s;}
+.stage-connector.done{background:var(--lime);}
+@media(max-width:480px){.stage-connector{width:14px;}.stage-dot{min-width:50px;}}
+
+/* ── CONTENT ── */
+.content-area{padding:24px 20px 60px;max-width:860px;margin:0 auto;}
+.tab-panel{display:none;}
+.tab-panel.active{display:block;}
+
+/* ── LESSON HERO ── */
+.lesson-hero{border-radius:var(--radius);padding:28px 28px 24px;margin-bottom:22px;color:#fff;position:relative;overflow:hidden;}
+.lesson-hero.thu{background:linear-gradient(135deg,#1D4ED8 0%,var(--violet-dark) 100%);}
+.lesson-hero.fri{background:linear-gradient(135deg,#0F766E 0%,#1D4ED8 100%);}
+.lesson-hero .day-badge{background:rgba(255,255,255,.2);display:inline-block;padding:4px 14px;border-radius:50px;font-size:.75rem;font-weight:800;margin-bottom:10px;letter-spacing:.6px;}
+.lesson-hero h2{font-size:clamp(1.25rem,3vw,1.9rem);font-weight:900;margin-bottom:10px;line-height:1.2;}
+.lesson-hero .competency{background:rgba(255,255,255,.15);border-left:4px solid rgba(255,255,255,.55);padding:9px 14px;border-radius:0 8px 8px 0;font-size:.86rem;line-height:1.5;}
+/* Video grid decoration */
+.vgrid{position:absolute;right:18px;bottom:14px;display:grid;grid-template-columns:repeat(3,32px);gap:4px;opacity:.22;}
+.vgrid-tile{width:32px;height:26px;background:rgba(255,255,255,.6);border-radius:5px;}
+.vgrid-tile:nth-child(1){animation:tpulse 1.8s .0s ease-in-out infinite alternate;}
+.vgrid-tile:nth-child(2){animation:tpulse 1.8s .3s ease-in-out infinite alternate;}
+.vgrid-tile:nth-child(3){animation:tpulse 1.8s .6s ease-in-out infinite alternate;}
+.vgrid-tile:nth-child(4){animation:tpulse 1.8s .2s ease-in-out infinite alternate;}
+.vgrid-tile:nth-child(5){animation:tpulse 1.8s .5s ease-in-out infinite alternate;}
+.vgrid-tile:nth-child(6){animation:tpulse 1.8s .8s ease-in-out infinite alternate;}
+@keyframes tpulse{from{opacity:.4;}to{opacity:1;}}
+
+/* ── SECTION CARDS ── */
+.section-card{background:var(--card);border-radius:var(--radius);padding:24px;margin-bottom:18px;box-shadow:var(--shadow);border:1.5px solid transparent;transition:.25s;scroll-margin-top:148px;}
+.section-card:hover{box-shadow:var(--shadow-hover);}
+.section-card.engage{border-color:var(--rose);}
+.section-card.explore{border-color:var(--amber);}
+.section-card.explain{border-color:var(--blue);}
+.section-card.elaborate{border-color:var(--lime);}
+.section-card.evaluate{border-color:var(--violet);}
+.section-card.pre-sec{border-color:#e2e8f0;}
+.section-card.integration-sec{border-color:var(--cyan);}
+.section-card.reflect-sec{border-color:var(--amber);}
+.section-card.extended-sec{border-color:var(--lime);}
+
+.section-header{display:flex;align-items:center;gap:12px;margin-bottom:16px;}
+.sec-icon{width:46px;height:46px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:1.5rem;flex-shrink:0;}
+.sec-icon.engage{background:var(--rose-light);}
+.sec-icon.explore{background:var(--amber-light);}
+.sec-icon.explain{background:var(--blue-light);}
+.sec-icon.elaborate{background:var(--lime-light);}
+.sec-icon.evaluate{background:var(--violet-light);}
+.sec-icon.pre{background:#f1f5f9;}
+.sec-icon.form{background:var(--violet-light);}
+.sec-icon.int{background:var(--cyan-light);}
+.section-tag{font-size:.65rem;font-weight:800;text-transform:uppercase;letter-spacing:1px;padding:3px 10px;border-radius:50px;display:block;margin-bottom:3px;}
+.section-tag.engage{background:var(--rose-light);color:var(--rose);}
+.section-tag.explore{background:var(--amber-light);color:#92400E;}
+.section-tag.explain{background:var(--blue-light);color:var(--blue-dark);}
+.section-tag.elaborate{background:var(--lime-light);color:var(--lime-dark);}
+.section-tag.evaluate{background:var(--violet-light);color:var(--violet-dark);}
+.section-tag.meta{background:var(--indigo-light);color:var(--indigo);}
+.section-title{font-size:1.1rem;font-weight:800;color:var(--text);}
+
+/* ── OBJECTIVES ── */
+.obj-list{list-style:none;}
+.obj-list li{display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:1px solid #f1f5f9;font-size:.93rem;line-height:1.5;}
+.obj-list li::before{content:'💡';font-size:.85rem;flex-shrink:0;margin-top:2px;}
+
+/* ── PLATFORM CARDS ── */
+.platform-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(175px,1fr));gap:14px;margin-top:14px;}
+.platform-card{border-radius:16px;padding:18px 14px;text-align:center;cursor:pointer;transition:.25s;border:2.5px solid #e2e8f0;background:#fff;position:relative;overflow:hidden;}
+.platform-card:hover,.platform-card.flipped{border-color:var(--blue);box-shadow:var(--shadow-hover);transform:translateY(-3px);}
+.platform-card .pc-front{}
+.platform-card.flipped .pc-front{display:none;}
+.platform-card .pc-back{display:none;font-size:.82rem;line-height:1.6;color:var(--text);text-align:left;}
+.platform-card.flipped .pc-back{display:block;animation:fadeSlide .25s ease;}
+.pc-logo{font-size:2.8rem;display:block;margin-bottom:8px;}
+.pc-name{font-weight:900;font-size:.95rem;color:var(--indigo);}
+.pc-tag{font-size:.68rem;background:var(--indigo-light);color:var(--indigo);padding:2px 10px;border-radius:50px;font-weight:700;margin-top:5px;display:inline-block;}
+.flip-hint{position:absolute;top:8px;right:10px;font-size:.6rem;background:var(--blue);color:#fff;padding:2px 7px;border-radius:50px;font-weight:700;}
+
+/* ── CHAT BUBBLE Q&A ── */
+.chat-bubble-area{display:flex;flex-direction:column;gap:12px;margin-top:12px;}
+.chat-q{background:var(--indigo-light);border-radius:0 14px 14px 14px;padding:12px 16px;font-size:.93rem;font-weight:700;color:var(--indigo);display:flex;gap:10px;align-items:flex-start;max-width:92%;}
+.chat-q::before{content:'🎒';font-size:1rem;flex-shrink:0;}
+.chat-reveal-btn{background:var(--blue);color:#fff;border:none;padding:7px 18px;border-radius:50px;font-size:.82rem;font-weight:700;cursor:pointer;margin-top:8px;transition:.2s;display:inline-block;}
+.chat-reveal-btn:hover{background:var(--blue-dark);}
+.chat-answer{display:none;background:linear-gradient(135deg,var(--blue),var(--violet));color:#fff;border-radius:14px 0 14px 14px;padding:12px 16px;font-size:.88rem;line-height:1.6;margin-top:8px;max-width:90%;align-self:flex-end;}
+.chat-answer.shown{display:block;animation:fadeSlide .3s ease;}
+
+/* ── EXPAND CARDS ── */
+.expand-card{border:2px solid var(--blue-light);border-radius:14px;margin-bottom:10px;overflow:hidden;}
+.expand-header{background:var(--blue-light);padding:13px 18px;display:flex;justify-content:space-between;align-items:center;cursor:pointer;font-weight:800;font-size:.93rem;transition:.2s;}
+.expand-header:hover{background:#dbeafe;}
+.expand-arrow{transition:transform .25s;font-size:1rem;}
+.expand-body{padding:16px 18px;font-size:.88rem;line-height:1.75;display:none;border-top:1px solid var(--blue-light);}
+.expand-body.open{display:block;animation:fadeSlide .25s ease;}
+
+/* ── PLATFORM MATCH-UP ── */
+.match-game{margin-top:14px;}
+.match-instructions{background:var(--indigo-light);border-radius:12px;padding:12px 16px;font-size:.85rem;margin-bottom:14px;color:var(--indigo);font-weight:600;}
+.match-items-row{display:flex;flex-wrap:wrap;gap:10px;padding:12px;background:#f8faff;border-radius:12px;min-height:52px;border:2px dashed #cbd5e1;margin-bottom:14px;}
+.match-chip{background:var(--indigo);color:#fff;padding:8px 16px;border-radius:50px;font-size:.82rem;font-weight:700;cursor:grab;user-select:none;transition:.2s;display:flex;align-items:center;gap:6px;}
+.match-chip:hover{transform:scale(1.05);box-shadow:0 4px 14px rgba(30,27,75,.2);}
+.match-chip.dragging{opacity:.35;cursor:grabbing;}
+.match-targets{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;}
+.match-target{background:#fff;border:2.5px dashed #cbd5e1;border-radius:14px;padding:12px;min-height:90px;transition:.2s;}
+.match-target.over{border-color:var(--blue);background:var(--blue-light);}
+.match-target.correct-zone{border-color:var(--lime);background:var(--lime-light);}
+.match-target h4{font-size:.78rem;font-weight:800;text-transform:uppercase;color:var(--muted);margin-bottom:8px;text-align:center;letter-spacing:.4px;}
+.match-target .dropped{display:flex;flex-wrap:wrap;gap:6px;}
+.match-target .dropped .match-chip{font-size:.75rem;padding:5px 12px;cursor:default;}
+.match-chip.ok{background:var(--lime);}
+.match-chip.ng{background:var(--rose);}
+.match-check-btn{background:var(--violet);color:#fff;border:none;padding:10px 24px;border-radius:50px;font-weight:800;font-size:.88rem;cursor:pointer;transition:.2s;margin-top:12px;}
+.match-check-btn:hover{background:var(--violet-dark);}
+
+/* ── SCENARIO COMPARE ── */
+.scenario-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px;}
+.scenario-card{border-radius:14px;padding:18px;border:2.5px solid;}
+.scenario-card.bad{border-color:var(--rose);background:var(--rose-light);}
+.scenario-card.good{border-color:var(--lime);background:var(--lime-light);}
+.scenario-card h4{font-weight:800;font-size:.9rem;margin-bottom:10px;display:flex;align-items:center;gap:8px;}
+.scenario-list{list-style:none;display:flex;flex-direction:column;gap:7px;}
+.scenario-list li{font-size:.85rem;display:flex;align-items:flex-start;gap:8px;line-height:1.4;}
+@media(max-width:540px){.scenario-grid{grid-template-columns:1fr;}}
+
+/* ── NETIQUETTE RULES ── */
+.rule-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(185px,1fr));gap:12px;margin-top:14px;}
+.rule-card{border-radius:14px;padding:16px;border:2px solid #e2e8f0;background:#fff;transition:.25s;cursor:pointer;}
+.rule-card:hover{transform:translateY(-3px);box-shadow:var(--shadow-hover);}
+.rule-card.do{border-color:var(--lime);}
+.rule-card.dont{border-color:var(--rose);}
+.rule-card .rule-icon{font-size:2rem;display:block;margin-bottom:8px;}
+.rule-card .rule-label{font-size:.68rem;font-weight:800;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;}
+.rule-card.do .rule-label{color:var(--lime-dark);}
+.rule-card.dont .rule-label{color:var(--rose);}
+.rule-card .rule-text{font-size:.85rem;font-weight:600;color:var(--text);line-height:1.4;}
+
+/* ── ROLE PLAY SIMULATOR ── */
+.roleplay-area{margin-top:14px;}
+.rp-roles{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:12px;margin-bottom:16px;}
+.rp-role{border:2.5px solid #e2e8f0;border-radius:14px;padding:16px;text-align:center;cursor:pointer;transition:.25s;background:#fff;}
+.rp-role:hover,.rp-role.active{border-color:var(--blue);background:var(--blue-light);transform:translateY(-3px);box-shadow:var(--shadow);}
+.rp-role .rp-emoji{font-size:2.2rem;display:block;margin-bottom:6px;}
+.rp-role .rp-name{font-weight:800;font-size:.88rem;color:var(--text);}
+.rp-screen{background:var(--indigo);border-radius:16px;padding:20px;color:#fff;display:none;margin-top:4px;}
+.rp-screen.shown{display:block;animation:fadeSlide .3s ease;}
+.rp-screen h4{font-weight:900;font-size:1rem;margin-bottom:12px;color:#a5b4fc;}
+/* mock video UI */
+.mock-meeting{background:#111827;border-radius:12px;padding:12px;margin-bottom:14px;}
+.mock-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:10px;}
+.mock-tile{background:#1F2937;border-radius:8px;height:50px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;position:relative;}
+.mock-tile.speaking{box-shadow:0 0 0 3px var(--lime);animation:speak .5s ease-in-out infinite alternate;}
+@keyframes speak{from{box-shadow:0 0 0 2px var(--lime);}to{box-shadow:0 0 0 5px rgba(34,197,94,.3);}}
+.mock-tile .muted-badge{position:absolute;bottom:3px;right:5px;font-size:.6rem;}
+.mock-controls{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;}
+.mock-btn{background:#374151;color:#fff;border:none;border-radius:50px;padding:7px 14px;font-size:.75rem;font-weight:700;cursor:pointer;transition:.2s;display:flex;align-items:center;gap:4px;}
+.mock-btn:hover{background:#4B5563;}
+.mock-btn.active-ctrl{background:var(--blue);}
+.mock-btn.danger{background:var(--rose);}
+.mock-btn.on{background:var(--lime);color:#fff;}
+.rp-action-btn{display:block;width:100%;background:rgba(255,255,255,.1);border:1.5px solid rgba(255,255,255,.2);color:#fff;padding:10px 14px;border-radius:10px;font-size:.86rem;text-align:left;cursor:pointer;transition:.2s;margin-bottom:8px;}
+.rp-action-btn:hover{background:rgba(255,255,255,.2);}
+.rp-feedback{background:rgba(34,197,94,.15);border:1px solid rgba(34,197,94,.3);border-radius:10px;padding:10px 14px;font-size:.85rem;margin-top:8px;animation:fadeSlide .25s ease;}
+
+/* ── QUIZ ── */
+.quiz-question{margin-bottom:20px;}
+.quiz-q-text{font-weight:800;font-size:.95rem;color:var(--text);margin-bottom:12px;display:flex;gap:10px;}
+.quiz-q-num{background:var(--violet);color:#fff;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.78rem;font-weight:900;flex-shrink:0;margin-top:1px;}
+.quiz-options{display:grid;gap:8px;}
+.quiz-opt{background:#fff;border:2px solid #e2e8f0;border-radius:12px;padding:11px 16px;cursor:pointer;transition:.2s;display:flex;align-items:center;gap:10px;font-size:.88rem;font-weight:600;text-align:left;width:100%;}
+.quiz-opt:hover:not(.locked){border-color:var(--violet);background:var(--violet-light);}
+.quiz-opt.selected{border-color:var(--violet);background:var(--violet-light);}
+.quiz-opt.correct{border-color:var(--lime)!important;background:var(--lime-light)!important;}
+.quiz-opt.wrong{border-color:var(--rose)!important;background:var(--rose-light)!important;}
+.quiz-opt.locked{cursor:default;}
+.opt-letter{width:27px;height:27px;border-radius:8px;background:#f1f5f9;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.82rem;flex-shrink:0;}
+.quiz-submit-btn{background:var(--violet);color:#fff;border:none;padding:12px 32px;border-radius:50px;font-weight:800;font-size:.93rem;cursor:pointer;margin-top:14px;transition:.2s;display:block;margin-left:auto;}
+.quiz-submit-btn:hover:not(:disabled){background:var(--violet-dark);}
+.quiz-submit-btn:disabled{opacity:.45;cursor:default;}
+.score-box{background:linear-gradient(135deg,var(--blue),var(--violet));color:#fff;border-radius:16px;padding:24px;text-align:center;margin-top:16px;display:none;}
+.score-box.shown{display:block;animation:bounceIn .5s ease;}
+.score-big{font-size:3rem;font-weight:900;}
+.score-label{font-size:.88rem;opacity:.8;margin-top:4px;}
+.score-msg{font-size:.95rem;font-weight:700;margin-top:12px;}
+
+/* ── FORMATIVE ASSESSMENT (written) ── */
+.fa-questions{display:flex;flex-direction:column;gap:12px;margin-top:14px;}
+.fa-item{background:#f8faff;border:2px solid var(--indigo-light);border-radius:12px;padding:14px;}
+.fa-item .fa-q{font-weight:700;font-size:.9rem;color:var(--indigo);margin-bottom:8px;display:flex;gap:8px;}
+.fa-item .fa-q-num{background:var(--violet);color:#fff;width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:900;flex-shrink:0;margin-top:1px;}
+.fa-item textarea{width:100%;border:2px solid #e2e8f0;border-radius:8px;padding:9px;font-size:.85rem;resize:none;font-family:inherit;transition:.2s;background:#fff;}
+.fa-item textarea:focus{outline:none;border-color:var(--blue);}
+
+/* ── BADGES ── */
+.badge-area{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px;}
+.badge{background:linear-gradient(135deg,var(--blue),var(--violet));color:#fff;border-radius:50px;padding:7px 15px;font-size:.8rem;font-weight:800;display:flex;align-items:center;gap:6px;animation:bounceIn .4s ease;}
+
+/* ── NAV + BACK TOP ── */
+.lesson-nav{display:flex;flex-wrap:wrap;gap:12px;margin-top:28px;justify-content:space-between;align-items:center;}
+.nav-btn{background:var(--indigo);color:#fff;border:none;padding:12px 22px;border-radius:50px;font-weight:800;font-size:.86rem;cursor:pointer;transition:.2s;display:flex;align-items:center;gap:8px;}
+.nav-btn:hover{background:var(--blue-dark);transform:translateY(-2px);}
+.nav-btn.secondary{background:#fff;color:var(--indigo);border:2px solid var(--indigo);}
+.nav-btn.secondary:hover{background:var(--indigo);color:#fff;}
+.back-top-btn{position:fixed;bottom:24px;right:24px;background:var(--blue);color:#fff;border:none;width:48px;height:48px;border-radius:50%;font-size:1.2rem;cursor:pointer;box-shadow:0 4px 16px rgba(0,0,0,.22);transition:.2s;z-index:200;display:flex;align-items:center;justify-content:center;}
+.back-top-btn:hover{background:var(--blue-dark);transform:translateY(-3px);}
+
+/* ── META CHIPS ── */
+.meta-chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;}
+.meta-chip{background:var(--indigo-light);border-radius:50px;padding:5px 14px;font-size:.8rem;font-weight:700;color:var(--indigo);}
+
+/* ── TEACHER ── */
+.teacher-only{display:none;}
+.teacher-mode .teacher-only{display:block;}
+.learner-mode .teacher-only{display:none!important;}
+.teacher-note{background:var(--amber-light);border-left:4px solid var(--amber);border-radius:0 10px 10px 0;padding:11px 15px;margin-top:12px;font-size:.83rem;}
+.teacher-note strong{color:#92400E;}
+
+/* ── COMPLETE BUTTON ── */
+.complete-btn{border:none;padding:9px 20px;border-radius:50px;cursor:pointer;font-size:.82rem;font-weight:800;margin-top:12px;transition:.2s;}
+.complete-btn.engage{background:var(--rose-light);color:var(--rose);}
+.complete-btn.explore{background:var(--amber-light);color:#92400E;}
+.complete-btn.explain{background:var(--blue-light);color:var(--blue-dark);}
+.complete-btn.elaborate{background:var(--lime-light);color:var(--lime-dark);}
+.complete-btn.evaluate{background:var(--violet-light);color:var(--violet-dark);}
+.complete-btn:hover{filter:brightness(.92);}
+
+/* ── EXIT BOARD ── */
+.exit-textarea{width:100%;border:2.5px solid #e2e8f0;border-radius:12px;padding:13px;font-size:.88rem;resize:vertical;min-height:78px;font-family:inherit;transition:.2s;}
+.exit-textarea:focus{outline:none;border-color:var(--violet);}
+.exit-submit-btn{background:var(--violet);color:#fff;border:none;padding:9px 24px;border-radius:50px;font-weight:800;font-size:.85rem;cursor:pointer;margin-top:9px;transition:.2s;}
+.exit-submit-btn:hover{background:var(--violet-dark);}
+.exit-posts{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px;}
+.exit-post{background:var(--indigo);color:#fff;padding:10px 14px;border-radius:10px;font-size:.83rem;font-weight:600;max-width:230px;animation:fadeSlide .3s ease;}
+
+/* ── DO's DON'Ts CANVAS ── */
+.dos-donts{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px;}
+.dd-col{border-radius:14px;padding:16px;}
+.dd-col.dos{background:var(--lime-light);border:2px solid var(--lime);}
+.dd-col.donts{background:var(--rose-light);border:2px solid var(--rose);}
+.dd-col h4{font-weight:900;font-size:.92rem;margin-bottom:10px;display:flex;align-items:center;gap:8px;}
+.dd-col.dos h4{color:var(--lime-dark);}
+.dd-col.donts h4{color:var(--rose);}
+.dd-list{list-style:none;display:flex;flex-direction:column;gap:7px;}
+.dd-list li{font-size:.84rem;display:flex;align-items:flex-start;gap:7px;line-height:1.4;}
+@media(max-width:520px){.dos-donts{grid-template-columns:1fr;}}
+
+/* ── TOGGLE SWITCHES (mic/cam demo) ── */
+.toggle-row{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid #f1f5f9;}
+.toggle-label{flex:1;font-size:.9rem;font-weight:600;}
+.toggle-switch{position:relative;width:46px;height:26px;cursor:pointer;}
+.toggle-switch input{opacity:0;width:0;height:0;}
+.toggle-track{position:absolute;top:0;left:0;right:0;bottom:0;background:#cbd5e1;border-radius:50px;transition:.3s;}
+.toggle-switch input:checked+.toggle-track{background:var(--lime);}
+.toggle-thumb{position:absolute;top:3px;left:3px;width:20px;height:20px;background:#fff;border-radius:50%;transition:.3s;box-shadow:0 1px 4px rgba(0,0,0,.2);}
+.toggle-switch input:checked~.toggle-thumb{left:23px;}
+.toggle-status{font-size:.78rem;font-weight:700;min-width:40px;}
+
+/* ── ANIMATIONS ── */
+@keyframes fadeSlide{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
+@keyframes bounceIn{0%{transform:scale(.7);opacity:0;}70%{transform:scale(1.07);}100%{transform:scale(1);opacity:1;}}
+
+/* ── PRINT ── */
+@media print{
+  .app-header,.progress-bar-wrap,.lesson-nav,.back-top-btn,.print-btn,.tabs,.mode-toggle,.mock-meeting,.complete-btn{display:none!important;}
+  .tab-panel{display:block!important;}
+  .section-card{break-inside:avoid;box-shadow:none;border:1px solid #ddd;}
+}
+/* ── RESPONSIVE ── */
+@media(max-width:600px){
+  .content-area{padding:14px 12px 50px;}
+  .section-card{padding:16px;}
+  .platform-grid{grid-template-columns:1fr 1fr;}
+  .match-targets{grid-template-columns:1fr 1fr;}
+}
+</style>
+</head>
+<body class="teacher-mode" id="appBody">
+
+<!-- HEADER -->
+<div class="app-header" id="appHeader">
+  <div class="header-top">
+    <div class="header-brand">
+      <div class="video-icon-anim">📹</div>
+      <div>
+        <h1>Grade 6 ICT – Web Conferencing</h1>
+        <p>Interactive Classroom Lesson Presentation</p>
+      </div>
+    </div>
+    <div class="header-controls">
+      <button class="print-btn" onclick="window.print()">🖨️ Print</button>
+      <div class="mode-toggle" onclick="toggleMode()">
+        <span class="mode-pip" id="modePip"></span>
+        <span id="modeLabel">Teacher Mode</span>
+      </div>
+    </div>
+  </div>
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab(0,this)" id="tab0">📅 Thursday – Day 1</button>
+    <button class="tab-btn" onclick="switchTab(1,this)" id="tab1">📅 Friday – Day 2</button>
+  </div>
+</div>
+
+<!-- PROGRESS BAR -->
+<div class="progress-bar-wrap">
+  <div class="progress-stages" id="progressStages">
+    <div class="stage-item"><div class="stage-dot" onclick="scrollToStage('engage')"><div class="stage-circle active" id="ps-engage">🎯</div><div class="stage-label active" id="pl-engage">Engage</div></div></div>
+    <div class="stage-connector" id="pc-engage"></div>
+    <div class="stage-item"><div class="stage-dot" onclick="scrollToStage('explore')"><div class="stage-circle" id="ps-explore">🔍</div><div class="stage-label" id="pl-explore">Explore</div></div></div>
+    <div class="stage-connector" id="pc-explore"></div>
+    <div class="stage-item"><div class="stage-dot" onclick="scrollToStage('explain')"><div class="stage-circle" id="ps-explain">📖</div><div class="stage-label" id="pl-explain">Explain</div></div></div>
+    <div class="stage-connector" id="pc-explain"></div>
+    <div class="stage-item"><div class="stage-dot" onclick="scrollToStage('elaborate')"><div class="stage-circle" id="ps-elaborate">🌐</div><div class="stage-label" id="pl-elaborate">Elaborate</div></div></div>
+    <div class="stage-connector" id="pc-elaborate"></div>
+    <div class="stage-item"><div class="stage-dot" onclick="scrollToStage('evaluate')"><div class="stage-circle" id="ps-evaluate">✅</div><div class="stage-label" id="pl-evaluate">Evaluate</div></div></div>
+  </div>
+</div>
+
+<!-- ══════════════ THURSDAY ══════════════ -->
+<div class="tab-panel active" id="panel-0">
+<div class="content-area">
+
+  <div class="lesson-hero thu">
+    <div class="vgrid"><div class="vgrid-tile"></div><div class="vgrid-tile"></div><div class="vgrid-tile"></div><div class="vgrid-tile"></div><div class="vgrid-tile"></div><div class="vgrid-tile"></div></div>
+    <span class="day-badge">📅 Day 1 · Thursday · ICT 6</span>
+    <h2>Introduction to Web Conferencing</h2>
+    <div class="competency">📌 <strong>Learning Competency:</strong> Describes web conferencing and identifies its uses and platforms. Demonstrates understanding of basic online communication tools.</div>
+  </div>
+
+  <!-- Pre-Lesson -->
+  <div class="section-card pre-sec">
+    <div class="section-header"><div class="sec-icon pre">📋</div><div><span class="section-tag meta">Pre-Lesson</span><div class="section-title">Before We Begin</div></div></div>
+    <div class="meta-chips"><span class="meta-chip">👋 Greetings</span><span class="meta-chip">📝 Attendance</span><span class="meta-chip">💻 Device Check</span></div>
+    <div style="margin-top:14px;background:var(--blue-light);border-radius:12px;padding:16px;">
+      <strong style="font-size:.93rem;">💬 Motivation Question:</strong>
+      <p style="margin-top:8px;font-size:1.08rem;font-weight:800;color:var(--indigo);">"Have you ever joined a video call? Who were you talking to?"</p>
+    </div>
+    <div class="teacher-only"><div class="teacher-note"><strong>👩‍🏫 Teacher Note:</strong> Let 2–3 learners share their experience with video calls. Relate their answers to what web conferencing is. This activates prior knowledge effectively.</div></div>
+  </div>
+
+  <!-- Objectives -->
+  <div class="section-card pre-sec">
+    <div class="section-header"><div class="sec-icon pre">🎯</div><div><span class="section-tag meta">Learning Objectives</span><div class="section-title">What You Will Learn Today</div></div></div>
+    <ul class="obj-list">
+      <li>Define web conferencing in your own words.</li>
+      <li>Identify common web conferencing platforms (Zoom, Google Meet, Microsoft Teams).</li>
+      <li>Explain the uses of web conferencing in learning and communication.</li>
+    </ul>
+    <div class="teacher-only"><div class="teacher-note"><strong>👩‍🏫 Teacher Note:</strong> Post objectives on the board. Return to them at the end of the lesson to check if all were met.</div></div>
+  </div>
+
+  <!-- Learning Context -->
+  <div class="section-card pre-sec">
+    <div class="section-header"><div class="sec-icon pre">🌐</div><div><span class="section-tag meta">Learning Context</span><div class="section-title">Where You Are Coming From</div></div></div>
+    <p style="font-size:.93rem;line-height:1.7;">Learners are already familiar with online communication from messaging apps like Messenger and Viber, and may have experienced online classes or family video calls. Today's lesson builds on that experience and formalizes it into the concept of <strong>web conferencing</strong>.</p>
+  </div>
+
+  <!-- ENGAGE -->
+  <div class="section-card engage" id="engage" data-stage="engage">
+    <div class="section-header"><div class="sec-icon engage">🎯</div><div><span class="section-tag engage">Engage</span><div class="section-title">Online Meetings — Have You Seen This?</div></div></div>
+    <p style="font-size:.88rem;color:var(--muted);margin-bottom:14px;">Click each platform card to see what it looks like and what it does! 💻</p>
+    <div class="platform-grid">
+      <div class="platform-card" onclick="flipCard(this)">
+        <span class="flip-hint">TAP</span>
+        <div class="pc-front"><span class="pc-logo">🎥</span><div class="pc-name">Zoom</div><span class="pc-tag">Video Meetings</span></div>
+        <div class="pc-back"><strong>Zoom</strong> is one of the most popular web conferencing apps in the world. It was widely used during online school during the pandemic. You can have video calls with up to hundreds of people at once! Features include screen sharing, breakout rooms, and the famous "raise hand" button. 🖐️</div>
+      </div>
+      <div class="platform-card" onclick="flipCard(this)">
+        <span class="flip-hint">TAP</span>
+        <div class="pc-front"><span class="pc-logo">🟢</span><div class="pc-name">Google Meet</div><span class="pc-tag">Browser-Based</span></div>
+        <div class="pc-back"><strong>Google Meet</strong> is made by Google and works right in your web browser — no download needed! It connects with Gmail and Google Classroom. Many Philippine public schools use Google Meet for online classes because it's free and easy to access! 🏫</div>
+      </div>
+      <div class="platform-card" onclick="flipCard(this)">
+        <span class="flip-hint">TAP</span>
+        <div class="pc-front"><span class="pc-logo">🟦</span><div class="pc-name">Microsoft Teams</div><span class="pc-tag">For Offices & Schools</span></div>
+        <div class="pc-back"><strong>Microsoft Teams</strong> is used by companies, schools, and organizations. It combines video meetings, chat, file sharing, and task management all in one app. Many offices around the world use Teams to hold meetings without being in the same building! 🏢</div>
+      </div>
+      <div class="platform-card" onclick="flipCard(this)">
+        <span class="flip-hint">TAP</span>
+        <div class="pc-front"><span class="pc-logo">📘</span><div class="pc-name">Facebook Rooms</div><span class="pc-tag">Social Video Calls</span></div>
+        <div class="pc-back"><strong>Facebook Messenger Rooms</strong> lets you do video calls with up to 50 people. Many Filipino families use this for virtual reunions and family catch-ups! It's one of the most accessible options since almost everyone in the Philippines has Facebook. 🇵🇭</div>
+      </div>
+    </div>
+    <div class="badge-area" id="badges-engage-0"></div>
+    <button class="complete-btn engage" onclick="markStageComplete('engage','0')">✅ Mark Engage Complete</button>
+    <div class="teacher-only"><div class="teacher-note"><strong>👩‍🏫 Teacher Note:</strong> Ask learners which platforms they've used before. Show the actual interface if a device is available. This builds excitement and relevance.</div></div>
+  </div>
+
+  <!-- EXPLORE -->
+  <div class="section-card explore" id="explore" data-stage="explore">
+    <div class="section-header"><div class="sec-icon explore">🔍</div><div><span class="section-tag explore">Explore</span><div class="section-title">What Do You See? What Have You Tried?</div></div></div>
+    <p style="font-size:.88rem;color:var(--muted);margin-bottom:14px;">Think about online meetings you've seen or joined. Answer these questions! 💬</p>
+    <div class="chat-bubble-area">
+      <div>
+        <div class="chat-q">What do you see in an online class or video meeting screen?</div>
+        <button class="chat-reveal-btn" onclick="revealChat(this)">💬 Reveal Answer</button>
+        <div class="chat-answer">You see small video tiles of each person's face, a chat box on the side, buttons to mute/unmute the microphone, and a button to turn the camera on or off. There's also a "raise hand" button so you can signal when you want to speak without interrupting! 🖐️</div>
+      </div>
+      <div>
+        <div class="chat-q">Have you experienced being in an online class or family video call? What did you do?</div>
+        <button class="chat-reveal-btn" onclick="revealChat(this)">💬 Reveal Answer</button>
+        <div class="chat-answer">In an online class, you listen to your teacher, answer questions in the chat, raise your hand virtually, and turn on your camera when asked. In family calls, you see and talk to relatives even when they are far away — that's the power of web conferencing! 🌏</div>
+      </div>
+      <div>
+        <div class="chat-q">Why do you think people prefer video calls over just phone calls?</div>
+        <button class="chat-reveal-btn" onclick="revealChat(this)">💬 Reveal Answer</button>
+        <div class="chat-answer">Video calls let you see the other person's face, expressions, and body language — just like talking in person! You can share your screen, show objects, and feel more connected. For school, teachers can show presentations and check if students understand. 📱</div>
+      </div>
+    </div>
+    <button class="complete-btn explore" onclick="markStageComplete('explore','0')">✅ Mark Explore Complete</button>
+  </div>
+
+  <!-- EXPLAIN -->
+  <div class="section-card explain" id="explain" data-stage="explain">
+    <div class="section-header"><div class="sec-icon explain">📖</div><div><span class="section-tag explain">Explain</span><div class="section-title">Understanding Web Conferencing</div></div></div>
+    <p style="font-size:.88rem;color:var(--muted);margin-bottom:14px;">Tap each card to expand and learn! 📚</p>
+    <div class="expand-card">
+      <div class="expand-header" onclick="toggleExpand(this)">💻 What is Web Conferencing? <span class="expand-arrow">▼</span></div>
+      <div class="expand-body"><strong>Web conferencing</strong> is a type of online communication that allows two or more people to hold a meeting, class, or discussion over the internet using audio, video, and text in real time.<br><br>The word "web" refers to the internet, and "conferencing" means holding a meeting or discussion. So web conferencing simply means <em>holding a meeting through the internet</em>!<br><br>You need: a device (computer, tablet, or smartphone), a microphone, a camera, and a stable internet connection.</div>
+    </div>
+    <div class="expand-card">
+      <div class="expand-header" onclick="toggleExpand(this)">📱 Common Web Conferencing Platforms <span class="expand-arrow">▼</span></div>
+      <div class="expand-body">
+        <strong>🎥 Zoom</strong> — Free for 40-minute meetings; widely used in schools and businesses. Has breakout rooms, whiteboard, and reactions.<br><br>
+        <strong>🟢 Google Meet</strong> — Made by Google; free and browser-based; integrates with Google Classroom and Gmail; preferred by many Philippine schools.<br><br>
+        <strong>🟦 Microsoft Teams</strong> — Best for organizations; combines meetings, chat, and file management; used by companies and universities.<br><br>
+        <strong>📘 Facebook Rooms / Messenger</strong> — Easy access for Filipino families; connects with existing Facebook accounts; up to 50 participants.
+      </div>
+    </div>
+    <div class="expand-card">
+      <div class="expand-header" onclick="toggleExpand(this)">🎓 Uses in Education <span class="expand-arrow">▼</span></div>
+      <div class="expand-body">
+        Web conferencing changed education forever — especially during the COVID-19 pandemic! Here's how it's used in schools:<br><br>
+        • <strong>Online classes</strong> — Teachers teach remotely while students attend from home.<br>
+        • <strong>Group discussions</strong> — Classmates collaborate through breakout rooms.<br>
+        • <strong>Presentations</strong> — Students present reports by sharing their screen.<br>
+        • <strong>Parent meetings</strong> — Schools hold Parent-Teacher conferences online.<br>
+        • <strong>Webinars</strong> — Experts share knowledge with students and teachers via video.
+      </div>
+    </div>
+    <div class="expand-card">
+      <div class="expand-header" onclick="toggleExpand(this)">📡 Uses in Communication <span class="expand-arrow">▼</span></div>
+      <div class="expand-body">
+        Beyond school, web conferencing is used in many areas of life:<br><br>
+        • <strong>Business meetings</strong> — Employees from different cities or countries meet without traveling.<br>
+        • <strong>Medical consultations</strong> — Doctors see patients online (telemedicine/teleconsult).<br>
+        • <strong>Family reunions</strong> — OFW families connect with loved ones abroad.<br>
+        • <strong>Government</strong> — Officials hold meetings and briefings online.<br>
+        • <strong>Religious services</strong> — Churches and mosques broadcast services online.
+      </div>
+    </div>
+    <button class="complete-btn explain" onclick="markStageComplete('explain','0')">✅ Mark Explain Complete</button>
+    <div class="teacher-only"><div class="teacher-note"><strong>👩‍🏫 Teacher Note:</strong> Open each card one at a time with the class. Ask comprehension questions: "What do you need for web conferencing?" "Name one use in school."</div></div>
+  </div>
+
+  <!-- ELABORATE – Platform Match-Up -->
+  <div class="section-card elaborate" id="elaborate" data-stage="elaborate">
+    <div class="section-header"><div class="sec-icon elaborate">🌐</div><div><span class="section-tag elaborate">Elaborate</span><div class="section-title">Platform Match-Up Activity</div></div></div>
+    <p style="font-size:.88rem;color:var(--muted);margin-bottom:4px;">Drag each platform name to the correct category it best belongs to! 🖱️</p>
+    <div class="match-instructions">🗂️ Sort each platform into the category that best describes where it is most used.</div>
+    <div id="match-pool-0" class="match-items-row">
+      <div class="match-chip" draggable="true" data-cat="School" id="mc-zoom" ondragstart="chipDragStart(event)" ondragend="chipDragEnd(event)" ontouchstart="chipTouchStart(event)" ontouchmove="chipTouchMove(event)" ontouchend="chipTouchEnd(event)">🎥 Zoom</div>
+      <div class="match-chip" draggable="true" data-cat="School" id="mc-meet" ondragstart="chipDragStart(event)" ondragend="chipDragEnd(event)" ontouchstart="chipTouchStart(event)" ontouchmove="chipTouchMove(event)" ontouchend="chipTouchEnd(event)">🟢 Google Meet</div>
+      <div class="match-chip" draggable="true" data-cat="Business" id="mc-teams" ondragstart="chipDragStart(event)" ondragend="chipDragEnd(event)" ontouchstart="chipTouchStart(event)" ontouchmove="chipTouchMove(event)" ontouchend="chipTouchEnd(event)">🟦 MS Teams</div>
+      <div class="match-chip" draggable="true" data-cat="Family" id="mc-fb" ondragstart="chipDragStart(event)" ondragend="chipDragEnd(event)" ontouchstart="chipTouchStart(event)" ontouchmove="chipTouchMove(event)" ontouchend="chipTouchEnd(event)">📘 FB Rooms</div>
+      <div class="match-chip" draggable="true" data-cat="School" id="mc-gclass" ondragstart="chipDragStart(event)" ondragend="chipDragEnd(event)" ontouchstart="chipTouchStart(event)" ontouchmove="chipTouchMove(event)" ontouchend="chipTouchEnd(event)">🎓 Google Classroom</div>
+      <div class="match-chip" draggable="true" data-cat="Business" id="mc-webex" ondragstart="chipDragStart(event)" ondragend="chipDragEnd(event)" ontouchstart="chipTouchStart(event)" ontouchmove="chipTouchMove(event)" ontouchend="chipTouchEnd(event)">🔵 Cisco Webex</div>
+      <div class="match-chip" draggable="true" data-cat="Family" id="mc-viber" ondragstart="chipDragStart(event)" ondragend="chipDragEnd(event)" ontouchstart="chipTouchStart(event)" ontouchmove="chipTouchMove(event)" ontouchend="chipTouchEnd(event)">💜 Viber</div>
+      <div class="match-chip" draggable="true" data-cat="Business" id="mc-slack" ondragstart="chipDragStart(event)" ondragend="chipDragEnd(event)" ontouchstart="chipTouchStart(event)" ontouchmove="chipTouchMove(event)" ontouchend="chipTouchEnd(event)">💬 Slack</div>
+    </div>
+    <div class="match-targets">
+      <div class="match-target" id="mt-school" data-cat="School" ondragover="chipAllowDrop(event)" ondrop="chipDrop(event)"><h4>🎓 School / Education</h4><div class="dropped"></div></div>
+      <div class="match-target" id="mt-business" data-cat="Business" ondragover="chipAllowDrop(event)" ondrop="chipDrop(event)"><h4>🏢 Business / Work</h4><div class="dropped"></div></div>
+      <div class="match-target" id="mt-family" data-cat="Family" ondragover="chipAllowDrop(event)" ondrop="chipDrop(event)"><h4>👨‍👩‍👧 Family / Personal</h4><div class="dropped"></div></div>
+    </div>
+    <button class="match-check-btn" onclick="checkMatch('0')">✅ Check Answers</button>
+    <div id="match-result-0" style="margin-top:10px;font-weight:700;font-size:.88rem;"></div>
+    <button class="complete-btn elaborate" onclick="markStageComplete('elaborate','0')">✅ Mark Elaborate Complete</button>
+    <div class="teacher-only"><div class="teacher-note"><strong>👩‍🏫 Teacher Note:</strong> Allow learners to discuss before dragging. Note: some platforms (like Zoom) are used in all categories — accept reasonable answers and discuss why a platform may fit more than one category.</div></div>
+  </div>
+
+  <!-- EVALUATE -->
+  <div class="section-card evaluate" id="evaluate" data-stage="evaluate">
+    <div class="section-header"><div class="sec-icon evaluate">✅</div><div><span class="section-tag evaluate">Evaluate</span><div class="section-title">Check Your Understanding</div></div></div>
+    <p style="font-size:.88rem;color:var(--muted);margin-bottom:14px;">Answer these oral check questions. Write your answer in the box! 🎤</p>
+    <div style="background:var(--violet-light);border-radius:12px;padding:14px;margin-bottom:14px;">
+      <p style="font-weight:800;color:var(--violet-dark);margin-bottom:8px;">🗣️ Class Oral Check:</p>
+      <p style="font-size:.93rem;margin-bottom:5px;">1. What is web conferencing?</p>
+      <p style="font-size:.93rem;">2. Name one platform used for web conferencing.</p>
+    </div>
+    <textarea class="exit-textarea" id="eval-0" placeholder="Write your answers here..."></textarea>
+    <button class="exit-submit-btn" onclick="submitEval('0')">📌 Post Answer</button>
+    <div class="exit-posts" id="eval-posts-0"></div>
+    <button class="complete-btn evaluate" onclick="markStageComplete('evaluate','0')">✅ Mark Evaluate Complete</button>
+  </div>
+
+  <!-- FORMATIVE ASSESSMENT -->
+  <div class="section-card" style="border-color:var(--violet);">
+    <div class="section-header"><div class="sec-icon form">📝</div><div><span class="section-tag evaluate">Formative Assessment</span><div class="section-title">5-Item Quiz</div></div></div>
+    <div id="quiz-0"></div>
+    <button class="quiz-submit-btn" id="quiz-submit-0" onclick="submitQuiz('0')" disabled>Submit Quiz</button>
+    <div class="score-box" id="score-box-0"></div>
+  </div>
+
+  <!-- Integration -->
+  <div class="section-card integration-sec">
+    <div class="section-header"><div class="sec-icon int">🔗</div><div><span class="section-tag meta">Integration</span><div class="section-title">Connecting to Other Subjects</div></div></div>
+    <div class="rule-cards">
+      <div class="rule-card do"><span class="rule-icon">📝</span><div class="rule-label">English</div><div class="rule-text">Web conferencing uses communication skills: listening, speaking clearly, writing in chat, and following meeting etiquette.</div></div>
+      <div class="rule-card do"><span class="rule-icon">🙏</span><div class="rule-label">Values Education</div><div class="rule-text">Responsible use of technology: being honest online, respecting others' privacy, and using devices for good purposes.</div></div>
+    </div>
+  </div>
+
+  <!-- Extended Learning -->
+  <div class="section-card extended-sec">
+    <div class="section-header"><div class="sec-icon pre">🚀</div><div><span class="section-tag meta">Extended Learning</span><div class="section-title">Keep Exploring!</div></div></div>
+    <div style="display:flex;flex-direction:column;gap:8px;font-size:.88rem;">
+      <div style="background:var(--blue-light);border-radius:10px;padding:12px;display:flex;gap:10px;"><span>👀</span><span><strong>Observe at Home:</strong> If someone at home joins an online meeting or video call, observe how they use the platform. What buttons do they click?</span></div>
+      <div style="background:var(--lime-light);border-radius:10px;padding:12px;display:flex;gap:10px;"><span>✍️</span><span><strong>Write a List:</strong> List 3 ways your family uses video calls at home. Share your list tomorrow.</span></div>
+    </div>
+  </div>
+
+  <!-- Reflection -->
+  <div class="section-card reflect-sec">
+    <div class="section-header"><div class="sec-icon pre">💭</div><div><span class="section-tag meta">Reflection Questions</span><div class="section-title">Think About It!</div></div></div>
+    <div style="display:flex;flex-direction:column;gap:10px;">
+      <div style="background:var(--blue-light);border-radius:12px;padding:13px;font-size:.93rem;"><strong>1.</strong> Do learners understand what web conferencing is and how it differs from a regular phone call?</div>
+      <div style="background:var(--violet-light);border-radius:12px;padding:13px;font-size:.93rem;"><strong>2.</strong> Can learners name at least two platforms? Can they explain one use?</div>
+      <div style="background:var(--lime-light);border-radius:12px;padding:13px;font-size:.93rem;"><strong>3.</strong> Were learners able to connect web conferencing to their own daily life experiences?</div>
+    </div>
+    <div class="teacher-only"><div class="teacher-note"><strong>👩‍🏫 Teacher Note:</strong> Use these as mental checkpoints for lesson pacing. If learners struggled with the platform names, do a quick review before moving to Day 2.</div></div>
+  </div>
+
+  <div class="lesson-nav">
+    <button class="nav-btn secondary" onclick="window.scrollTo({top:0,behavior:'smooth'})">⬆ Back to Top</button>
+    <button class="nav-btn" onclick="switchTab(1,document.getElementById('tab1'))">Friday – Day 2 ▶</button>
+  </div>
+
+</div>
+</div>
+
+<!-- ══════════════ FRIDAY ══════════════ -->
+<div class="tab-panel" id="panel-1">
+<div class="content-area">
+
+  <div class="lesson-hero fri">
+    <div class="vgrid"><div class="vgrid-tile"></div><div class="vgrid-tile"></div><div class="vgrid-tile"></div><div class="vgrid-tile"></div><div class="vgrid-tile"></div><div class="vgrid-tile"></div></div>
+    <span class="day-badge">📅 Day 2 · Friday · ICT 6</span>
+    <h2>Safe and Responsible Web Conferencing</h2>
+    <div class="competency">📌 <strong>Learning Competency:</strong> Performs web conferencing in a safe and responsible manner.</div>
+  </div>
+
+  <!-- Pre-Lesson -->
+  <div class="section-card pre-sec">
+    <div class="section-header"><div class="sec-icon pre">📋</div><div><span class="section-tag meta">Pre-Lesson</span><div class="section-title">Review &amp; Warm-Up</div></div></div>
+    <div class="meta-chips"><span class="meta-chip">🔄 Review of Day 1</span><span class="meta-chip">📝 Attendance</span><span class="meta-chip">💻 Device Check</span></div>
+    <div style="margin-top:14px;background:var(--cyan-light);border-radius:12px;padding:16px;border-left:4px solid var(--cyan);">
+      <strong style="font-size:.93rem;">🔄 Quick Review:</strong>
+      <p style="margin-top:6px;font-size:.88rem;">Ask: "What is web conferencing? Name one platform." (Learners answer from memory.)</p>
+    </div>
+    <div style="margin-top:12px;background:var(--blue-light);border-radius:12px;padding:16px;">
+      <strong style="font-size:.93rem;">💬 Motivation Question:</strong>
+      <p style="margin-top:8px;font-size:1.08rem;font-weight:800;color:var(--indigo);">"What should you do BEFORE joining an online meeting?"</p>
+    </div>
+    <div class="teacher-only"><div class="teacher-note"><strong>👩‍🏫 Teacher Note:</strong> Expected answers from learners: find a quiet place, check your internet, fix your appearance, prepare your device. All are correct — affirm them and build on these in the lesson.</div></div>
+  </div>
+
+  <!-- Objectives -->
+  <div class="section-card pre-sec">
+    <div class="section-header"><div class="sec-icon pre">🎯</div><div><span class="section-tag meta">Learning Objectives</span><div class="section-title">What You Will Learn Today</div></div></div>
+    <ul class="obj-list">
+      <li>Demonstrate basic participation in a web conference.</li>
+      <li>Practice proper use of microphone, camera, and chat features.</li>
+      <li>Apply safe and responsible online behavior (netiquette).</li>
+    </ul>
+  </div>
+
+  <!-- ENGAGE – Scenario Compare -->
+  <div class="section-card engage" id="engage" data-stage="engage">
+    <div class="section-header"><div class="sec-icon engage">🎯</div><div><span class="section-tag engage">Engage</span><div class="section-title">Spot the Difference!</div></div></div>
+    <p style="font-size:.88rem;color:var(--muted);margin-bottom:14px;">Look at these two online meeting situations. What is wrong? What is right? 👀</p>
+    <div class="scenario-grid">
+      <div class="scenario-card bad">
+        <h4>❌ Scenario A — Improper Meeting</h4>
+        <ul class="scenario-list">
+          <li><span>🔊</span><span>Microphone is ON but no one is speaking — background noise fills the call</span></li>
+          <li><span>👕</span><span>Student is in pajamas lying in bed</span></li>
+          <li><span>🎮</span><span>Playing a game on another window during the meeting</span></li>
+          <li><span>💬</span><span>Sending unrelated emoji in the chat</span></li>
+          <li><span>🗣️</span><span>Interrupting the teacher while speaking</span></li>
+          <li><span>📸</span><span>Taking screenshots of classmates without permission</span></li>
+        </ul>
+      </div>
+      <div class="scenario-card good">
+        <h4>✅ Scenario B — Proper Meeting</h4>
+        <ul class="scenario-list">
+          <li><span>🔇</span><span>Microphone is MUTED when not speaking</span></li>
+          <li><span>👔</span><span>Student is dressed appropriately and seated properly</span></li>
+          <li><span>👁️</span><span>Focused on the screen with no distractions</span></li>
+          <li><span>💬</span><span>Uses chat only for lesson-related messages</span></li>
+          <li><span>🖐️</span><span>Uses "raise hand" feature before speaking</span></li>
+          <li><span>🔒</span><span>Does not share screen or photos without permission</span></li>
+        </ul>
+      </div>
+    </div>
+    <div class="badge-area" id="badges-engage-1"></div>
+    <button class="complete-btn engage" onclick="markStageComplete('engage','1')">✅ Mark Engage Complete</button>
+    <div class="teacher-only"><div class="teacher-note"><strong>👩‍🏫 Teacher Note:</strong> Have learners identify specific problems in Scenario A one by one. Then contrast with Scenario B. This creates concrete mental models for netiquette.</div></div>
+  </div>
+
+  <!-- EXPLORE -->
+  <div class="section-card explore" id="explore" data-stage="explore">
+    <div class="section-header"><div class="sec-icon explore">🔍</div><div><span class="section-tag explore">Explore</span><div class="section-title">What's Wrong? What's Right?</div></div></div>
+    <p style="font-size:.88rem;color:var(--muted);margin-bottom:14px;">Answer these questions based on the scenarios above! 💬</p>
+    <div class="chat-bubble-area">
+      <div>
+        <div class="chat-q">What is wrong in Scenario A (the improper meeting)?</div>
+        <button class="chat-reveal-btn" onclick="revealChat(this)">💬 Reveal Answer</button>
+        <div class="chat-answer">The student is distracted (playing games), being disrespectful (pajamas, lying in bed), disturbing others (mic noise), being rude (interrupting), using chat incorrectly, and violating privacy (taking screenshots). These are all examples of <em>poor netiquette</em> and <em>unsafe behavior</em>.</div>
+      </div>
+      <div>
+        <div class="chat-q">What makes Scenario B the correct behavior?</div>
+        <button class="chat-reveal-btn" onclick="revealChat(this)">💬 Reveal Answer</button>
+        <div class="chat-answer">In Scenario B, the student respects others by muting when not speaking, staying focused, using features properly, waiting their turn, and protecting everyone's privacy. This shows <em>digital citizenship</em> — being a responsible member of the online community! 🏅</div>
+      </div>
+      <div>
+        <div class="chat-q">Why should we follow rules in an online meeting?</div>
+        <button class="chat-reveal-btn" onclick="revealChat(this)">💬 Reveal Answer</button>
+        <div class="chat-answer">Rules keep the meeting productive and respectful for everyone. Just like classroom rules help learning, online meeting rules help communication. They also protect your privacy and safety — online spaces can be risky if you're not careful! 🛡️</div>
+      </div>
+    </div>
+    <button class="complete-btn explore" onclick="markStageComplete('explore','1')">✅ Mark Explore Complete</button>
+  </div>
+
+  <!-- EXPLAIN -->
+  <div class="section-card explain" id="explain" data-stage="explain">
+    <div class="section-header"><div class="sec-icon explain">📖</div><div><span class="section-tag explain">Explain</span><div class="section-title">How to Use Web Conferencing Properly</div></div></div>
+    <p style="font-size:.88rem;color:var(--muted);margin-bottom:14px;">Tap each card to learn! Practice the toggles too! 📚</p>
+    <div class="expand-card">
+      <div class="expand-header" onclick="toggleExpand(this)">🔗 How to Join a Web Conference <span class="expand-arrow">▼</span></div>
+      <div class="expand-body">
+        <strong>Steps to join a web conference:</strong><br><br>
+        1. <strong>Get the meeting link or ID</strong> from your teacher or organizer.<br>
+        2. <strong>Click the link</strong> or open the app and enter the Meeting ID and password.<br>
+        3. <strong>Test your mic and camera</strong> before entering the meeting room.<br>
+        4. <strong>Enter your real name</strong> — do not use nicknames that others won't recognize.<br>
+        5. <strong>Wait in the waiting room</strong> until the host admits you.<br>
+        6. <strong>Mute your mic</strong> immediately when you enter.
+      </div>
+    </div>
+    <div class="expand-card">
+      <div class="expand-header" onclick="toggleExpand(this)">🎤 Using the Microphone <span class="expand-arrow">▼</span></div>
+      <div class="expand-body">
+        <strong>Microphone Rules:</strong><br><br>
+        ✅ <strong>MUTE when not speaking</strong> — Background noise like fans, TV, or pets can disrupt the meeting for everyone.<br>
+        ✅ <strong>UNMUTE only when it's your turn</strong> — Wait until you're asked to speak or use the raise hand feature.<br>
+        ✅ <strong>Speak clearly and at a normal pace</strong> — Don't shout or whisper; position the mic correctly.<br>
+        ❌ <strong>Never leave an open mic</strong> near a TV or noisy area.<br><br>
+        <div class="toggle-row"><span class="toggle-label">🎤 My Microphone</span><label class="toggle-switch" title="Toggle mic"><input type="checkbox" onchange="updateToggle(this,'mic')"><div class="toggle-track"></div><div class="toggle-thumb"></div></label><span class="toggle-status" id="ts-mic" style="color:var(--rose);">OFF</span></div>
+      </div>
+    </div>
+    <div class="expand-card">
+      <div class="expand-header" onclick="toggleExpand(this)">📷 Using the Camera <span class="expand-arrow">▼</span></div>
+      <div class="expand-body">
+        <strong>Camera Rules:</strong><br><br>
+        ✅ <strong>Turn ON when asked by the teacher</strong> — showing your face shows respect and helps the teacher see you're engaged.<br>
+        ✅ <strong>Choose a clean, appropriate background</strong> — sit in a well-lit, tidy area.<br>
+        ✅ <strong>Dress appropriately</strong> — treat the online class like a real classroom.<br>
+        ❌ <strong>Don't point the camera at personal items</strong> in your home — protect your family's privacy.<br>
+        ❌ <strong>Don't make faces or distracting gestures</strong> when on camera.<br><br>
+        <div class="toggle-row"><span class="toggle-label">📷 My Camera</span><label class="toggle-switch" title="Toggle cam"><input type="checkbox" onchange="updateToggle(this,'cam')"><div class="toggle-track"></div><div class="toggle-thumb"></div></label><span class="toggle-status" id="ts-cam" style="color:var(--rose);">OFF</span></div>
+      </div>
+    </div>
+    <div class="expand-card">
+      <div class="expand-header" onclick="toggleExpand(this)">💬 Using the Chat Box <span class="expand-arrow">▼</span></div>
+      <div class="expand-body">
+        <strong>Chat Box Rules:</strong><br><br>
+        ✅ <strong>Use it to ask questions</strong> related to the lesson.<br>
+        ✅ <strong>Answer when asked</strong> — type your response clearly and completely.<br>
+        ✅ <strong>Use proper language</strong> — write in Filipino or English as required; no slang or text speak in formal settings.<br>
+        ❌ <strong>Never spam or send irrelevant messages</strong> — this is disrespectful and distracting.<br>
+        ❌ <strong>Never share personal information</strong> in the chat — protect your privacy!
+      </div>
+    </div>
+    <div class="expand-card">
+      <div class="expand-header" onclick="toggleExpand(this)">🛡️ Netiquette &amp; Safety Rules <span class="expand-arrow">▼</span></div>
+      <div class="expand-body">
+        <strong>Netiquette</strong> = Internet + Etiquette = proper online behavior.<br><br>
+        🔒 <strong>Safety Rules:</strong><br>
+        • Never share the meeting link or ID publicly — only authorized people should join.<br>
+        • Do not join meetings from strangers or unknown links.<br>
+        • Tell a trusted adult if someone is behaving inappropriately in the meeting.<br>
+        • Never record the meeting without everyone's permission.<br><br>
+        🤝 <strong>Respect Rules:</strong><br>
+        • Use the "raise hand" before speaking.<br>
+        • Do not interrupt classmates or the teacher.<br>
+        • Be kind in chat — never bully or mock classmates.
+      </div>
+    </div>
+    <button class="complete-btn explain" onclick="markStageComplete('explain','1')">✅ Mark Explain Complete</button>
+    <div class="teacher-only"><div class="teacher-note"><strong>👩‍🏫 Teacher Note:</strong> The toggle switches for Mic and Camera are interactive — use them to demonstrate muting concepts. Have the class try toggling on their own devices.</div></div>
+  </div>
+
+  <!-- ELABORATE – Netiquette Do's and Don'ts + Role Play -->
+  <div class="section-card elaborate" id="elaborate" data-stage="elaborate">
+    <div class="section-header"><div class="sec-icon elaborate">🌐</div><div><span class="section-tag elaborate">Elaborate</span><div class="section-title">Mini Web Conference Simulation</div></div></div>
+    <p style="font-size:.88rem;color:var(--muted);margin-bottom:14px;">Choose your role in the web conference and practice! 🎭</p>
+
+    <!-- Do's and Don'ts visual -->
+    <div class="dos-donts" style="margin-bottom:16px;">
+      <div class="dd-col dos"><h4>✅ DO's</h4><ul class="dd-list"><li><span>🔇</span><span>Mute when not speaking</span></li><li><span>🖐️</span><span>Raise hand before speaking</span></li><li><span>👔</span><span>Dress appropriately</span></li><li><span>💡</span><span>Stay focused on the topic</span></li><li><span>🔒</span><span>Keep meeting link private</span></li><li><span>👁️</span><span>Look at the camera when talking</span></li></ul></div>
+      <div class="dd-col donts"><h4>❌ DON'Ts</h4><ul class="dd-list"><li><span>🎮</span><span>Play games during the meeting</span></li><li><span>📸</span><span>Screenshot without permission</span></li><li><span>🗣️</span><span>Interrupt others while speaking</span></li><li><span>📢</span><span>Leave mic on near noisy areas</span></li><li><span>🔗</span><span>Share meeting links publicly</span></li><li><span>😤</span><span>Be rude or bully in the chat</span></li></ul></div>
+    </div>
+
+    <p style="font-weight:800;font-size:.9rem;color:var(--indigo);margin-bottom:12px;">Choose your role and practice the simulation:</p>
+    <div class="roleplay-area">
+      <div class="rp-roles">
+        <div class="rp-role" onclick="selectRpRole(this,'host','1')"><span class="rp-emoji">👩‍🏫</span><div class="rp-name">Host / Teacher</div></div>
+        <div class="rp-role" onclick="selectRpRole(this,'participant','1')"><span class="rp-emoji">🧑‍💻</span><div class="rp-name">Participant</div></div>
+      </div>
+      <div class="rp-screen" id="rp-screen-1"></div>
+    </div>
+    <button class="complete-btn elaborate" style="margin-top:16px;" onclick="markStageComplete('elaborate','1')">✅ Mark Elaborate Complete</button>
+    <div class="teacher-only"><div class="teacher-note"><strong>👩‍🏫 Teacher Note:</strong> If possible, use an actual video conferencing app on the classroom device to simulate. Assign 1 student as Host and 3–4 as Participants. Practice: greeting, muting, raising hand, and proper speaking.</div></div>
+  </div>
+
+  <!-- EVALUATE -->
+  <div class="section-card evaluate" id="evaluate" data-stage="evaluate">
+    <div class="section-header"><div class="sec-icon evaluate">✅</div><div><span class="section-tag evaluate">Evaluate</span><div class="section-title">Performance Check</div></div></div>
+    <p style="font-size:.88rem;color:var(--muted);margin-bottom:14px;">During the simulation, the teacher checks each learner's performance! 🏅</p>
+    <div style="background:var(--violet-light);border-radius:12px;padding:14px;margin-bottom:14px;">
+      <p style="font-weight:800;color:var(--violet-dark);margin-bottom:10px;">📋 Performance Checklist:</p>
+      <div id="perf-checklist">
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          <label style="display:flex;align-items:center;gap:10px;cursor:pointer;font-size:.9rem;"><input type="checkbox" style="width:18px;height:18px;accent-color:var(--violet);"> Properly muted/unmuted microphone</label>
+          <label style="display:flex;align-items:center;gap:10px;cursor:pointer;font-size:.9rem;"><input type="checkbox" style="width:18px;height:18px;accent-color:var(--violet);"> Used camera appropriately</label>
+          <label style="display:flex;align-items:center;gap:10px;cursor:pointer;font-size:.9rem;"><input type="checkbox" style="width:18px;height:18px;accent-color:var(--violet);"> Used raise hand before speaking</label>
+          <label style="display:flex;align-items:center;gap:10px;cursor:pointer;font-size:.9rem;"><input type="checkbox" style="width:18px;height:18px;accent-color:var(--violet);"> Communicated respectfully</label>
+          <label style="display:flex;align-items:center;gap:10px;cursor:pointer;font-size:.9rem;"><input type="checkbox" style="width:18px;height:18px;accent-color:var(--violet);"> Followed instructions promptly</label>
+        </div>
+      </div>
+    </div>
+    <textarea class="exit-textarea" id="eval-1" placeholder="What did you learn today? What will you do differently in your next online meeting?"></textarea>
+    <button class="exit-submit-btn" onclick="submitEval('1')">📌 Post to Board</button>
+    <div class="exit-posts" id="eval-posts-1"></div>
+    <button class="complete-btn evaluate" onclick="markStageComplete('evaluate','1')">✅ Mark Evaluate Complete</button>
+  </div>
+
+  <!-- FORMATIVE ASSESSMENT -->
+  <div class="section-card" style="border-color:var(--violet);">
+    <div class="section-header"><div class="sec-icon form">📝</div><div><span class="section-tag evaluate">Formative Assessment</span><div class="section-title">5-Item Quiz</div></div></div>
+    <div id="quiz-1"></div>
+    <button class="quiz-submit-btn" id="quiz-submit-1" onclick="submitQuiz('1')" disabled>Submit Quiz</button>
+    <div class="score-box" id="score-box-1"></div>
+  </div>
+
+  <!-- Integration -->
+  <div class="section-card integration-sec">
+    <div class="section-header"><div class="sec-icon int">🔗</div><div><span class="section-tag meta">Integration</span><div class="section-title">Connecting to Other Subjects</div></div></div>
+    <div class="rule-cards">
+      <div class="rule-card do"><span class="rule-icon">🙏</span><div class="rule-label">Values Education</div><div class="rule-text">Digital citizenship — being honest, respectful, and responsible in all online interactions.</div></div>
+      <div class="rule-card do"><span class="rule-icon">🌾</span><div class="rule-label">EPP / TLE</div><div class="rule-text">Responsibility: using tools (devices/apps) correctly and caring for shared digital resources.</div></div>
+      <div class="rule-card do"><span class="rule-icon">💬</span><div class="rule-label">English</div><div class="rule-text">Communication skills: clear speaking, proper written chat etiquette, and active listening.</div></div>
+    </div>
+  </div>
+
+  <!-- Extended Learning -->
+  <div class="section-card extended-sec">
+    <div class="section-header"><div class="sec-icon pre">🚀</div><div><span class="section-tag meta">Extended Learning</span><div class="section-title">Take It Further!</div></div></div>
+    <div style="display:flex;flex-direction:column;gap:8px;font-size:.88rem;">
+      <div style="background:var(--lime-light);border-radius:10px;padding:12px;display:flex;gap:10px;"><span>🎨</span><span><strong>Draw It:</strong> Create a "Do's and Don'ts in Online Meetings" poster. Use drawings and simple labels. Present it to the class next week!</span></div>
+      <div style="background:var(--blue-light);border-radius:10px;padding:12px;display:flex;gap:10px;"><span>🏠</span><span><strong>At Home:</strong> With a family member, practice joining a video call. Use proper netiquette — mute when not talking, greet properly, say goodbye before leaving.</span></div>
+      <div style="background:var(--amber-light);border-radius:10px;padding:12px;display:flex;gap:10px;"><span>📋</span><span><strong>Make a Safety Checklist:</strong> Write your personal "Online Safety Rules" — at least 5 rules you will always follow in online meetings.</span></div>
+    </div>
+  </div>
+
+  <!-- Reflection -->
+  <div class="section-card reflect-sec">
+    <div class="section-header"><div class="sec-icon pre">💭</div><div><span class="section-tag meta">Reflection Questions</span><div class="section-title">Teacher Reflection</div></div></div>
+    <div style="display:flex;flex-direction:column;gap:10px;">
+      <div style="background:var(--blue-light);border-radius:12px;padding:13px;font-size:.93rem;"><strong>1.</strong> Were learners able to behave properly during the simulated web conference?</div>
+      <div style="background:var(--rose-light);border-radius:12px;padding:13px;font-size:.93rem;"><strong>2.</strong> What safety issues came up that need more emphasis in follow-up lessons?</div>
+      <div style="background:var(--lime-light);border-radius:12px;padding:13px;font-size:.93rem;"><strong>3.</strong> Are learners ready to participate in a real web conference responsibly?</div>
+    </div>
+    <div class="teacher-only"><div class="teacher-note"><strong>👩‍🏫 Teacher Note:</strong> Document specific observations from the simulation. Learners who struggled with mic/camera etiquette may need one-on-one guidance before the next online activity.</div></div>
+  </div>
+
+  <div class="lesson-nav">
+    <button class="nav-btn secondary" onclick="switchTab(0,document.getElementById('tab0'))">◀ Thursday – Day 1</button>
+    <button class="nav-btn" onclick="window.scrollTo({top:0,behavior:'smooth'})">⬆ Back to Top</button>
+  </div>
+
+</div>
+</div>
+
+<!-- Back to Top -->
+<button class="back-top-btn" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Back to Top">⬆</button>
+
+<script>
+// ══════════════════════════════════════
+// QUIZ DATA
+// ══════════════════════════════════════
+const QUIZZES = {
+  '0': [
+    { q:'What is web conferencing?', correct:'A', opts:{A:'Holding a meeting through the internet using audio and video',B:'Sending text messages through a mobile app',C:'Downloading files from a website',D:'Playing games with friends online'} },
+    { q:'Which of the following is a web conferencing platform?', correct:'A', opts:{A:'Zoom',B:'Microsoft Word',C:'YouTube',D:'Google Maps'} },
+    { q:'What is the main use of web conferencing in school?', correct:'A', opts:{A:'Conducting online classes and meetings with teachers',B:'Storing school files and documents',C:'Playing educational games with classmates',D:'Printing homework assignments'} },
+    { q:'Which device is needed for a video meeting?', correct:'A', opts:{A:'A device with a camera and internet connection',B:'A printer and paper',C:'A television remote control',D:'A calculator'} },
+    { q:'Which of the following is an example of an online communication tool?', correct:'A', opts:{A:'Google Meet',B:'Microsoft Paint',C:'Notepad',D:'Windows Calculator'} }
+  ],
+  '1': [
+    { q:'What should you do BEFORE speaking in a web conference?', correct:'A', opts:{A:'Use the raise hand feature and wait to be called',B:'Start talking immediately in a loud voice',C:'Send a chat message saying "I want to talk"',D:'Turn off your camera and type your answer'} },
+    { q:'When should you MUTE your microphone during a web conference?', correct:'A', opts:{A:'When you are not speaking to avoid background noise',B:'Only when the teacher tells you to',C:'When you want to talk to the class',D:'Only at the beginning of the meeting'} },
+    { q:'Which of the following is PROPER behavior during an online meeting?', correct:'A', opts:{A:'Staying focused and muting when not speaking',B:'Playing games on another tab while listening',C:'Sending jokes and emojis in the chat',D:'Leaving and rejoining the meeting repeatedly'} },
+    { q:'Why should we follow rules in web conferencing?', correct:'A', opts:{A:'To respect others and keep the meeting safe and productive',B:'Because it is required to get a grade',C:'To avoid making the app crash',D:'So the internet connection stays fast'} },
+    { q:'What is a safety rule when using online meetings?', correct:'A', opts:{A:'Never share the meeting link or ID with unauthorized people',B:'Always record the meeting for later',C:'Share your home address in the chat if asked',D:'Let anyone join who has the link'} }
+  ]
+};
+
+function shuffleArr(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function renderQuiz(id) {
+  const container = document.getElementById('quiz-' + id);
+  if (!container) return;
+  const questions = QUIZZES[id];
+  let html = '';
+  const state = {};
+  questions.forEach((q, qi) => {
+    const letters = ['A','B','C','D'];
+    const correctText = q.opts[q.correct];
+    const shuffled = shuffleArr(Object.entries(q.opts));
+    state[qi] = { correctText, selected: null };
+    html += `<div class="quiz-question">
+      <div class="quiz-q-text"><div class="quiz-q-num">${qi+1}</div><div>${q.q}</div></div>
+      <div class="quiz-options">`;
+    shuffled.forEach(([, text], oi) => {
+      const safeText = text.replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+      html += `<button class="quiz-opt" data-qi="${qi}" data-text="${safeText}" onclick="selectOpt(this,'${id}',${qi},'${safeText}')">
+        <span class="opt-letter">${letters[oi]}</span>${text}
+      </button>`;
+    });
+    html += `</div></div>`;
+  });
+  container.innerHTML = html;
+  container.dataset.quizState = JSON.stringify(state);
+}
+
+function selectOpt(btn, quizId, qi, text) {
+  const container = document.getElementById('quiz-' + quizId);
+  const scoreBox = document.getElementById('score-box-' + quizId);
+  if (scoreBox.classList.contains('shown')) return;
+  container.querySelectorAll(`.quiz-opt[data-qi="${qi}"]`).forEach(o => o.classList.remove('selected'));
+  btn.classList.add('selected');
+  const state = JSON.parse(container.dataset.quizState || '{}');
+  state[qi].selected = btn.dataset.text;
+  container.dataset.quizState = JSON.stringify(state);
+  const allAnswered = QUIZZES[quizId].every((_, i) => state[i]?.selected);
+  document.getElementById('quiz-submit-' + quizId).disabled = !allAnswered;
+}
+
+function submitQuiz(id) {
+  const container = document.getElementById('quiz-' + id);
+  const scoreBox = document.getElementById('score-box-' + id);
+  const submitBtn = document.getElementById('quiz-submit-' + id);
+  const state = JSON.parse(container.dataset.quizState || '{}');
+  let score = 0;
+  const total = QUIZZES[id].length;
+  QUIZZES[id].forEach((q, qi) => {
+    const correctText = q.opts[q.correct];
+    const selected = state[qi]?.selected;
+    container.querySelectorAll(`.quiz-opt[data-qi="${qi}"]`).forEach(opt => {
+      opt.classList.add('locked');
+      const t = opt.dataset.text;
+      if (t === correctText) { opt.classList.add('correct'); opt.classList.remove('selected'); }
+      else if (t === selected && t !== correctText) { opt.classList.add('wrong'); opt.classList.remove('selected'); }
+    });
+    if (selected === correctText) score++;
+  });
+  submitBtn.disabled = true;
+  const pct = Math.round((score / total) * 100);
+  const msgs = ['Keep reviewing! 📚', 'Good effort! Try again! 💪', 'Good job! 👍', 'Very good! ⭐', 'Perfect score! 🏆'];
+  const mi = score === 5 ? 4 : score === 4 ? 3 : score === 3 ? 2 : score <= 1 ? 0 : 1;
+  scoreBox.innerHTML = `<div class="score-big">${score}/${total}</div><div class="score-label">${pct}% Correct</div><div class="score-msg">${msgs[mi]}</div>`;
+  scoreBox.classList.add('shown');
+  saveProgress('quiz-' + id, score);
+}
+
+// ══════════════════════════════════════
+// TABS
+// ══════════════════════════════════════
+let currentTab = 0;
+const stageOrder = ['engage','explore','explain','elaborate','evaluate'];
+
+function switchTab(idx, btn) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('panel-' + idx).classList.add('active');
+  btn.classList.add('active');
+  currentTab = idx;
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  loadStageProgress(idx);
+}
+
+// ══════════════════════════════════════
+// PROGRESS TRACKER
+// ══════════════════════════════════════
+function loadStageProgress(tabIdx) {
+  stageOrder.forEach((stage, i) => {
+    const done = getProgress('stage-' + tabIdx + '-' + stage);
+    const circle = document.getElementById('ps-' + stage);
+    const label = document.getElementById('pl-' + stage);
+    const connector = document.getElementById('pc-' + stage);
+    if (!circle) return;
+    circle.classList.remove('done', 'active');
+    label.classList.remove('done', 'active');
+    if (connector) connector.classList.remove('done');
+    if (done) {
+      circle.classList.add('done'); label.classList.add('done');
+      if (connector) connector.classList.add('done');
+    } else {
+      const prevDone = i === 0 || getProgress('stage-' + tabIdx + '-' + stageOrder[i - 1]);
+      if (prevDone) { circle.classList.add('active'); label.classList.add('active'); }
+    }
+  });
+}
+
+function markStageComplete(stage, tabIdx) {
+  saveProgress('stage-' + tabIdx + '-' + stage, true);
+  loadStageProgress(parseInt(tabIdx));
+  addBadge(stage, tabIdx);
+  const el = document.getElementById('ps-' + stage);
+  if (el) { el.style.transform = 'scale(1.3)'; setTimeout(() => el.style.transform = '', 400); }
+}
+
+function scrollToStage(stage) {
+  const el = document.getElementById(stage);
+  if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+// ══════════════════════════════════════
+// BADGES
+// ══════════════════════════════════════
+const badgeInfo = {
+  engage:{ label:'🎯 Engaged!'},explore:{label:'🔍 Explorer!'},
+  explain:{label:'📖 Learner!'},elaborate:{label:'🌐 Creator!'},evaluate:{label:'✅ Evaluator!'}
+};
+function addBadge(stage, tabIdx) {
+  const area = document.getElementById('badges-engage-' + tabIdx);
+  if (!area || area.querySelector('[data-badge="'+stage+'"]')) return;
+  const b = document.createElement('span');
+  b.className = 'badge'; b.dataset.badge = stage;
+  b.textContent = (badgeInfo[stage]||{label:'🏅 Done!'}).label;
+  area.appendChild(b);
+}
+
+// ══════════════════════════════════════
+// CARD INTERACTIONS
+// ══════════════════════════════════════
+function flipCard(card) { card.classList.toggle('flipped'); }
+function revealChat(btn) {
+  const ans = btn.nextElementSibling;
+  ans.classList.toggle('shown');
+  btn.textContent = ans.classList.contains('shown') ? '🔒 Hide' : '💬 Reveal Answer';
+}
+function toggleExpand(header) {
+  const body = header.nextElementSibling;
+  const arrow = header.querySelector('.expand-arrow');
+  body.classList.toggle('open');
+  arrow.textContent = body.classList.contains('open') ? '▲' : '▼';
+}
+function updateToggle(input, type) {
+  const status = document.getElementById('ts-' + type);
+  if (!status) return;
+  if (input.checked) { status.textContent = 'ON'; status.style.color = 'var(--lime-dark)'; }
+  else { status.textContent = 'OFF'; status.style.color = 'var(--rose)'; }
+}
+
+// ══════════════════════════════════════
+// DRAG-DROP – Platform Match-Up
+// ══════════════════════════════════════
+let chipDragged = null;
+let chipTouchEl = null, chipTouchClone = null;
+
+function chipDragStart(e) { chipDragged = e.currentTarget; e.currentTarget.classList.add('dragging'); e.dataTransfer.setData('text', e.currentTarget.id); }
+function chipDragEnd(e) { e.currentTarget.classList.remove('dragging'); }
+function chipAllowDrop(e) { e.preventDefault(); e.currentTarget.classList.add('over'); document.querySelectorAll('.match-target').forEach(z => { if(z !== e.currentTarget) z.classList.remove('over'); }); }
+function chipDrop(e) {
+  e.preventDefault();
+  const zone = e.currentTarget; zone.classList.remove('over');
+  const id = e.dataTransfer.getData('text');
+  const item = document.getElementById(id);
+  if (!item) return;
+  const clone = item.cloneNode(true); clone.draggable = false; clone.removeAttribute('id');
+  clone.removeAttribute('ondragstart'); clone.removeAttribute('ondragend');
+  clone.removeAttribute('ontouchstart'); clone.removeAttribute('ontouchmove'); clone.removeAttribute('ontouchend');
+  zone.querySelector('.dropped').appendChild(clone);
+  item.remove();
+}
+
+function chipTouchStart(e) {
+  chipTouchEl = e.currentTarget;
+  const r = chipTouchEl.getBoundingClientRect();
+  chipTouchClone = chipTouchEl.cloneNode(true);
+  chipTouchClone.style.cssText = `position:fixed;z-index:9999;opacity:.75;pointer-events:none;width:${r.width}px;top:${r.top}px;left:${r.left}px;`;
+  document.body.appendChild(chipTouchClone);
+}
+function chipTouchMove(e) {
+  e.preventDefault();
+  const t = e.touches[0];
+  if (chipTouchClone) { chipTouchClone.style.top=(t.clientY-20)+'px'; chipTouchClone.style.left=(t.clientX-60)+'px'; }
+  document.querySelectorAll('.match-target').forEach(z => z.classList.remove('over'));
+  const el = document.elementFromPoint(t.clientX, t.clientY);
+  if (el) { const z = el.closest('.match-target'); if (z) z.classList.add('over'); }
+}
+function chipTouchEnd(e) {
+  if (chipTouchClone) { chipTouchClone.remove(); chipTouchClone = null; }
+  document.querySelectorAll('.match-target').forEach(z => z.classList.remove('over'));
+  if (!chipTouchEl) return;
+  const t = e.changedTouches[0];
+  const el = document.elementFromPoint(t.clientX, t.clientY);
+  if (el) {
+    const zone = el.closest('.match-target');
+    if (zone) {
+      const clone = chipTouchEl.cloneNode(true); clone.draggable = false; clone.removeAttribute('id');
+      clone.removeAttribute('ontouchstart'); clone.removeAttribute('ontouchmove'); clone.removeAttribute('ontouchend');
+      clone.removeAttribute('ondragstart'); clone.removeAttribute('ondragend');
+      zone.querySelector('.dropped').appendChild(clone); chipTouchEl.remove();
+    }
+  }
+  chipTouchEl = null;
+}
+
+function checkMatch(tabId) {
+  let correct = 0, total = 0;
+  document.querySelectorAll('#panel-'+tabId+' .match-target').forEach(zone => {
+    const cat = zone.dataset.cat;
+    zone.querySelectorAll('.match-chip').forEach(chip => {
+      total++;
+      if (chip.dataset.cat === cat) { chip.classList.add('ok'); correct++; }
+      else chip.classList.add('ng');
+    });
+  });
+  const result = document.getElementById('match-result-' + tabId);
+  if (result) {
+    if (total === 0) { result.innerHTML = '<span style="color:var(--amber)">Drag some items first!</span>'; return; }
+    if (correct === total) result.innerHTML = '<span style="color:var(--lime-dark)">🎉 All sorted correctly! Excellent!</span>';
+    else result.innerHTML = `<span style="color:var(--rose)">${correct}/${total} correct. Red items are in the wrong category.</span>`;
+  }
+}
+
+// ══════════════════════════════════════
+// ROLE PLAY (Friday)
+// ══════════════════════════════════════
+const rpData = {
+  host: {
+    title: '👩‍🏫 You are the HOST / Teacher!',
+    intro: 'The online class is about to start. You need to set up the meeting and guide participants.',
+    actions: [
+      { text: '📋 Start the meeting and greet everyone', result: 'You say: "Good morning! Welcome to our online class. Please mute your microphone and wait for instructions." Participants join one by one. 👍' },
+      { text: '🔇 Ask participants to mute their mics', result: 'You announce: "Please mute your microphone unless I call on you. This helps us hear better and avoids distracting noise." Everyone complies! ✅' },
+      { text: '🖐️ Remind students to use raise hand', result: 'You explain: "If you want to speak or answer a question, please click the Raise Hand button. I will call on you in order." Great facilitation! 🏅' },
+      { text: '📌 Share the lesson on screen', result: 'You click "Share Screen" and show your presentation. All participants can now see the lesson slides clearly! 🖥️' }
+    ]
+  },
+  participant: {
+    title: '🧑‍💻 You are a PARTICIPANT / Student!',
+    intro: 'Your teacher has started the online class. The meeting link was sent to you privately. What do you do?',
+    actions: [
+      { text: '🔗 Join using the private meeting link', result: 'Smart! You use only the private link sent by the teacher — you did NOT share it with anyone else. Safe behavior! 🛡️' },
+      { text: '🔇 Mute yourself immediately when you enter', result: 'Excellent! You muted your mic right away. Your background noise (TV, fan) did not disturb others. That\'s proper netiquette! 🎤' },
+      { text: '🖐️ Raise hand when you want to answer', result: 'You click "Raise Hand" and wait patiently. The teacher calls on you: "Yes, please unmute." You unmute, speak clearly, then mute again. Perfect! 👏' },
+      { text: '💬 Type a question in the chat box', result: 'You type: "Teacher, can you repeat the last part please?" — polite, relevant, and helpful. That\'s excellent chat etiquette! 📝' }
+    ]
+  }
+};
+
+function selectRpRole(card, role, tabId) {
+  document.querySelectorAll(`#panel-${tabId} .rp-role`).forEach(c => c.classList.remove('active'));
+  card.classList.add('active');
+  const data = rpData[role];
+  const screen = document.getElementById('rp-screen-' + tabId);
+  // Build mock meeting UI
+  let actionsHtml = data.actions.map(a =>
+    `<button class="rp-action-btn" onclick="showRpAction(this,'${a.result.replace(/'/g,"&#39;").replace(/"/g,"&quot;")}')">${a.text}</button>`
+  ).join('');
+  screen.innerHTML = `
+    <h4>${data.title}</h4>
+    <p style="font-size:.85rem;opacity:.8;margin-bottom:14px;">${data.intro}</p>
+    <div class="mock-meeting">
+      <div class="mock-grid">
+        <div class="mock-tile speaking">👩‍🏫<span class="muted-badge">🎤</span></div>
+        <div class="mock-tile">🧑‍💻<span class="muted-badge">🔇</span></div>
+        <div class="mock-tile">👩<span class="muted-badge">🔇</span></div>
+        <div class="mock-tile">👦<span class="muted-badge">🔇</span></div>
+        <div class="mock-tile">👧<span class="muted-badge">🔇</span></div>
+        <div class="mock-tile" style="background:#0F172A;color:#475569;font-size:.7rem;display:flex;align-items:center;justify-content:center;">Camera Off</div>
+      </div>
+      <div class="mock-controls">
+        <button class="mock-btn" onclick="toggleMockBtn(this)">🔇 Unmute</button>
+        <button class="mock-btn" onclick="toggleMockBtn(this)">📷 Start Video</button>
+        <button class="mock-btn" onclick="toggleMockBtn(this)">🖐️ Raise Hand</button>
+        <button class="mock-btn" onclick="toggleMockBtn(this)">💬 Chat</button>
+        <button class="mock-btn danger">🔴 Leave</button>
+      </div>
+    </div>
+    <p style="font-size:.82rem;opacity:.7;margin-bottom:10px;">Choose an action to practice:</p>
+    ${actionsHtml}`;
+  screen.classList.add('shown');
+}
+
+function toggleMockBtn(btn) { btn.classList.toggle('on'); }
+function showRpAction(btn, result) {
+  document.querySelectorAll('.rp-action-btn').forEach(b => b.style.opacity = '.6');
+  btn.style.opacity = '1'; btn.style.background = 'rgba(99,102,241,.3)';
+  const existing = btn.parentNode.querySelector('.rp-feedback');
+  if (existing) existing.remove();
+  const div = document.createElement('div'); div.className = 'rp-feedback';
+  div.innerHTML = '✅ ' + result;
+  btn.parentNode.insertBefore(div, btn.nextSibling);
+}
+
+// ══════════════════════════════════════
+// EVAL / EXIT BOARD
+// ══════════════════════════════════════
+function submitEval(id) {
+  const textarea = document.getElementById('eval-' + id);
+  const posts = document.getElementById('eval-posts-' + id);
+  if (!textarea || !textarea.value.trim()) return;
+  const post = document.createElement('div');
+  post.className = 'exit-post';
+  post.textContent = textarea.value.trim();
+  posts.appendChild(post);
+  textarea.value = '';
+}
+
+// ══════════════════════════════════════
+// MODE TOGGLE
+// ══════════════════════════════════════
+let isTeacher = true;
+function toggleMode() {
+  isTeacher = !isTeacher;
+  const body = document.getElementById('appBody');
+  const label = document.getElementById('modeLabel');
+  const pip = document.getElementById('modePip');
+  if (isTeacher) {
+    body.classList.add('teacher-mode'); body.classList.remove('learner-mode');
+    label.textContent = 'Teacher Mode'; pip.style.background = 'var(--amber)';
+  } else {
+    body.classList.remove('teacher-mode'); body.classList.add('learner-mode');
+    label.textContent = 'Learner Mode'; pip.style.background = 'var(--lime)';
+  }
+  saveProgress('mode', isTeacher ? 'teacher' : 'learner');
+}
+
+// ══════════════════════════════════════
+// LOCAL STORAGE
+// ══════════════════════════════════════
+function saveProgress(key, value) { try { localStorage.setItem('ict6_wc_' + key, JSON.stringify(value)); } catch(e) {} }
+function getProgress(key) { try { const v = localStorage.getItem('ict6_wc_' + key); return v ? JSON.parse(v) : null; } catch(e) { return null; } }
+
+// ══════════════════════════════════════
+// INIT
+// ══════════════════════════════════════
+document.addEventListener('DOMContentLoaded', () => {
+  renderQuiz('0');
+  renderQuiz('1');
+  loadStageProgress(0);
+  const savedMode = getProgress('mode');
+  if (savedMode === 'learner') { isTeacher = true; toggleMode(); }
+});
+
+// Intersection Observer for progress tracker
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (!entry.isIntersecting) return;
+    const stage = entry.target.dataset.stage;
+    if (!stage) return;
+    stageOrder.forEach(s => {
+      const c = document.getElementById('ps-' + s);
+      const l = document.getElementById('pl-' + s);
+      if (!c) return;
+      const done = getProgress('stage-' + currentTab + '-' + s);
+      if (!done) {
+        c.classList.remove('active'); l.classList.remove('active');
+        if (s === stage) { c.classList.add('active'); l.classList.add('active'); }
+      }
+    });
+  });
+}, { threshold: 0.3 });
+
+document.querySelectorAll('[data-stage]').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>

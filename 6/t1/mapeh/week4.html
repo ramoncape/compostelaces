@@ -1,0 +1,1944 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>MAPEH Grade 6 – Health Dimensions & Adolescent Well-Being</title>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@700;800;900&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+/* ═══ TOKENS ═══════════════════════════════════════════════ */
+:root {
+  --coral:   #ff6b6b;
+  --coral-d: #e84f4f;
+  --violet:  #7c3aed;
+  --violet-l:#a78bfa;
+  --teal:    #0d9488;
+  --teal-l:  #ccfbf1;
+  --amber:   #f59e0b;
+  --amber-l: #fef3c7;
+  --rose:    #fb7185;
+  --sky:     #0ea5e9;
+  --sky-l:   #e0f2fe;
+  --green:   #16a34a;
+  --green-l: #dcfce7;
+  --cream:   #fefce8;
+  --fog:     #f1f5f9;
+  --fog-d:   #e2e8f0;
+  --white:   #ffffff;
+  --ink:     #1e1b4b;
+  --ink-m:   #475569;
+  --ink-l:   #94a3b8;
+  --rad:     16px;
+  --rad-sm:  10px;
+  --sh:      0 4px 20px rgba(0,0,0,0.10);
+  --sh-lg:   0 10px 40px rgba(0,0,0,0.14);
+  --fs-xs:   0.8rem;
+  --fs-sm:   0.92rem;
+  --fs-base: 1.05rem;
+  --fs-md:   1.18rem;
+  --fs-lg:   1.4rem;
+  --fs-xl:   1.75rem;
+  --fs-2xl:  2.2rem;
+}
+
+/* ═══ RESET ═════════════════════════════════════════════════ */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{
+  font-family:'Nunito',sans-serif;
+  font-size:var(--fs-base);
+  background:var(--fog);
+  color:var(--ink);
+  line-height:1.7;
+  -webkit-text-size-adjust:100%;
+}
+
+/* ═══ STICKY HEADER ════════════════════════════════════════ */
+.site-header{
+  position:fixed;top:0;left:0;right:0;
+  z-index:500;
+  background:var(--ink);
+  transition:transform .32s cubic-bezier(.4,0,.2,1);
+  box-shadow:0 2px 16px rgba(0,0,0,.4);
+}
+.site-header.hidden{transform:translateY(-100%);}
+
+.brand-row{
+  display:flex;align-items:center;gap:10px;
+  padding:10px 16px 4px;
+}
+.brand-logo{font-size:1.5rem;}
+.brand-text{flex:1;min-width:0;}
+.brand-text h1{
+  font-family:'Lexend',sans-serif;
+  font-size:clamp(.8rem,3.5vw,.98rem);
+  color:var(--white);line-height:1.2;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.brand-text p{
+  font-size:.65rem;color:rgba(255,255,255,.55);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+
+/* Tabs */
+.tab-strip{
+  display:flex;gap:3px;
+  padding:6px 10px 0;
+  overflow-x:auto;scrollbar-width:none;
+}
+.tab-strip::-webkit-scrollbar{display:none;}
+.tab-btn{
+  flex:1;min-width:52px;
+  background:rgba(255,255,255,.08);
+  color:rgba(255,255,255,.5);
+  border:none;border-radius:8px 8px 0 0;
+  padding:7px 6px 6px;
+  font-family:'Nunito',sans-serif;font-weight:800;
+  font-size:clamp(.65rem,2vw,.78rem);
+  cursor:pointer;
+  transition:all .18s;
+  white-space:nowrap;
+  border-bottom:3px solid transparent;
+  line-height:1.2;
+}
+.tab-btn .day-num{display:block;font-size:.6rem;opacity:.65;letter-spacing:.5px;}
+.tab-btn:hover{background:rgba(255,255,255,.15);color:var(--white);}
+.tab-btn.active{
+  background:var(--coral);
+  color:var(--white);
+  border-bottom-color:var(--amber);
+}
+
+/* ═══ HEADER OFFSET ════════════════════════════════════════ */
+.header-offset{height:88px;}
+
+/* ═══ DAY PANELS ════════════════════════════════════════════ */
+.day-panel{display:none;padding:0 0 80px;}
+.day-panel.active{display:block;}
+
+/* ═══ HERO BANNER ═══════════════════════════════════════════ */
+.day-hero{
+  padding:36px 20px 32px;
+  position:relative;overflow:hidden;
+  color:var(--white);
+}
+.d1-hero{background:linear-gradient(135deg,#7c3aed 0%,#c026d3 100%);}
+.d2-hero{background:linear-gradient(135deg,#0d9488 0%,#0369a1 100%);}
+.d3-hero{background:linear-gradient(135deg,#e84f4f 0%,#f59e0b 100%);}
+.d4-hero{background:linear-gradient(135deg,#1e40af 0%,#7c3aed 100%);}
+.d5-hero{background:linear-gradient(135deg,#16a34a 0%,#0d9488 100%);}
+
+.day-hero::after{
+  content:'';position:absolute;
+  right:-40px;bottom:-40px;
+  width:200px;height:200px;border-radius:50%;
+  background:rgba(255,255,255,.07);
+}
+.hero-day-tag{
+  display:inline-block;
+  font-size:.75rem;font-weight:800;letter-spacing:1.2px;
+  text-transform:uppercase;
+  background:rgba(255,255,255,.18);
+  border:1px solid rgba(255,255,255,.3);
+  border-radius:20px;padding:4px 14px;
+  margin-bottom:14px;
+}
+.hero-icon{font-size:clamp(2.8rem,8vw,4rem);display:block;margin-bottom:12px;line-height:1;}
+.day-hero h2{
+  font-family:'Lexend',sans-serif;
+  font-size:clamp(1.4rem,5vw,2rem);
+  line-height:1.15;margin-bottom:10px;
+}
+.day-hero p{font-size:var(--fs-md);color:rgba(255,255,255,.88);line-height:1.6;}
+.lc-tag{
+  display:inline-block;
+  margin-top:14px;font-size:.78rem;font-weight:700;
+  background:rgba(255,255,255,.15);
+  border-radius:8px;padding:6px 14px;
+  border-left:3px solid rgba(255,255,255,.5);
+}
+
+/* ═══ SECTION WRAPPER ═══════════════════════════════════════ */
+.day-content{padding:20px 16px;}
+
+/* ═══ SECTION CARD ══════════════════════════════════════════ */
+.sec{
+  background:var(--white);
+  border-radius:var(--rad);
+  padding:24px 20px;
+  margin-bottom:20px;
+  box-shadow:var(--sh);
+}
+.sec-label{
+  display:inline-flex;align-items:center;gap:6px;
+  font-size:.7rem;font-weight:800;letter-spacing:1px;
+  text-transform:uppercase;padding:4px 12px;
+  border-radius:20px;margin-bottom:14px;
+}
+.sl-purple{background:#ede9fe;color:var(--violet);}
+.sl-teal  {background:var(--teal-l);color:var(--teal);}
+.sl-coral {background:#ffe4e6;color:var(--coral-d);}
+.sl-amber {background:var(--amber-l);color:#92400e;}
+.sl-sky   {background:var(--sky-l);color:#0369a1;}
+.sl-green {background:var(--green-l);color:var(--green);}
+.sl-ink   {background:var(--fog);color:var(--ink);}
+
+.sec h3{
+  font-family:'Lexend',sans-serif;
+  font-size:var(--fs-lg);
+  color:var(--ink);margin-bottom:10px;line-height:1.25;
+}
+.sec p,.sec li{font-size:var(--fs-md);line-height:1.7;}
+.sec ul,.sec ol{padding-left:22px;margin-top:8px;}
+.sec li{margin-bottom:6px;}
+
+/* ═══ OBJECTIVES GRID ═══════════════════════════════════════ */
+.obj-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-top:12px;}
+.obj-cell{
+  border-radius:12px;padding:16px;
+  border-top:4px solid var(--amber);
+  background:var(--fog);
+}
+.obj-type{font-size:.68rem;font-weight:800;text-transform:uppercase;letter-spacing:.8px;color:var(--amber);margin-bottom:5px;}
+.obj-cell p{font-size:var(--fs-sm);}
+
+/* ═══ DIMENSION CARDS ═══════════════════════════════════════ */
+.dim-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-top:14px;}
+.dim-card{
+  border-radius:14px;padding:18px 14px;
+  text-align:center;cursor:pointer;
+  border:2.5px solid transparent;
+  transition:all .22s;
+  background:var(--fog);
+}
+.dim-card:hover,.dim-card.on{transform:translateY(-4px);box-shadow:var(--sh-lg);}
+.dim-icon{font-size:2.4rem;display:block;margin-bottom:8px;}
+.dim-card h4{font-family:'Lexend',sans-serif;font-size:var(--fs-sm);margin-bottom:5px;color:var(--ink);}
+.dim-card p{font-size:.8rem;color:var(--ink-m);display:none;margin-top:4px;line-height:1.5;}
+.dim-card.on p{display:block;}
+.dim-card.on{background:var(--white);}
+.dc-ph{border-color:#fb7185;}.dc-ph.on{border-color:#fb7185;}
+.dc-me{border-color:#a78bfa;}.dc-me.on{border-color:#a78bfa;}
+.dc-so{border-color:#34d399;}.dc-so.on{border-color:#34d399;}
+.dc-sp{border-color:#f59e0b;}.dc-sp.on{border-color:#f59e0b;}
+.dc-em{border-color:#60a5fa;}.dc-em.on{border-color:#60a5fa;}
+.dc-en{border-color:#a3e635;}.dc-en.on{border-color:#a3e635;}
+
+/* ═══ SCENARIO CARD ═════════════════════════════════════════ */
+.scenario-block{
+  background:linear-gradient(135deg,var(--fog) 0%,#ede9fe 100%);
+  border-radius:14px;padding:20px;margin-top:14px;
+  border-left:5px solid var(--violet);
+}
+.scenario-block p{font-size:var(--fs-md);}
+.scenario-name{font-family:'Lexend',sans-serif;font-size:.85rem;color:var(--violet);margin-bottom:4px;display:block;}
+
+/* ═══ REFLECTION / TEXT INPUT ═══════════════════════════════ */
+.reflection-box{margin-top:14px;}
+.reflection-box label{display:block;font-size:var(--fs-sm);font-weight:700;color:var(--ink);margin-bottom:6px;}
+.reflection-box textarea,.reflection-box input{
+  width:100%;padding:14px 16px;
+  border:2.5px solid var(--fog-d);border-radius:12px;
+  font-family:'Nunito',sans-serif;font-size:var(--fs-md);
+  background:var(--fog);color:var(--ink);
+  resize:vertical;transition:border-color .2s;
+  min-height:90px;
+}
+.reflection-box textarea:focus,.reflection-box input:focus{
+  outline:none;border-color:var(--violet);background:var(--white);
+}
+.feedback-strip{
+  margin-top:10px;padding:12px 16px;
+  border-radius:10px;font-size:var(--fs-sm);font-weight:600;
+  display:none;
+}
+.fb-ok {background:var(--green-l);color:var(--green);display:block;}
+.fb-warn{background:var(--amber-l);color:#92400e;display:block;}
+
+/* ═══ CHOICE CHIPS ══════════════════════════════════════════ */
+.chip-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;}
+.chip{
+  background:var(--fog);color:var(--ink);
+  border:2.5px solid var(--fog-d);border-radius:24px;
+  padding:8px 16px;font-family:'Nunito',sans-serif;
+  font-size:var(--fs-sm);font-weight:700;cursor:pointer;
+  transition:all .18s;
+}
+.chip:hover,.chip.on{background:var(--violet);color:var(--white);border-color:var(--violet);}
+.chip.on-teal{background:var(--teal);color:var(--white);border-color:var(--teal);}
+
+/* ═══ BUTTONS ═══════════════════════════════════════════════ */
+.btn{
+  display:inline-block;padding:13px 26px;
+  border-radius:12px;border:none;cursor:pointer;
+  font-family:'Nunito',sans-serif;font-weight:800;
+  font-size:var(--fs-md);transition:all .18s;
+  width:100%;text-align:center;margin-top:10px;
+}
+.btn-violet{background:var(--violet);color:var(--white);}
+.btn-violet:hover{background:#6d28d9;transform:translateY(-2px);}
+.btn-teal{background:var(--teal);color:var(--white);}
+.btn-teal:hover{background:#0f766e;}
+.btn-coral{background:var(--coral);color:var(--white);}
+.btn-coral:hover{background:var(--coral-d);}
+.btn-amber{background:var(--amber);color:var(--ink);}
+.btn-amber:hover{background:#d97706;}
+.btn-green{background:var(--green);color:var(--white);}
+.btn-green:hover{background:#15803d;}
+.btn-sm{padding:9px 18px;font-size:var(--fs-sm);width:auto;}
+
+/* ═══ MATCHING ACTIVITY ═════════════════════════════════════ */
+.match-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px;}
+.match-item{
+  background:var(--fog);border-radius:10px;padding:13px;
+  font-size:var(--fs-sm);font-weight:600;cursor:pointer;
+  border:2.5px solid transparent;transition:all .18s;
+  text-align:center;
+}
+.match-item:hover{border-color:var(--violet);}
+.match-item.selected-a{background:#ede9fe;border-color:var(--violet);}
+.match-item.selected-b{background:var(--teal-l);border-color:var(--teal);}
+.match-item.matched{background:var(--green-l);border-color:var(--green);cursor:default;}
+.match-item.wrong-flash{background:#ffe4e6;border-color:var(--coral);}
+
+/* ═══ SCENARIO SORTER ═══════════════════════════════════════ */
+.sorter-item{
+  background:var(--fog);border-radius:12px;padding:16px 18px;
+  margin-bottom:10px;cursor:pointer;
+  border:2.5px solid transparent;
+  transition:all .2s;font-size:var(--fs-sm);
+}
+.sorter-item:hover{border-color:var(--violet);}
+.sorter-item.picked{background:#ede9fe;border-color:var(--violet);}
+
+.dim-bucket{
+  background:var(--fog);border-radius:12px;padding:13px;
+  margin-bottom:8px;cursor:pointer;
+  border:2.5px dashed var(--fog-d);
+  transition:border-color .2s;font-size:var(--fs-sm);
+}
+.dim-bucket:hover{border-color:var(--teal);}
+.dim-bucket.filled{background:var(--teal-l);border-color:var(--teal);cursor:default;}
+
+/* ═══ LIKERT / SLIDER ═══════════════════════════════════════ */
+.likert-wrap{margin:12px 0;}
+.likert-label{font-size:var(--fs-sm);font-weight:700;color:var(--ink);margin-bottom:8px;display:block;}
+.likert-scale{display:flex;gap:6px;flex-wrap:wrap;}
+.likert-btn{
+  flex:1;min-width:42px;padding:10px 4px;
+  background:var(--fog);border:2px solid var(--fog-d);
+  border-radius:10px;font-size:var(--fs-base);font-weight:800;
+  cursor:pointer;text-align:center;transition:all .18s;
+  font-family:'Nunito',sans-serif;
+}
+.likert-btn:hover,.likert-btn.on{background:var(--coral);color:var(--white);border-color:var(--coral);}
+
+/* ═══ IMPACT TABLE ══════════════════════════════════════════ */
+.impact-table{width:100%;border-collapse:collapse;margin-top:14px;font-size:var(--fs-sm);}
+.impact-table th{
+  background:var(--ink);color:var(--white);
+  padding:11px 14px;text-align:left;font-family:'Lexend',sans-serif;
+  font-size:.82rem;
+}
+.impact-table td{padding:11px 14px;border-bottom:1px solid var(--fog-d);vertical-align:top;}
+.impact-table tr:nth-child(even) td{background:var(--fog);}
+.tag-pos{background:#dcfce7;color:var(--green);border-radius:5px;padding:2px 8px;font-size:.72rem;font-weight:700;}
+.tag-neg{background:#ffe4e6;color:var(--coral-d);border-radius:5px;padding:2px 8px;font-size:.72rem;font-weight:700;}
+
+/* ═══ CASE STUDY ════════════════════════════════════════════ */
+.case-card{
+  background:linear-gradient(135deg,#1e1b4b 0%,#312e81 100%);
+  color:var(--white);border-radius:14px;padding:22px 20px;margin-top:14px;
+}
+.case-card .case-label{font-size:.7rem;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:var(--violet-l);margin-bottom:8px;display:block;}
+.case-card h4{font-family:'Lexend',sans-serif;font-size:var(--fs-md);color:var(--amber);margin-bottom:10px;}
+.case-card p{font-size:var(--fs-sm);color:rgba(255,255,255,.88);line-height:1.7;}
+
+/* ═══ QUIZ ══════════════════════════════════════════════════ */
+.quiz-sec{
+  background:linear-gradient(135deg,#1e1b4b 0%,#312e81 100%);
+  border-radius:var(--rad);padding:24px 20px;margin-top:20px;
+}
+.quiz-sec h3{font-family:'Lexend',sans-serif;font-size:var(--fs-lg);color:var(--amber);margin-bottom:6px;}
+.quiz-sec .quiz-sub{font-size:var(--fs-sm);color:rgba(255,255,255,.7);margin-bottom:20px;}
+
+.q-block{margin-bottom:26px;}
+.q-num{
+  display:inline-block;background:var(--coral);color:var(--white);
+  border-radius:8px;padding:3px 10px;font-size:.78rem;font-weight:800;
+  margin-bottom:8px;
+}
+.q-hots{
+  display:inline-block;margin-left:6px;
+  background:var(--amber);color:var(--ink);
+  border-radius:8px;padding:3px 9px;font-size:.68rem;font-weight:800;
+}
+.q-text{font-size:var(--fs-md);font-weight:700;color:var(--white);margin-bottom:12px;line-height:1.6;}
+.q-opts{display:grid;gap:8px;}
+.q-opt{
+  background:rgba(255,255,255,.08);
+  border:2px solid rgba(255,255,255,.15);
+  border-radius:12px;padding:14px 16px;
+  color:var(--white);cursor:pointer;
+  font-family:'Nunito',sans-serif;font-size:var(--fs-base);
+  font-weight:600;text-align:left;
+  transition:all .18s;line-height:1.5;
+}
+.q-opt:hover:not(:disabled){background:rgba(255,255,255,.16);border-color:rgba(255,255,255,.4);}
+.q-opt.correct{background:#16a34a;border-color:#16a34a;color:var(--white);}
+.q-opt.wrong  {background:#dc2626;border-color:#dc2626;color:var(--white);}
+.q-opt:disabled{cursor:default;}
+.q-fb{font-size:var(--fs-sm);margin-top:8px;padding:8px 12px;border-radius:8px;display:none;}
+.q-fb.vis{display:block;}
+.q-fb-ok{background:rgba(22,163,74,.25);color:#86efac;}
+.q-fb-no{background:rgba(220,38,38,.25);color:#fca5a5;}
+
+.quiz-submit-row{text-align:center;margin-top:10px;}
+.score-reveal{
+  background:rgba(255,255,255,.08);
+  border-radius:14px;padding:24px;text-align:center;
+  margin-top:16px;display:none;
+}
+.score-reveal.vis{display:block;}
+.score-num{font-family:'Lexend',sans-serif;font-size:3.5rem;color:var(--amber);}
+.score-msg{font-size:var(--fs-md);color:rgba(255,255,255,.8);margin-top:6px;}
+.score-bar{
+  height:14px;background:rgba(255,255,255,.12);
+  border-radius:10px;overflow:hidden;margin-top:14px;
+}
+.score-bar-fill{height:100%;border-radius:10px;background:linear-gradient(90deg,var(--coral),var(--amber));transition:width .8s ease;}
+
+/* ═══ EXTENDED LEARNING ═════════════════════════════════════ */
+.ext-card{
+  background:linear-gradient(135deg,#0d9488,#0369a1);
+  color:var(--white);border-radius:14px;padding:22px 20px;margin-top:14px;
+}
+.ext-card p{font-size:var(--fs-md);line-height:1.7;color:rgba(255,255,255,.9);}
+.ext-card strong{color:var(--amber);}
+
+/* ═══ WHEEL TRACKER ═════════════════════════════════════════ */
+.wheel-wrap{
+  display:flex;align-items:center;gap:14px;
+  padding:14px 16px;background:rgba(255,255,255,.06);
+}
+.wheel-svg{flex-shrink:0;width:52px;height:52px;}
+.wheel-text{flex:1;}
+.wheel-text p{font-size:.75rem;color:rgba(255,255,255,.6);}
+.wheel-text strong{font-family:'Lexend',sans-serif;font-size:.88rem;color:var(--amber);}
+
+/* ═══ HOTSPOT MAP ═══════════════════════════════════════════ */
+.hotspot-body{
+  display:flex;flex-direction:column;gap:10px;margin-top:12px;
+}
+.hotspot-item{
+  background:var(--fog);border-radius:12px;padding:14px 16px;
+  display:flex;align-items:flex-start;gap:12px;cursor:pointer;
+  border:2px solid transparent;transition:all .2s;
+}
+.hotspot-item:hover,.hotspot-item.open{border-color:var(--violet);background:var(--white);}
+.hotspot-icon{font-size:1.8rem;flex-shrink:0;line-height:1;}
+.hotspot-text h4{font-family:'Lexend',sans-serif;font-size:var(--fs-sm);color:var(--ink);margin-bottom:3px;}
+.hotspot-detail{font-size:var(--fs-sm);color:var(--ink-m);display:none;margin-top:6px;line-height:1.6;}
+.hotspot-item.open .hotspot-detail{display:block;}
+
+/* ═══ RANKING ACTIVITY ══════════════════════════════════════ */
+.rank-item{
+  background:var(--fog);border-radius:12px;padding:14px 16px;
+  margin-bottom:8px;display:flex;align-items:center;gap:12px;
+  font-size:var(--fs-sm);font-weight:600;
+}
+.rank-num{
+  width:34px;height:34px;border-radius:50%;
+  background:var(--violet);color:var(--white);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Lexend',sans-serif;font-size:.9rem;font-weight:700;flex-shrink:0;
+}
+.rank-btns{margin-left:auto;display:flex;gap:5px;}
+.rank-btn{
+  background:var(--fog-d);border:none;border-radius:7px;
+  width:30px;height:30px;cursor:pointer;font-size:.9rem;
+  transition:background .15s;
+}
+.rank-btn:hover{background:var(--violet);color:var(--white);}
+
+/* ═══ PROGRESS DOT ROW ══════════════════════════════════════ */
+.progress-dots{
+  display:flex;justify-content:center;gap:8px;
+  padding:14px 0 0;
+}
+.pdot{
+  width:10px;height:10px;border-radius:50%;
+  background:rgba(255,255,255,.2);transition:background .3s;
+}
+.pdot.done{background:var(--amber);}
+
+/* ═══ HIGHLIGHT BOX ═════════════════════════════════════════ */
+.hl-box{
+  border-radius:12px;padding:16px 18px;margin:12px 0;
+  border-left:5px solid;
+}
+.hl-violet{background:#ede9fe;border-color:var(--violet);}
+.hl-teal  {background:var(--teal-l);border-color:var(--teal);}
+.hl-amber {background:var(--amber-l);border-color:var(--amber);}
+.hl-coral {background:#ffe4e6;border-color:var(--coral);}
+.hl-green {background:var(--green-l);border-color:var(--green);}
+.hl-box p{font-size:var(--fs-md);}
+.hl-box strong{font-size:var(--fs-md);}
+
+/* ═══ FOOTER ════════════════════════════════════════════════ */
+footer{
+  text-align:center;padding:20px 16px 40px;
+  font-size:.75rem;color:var(--ink-l);
+  border-top:1px solid var(--fog-d);
+}
+footer span{color:#94a3b8;}
+
+/* ═══ RESPONSIVE ════════════════════════════════════════════ */
+@media(max-width:480px){
+  .dim-grid{grid-template-columns:1fr 1fr;}
+  .match-grid{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════════════════════
+     STICKY HEADER
+══════════════════════════════════════════════════════════ -->
+<header class="site-header" id="siteHeader">
+  <div class="brand-row">
+    <span class="brand-logo">🌱</span>
+    <div class="brand-text">
+      <h1>Health Dimensions &amp; Adolescent Well-Being</h1>
+      <p>MAPEH Grade 6 &nbsp;·&nbsp; Alternative Delivery Mode &nbsp;·&nbsp; 5 Days</p>
+    </div>
+  </div>
+  <div class="tab-strip" role="tablist">
+    <button class="tab-btn active" onclick="goDay(0)" id="t0" role="tab"><span class="day-num">DAY 1</span>Intro</button>
+    <button class="tab-btn" onclick="goDay(1)" id="t1" role="tab"><span class="day-num">DAY 2</span>Explore</button>
+    <button class="tab-btn" onclick="goDay(2)" id="t2" role="tab"><span class="day-num">DAY 3</span>Apply</button>
+    <button class="tab-btn" onclick="goDay(3)" id="t3" role="tab"><span class="day-num">DAY 4</span>Analyze</button>
+    <button class="tab-btn" onclick="goDay(4)" id="t4" role="tab"><span class="day-num">DAY 5</span>Evaluate</button>
+  </div>
+  <div class="progress-dots" id="progDots">
+    <div class="pdot" id="pd0"></div>
+    <div class="pdot" id="pd1"></div>
+    <div class="pdot" id="pd2"></div>
+    <div class="pdot" id="pd3"></div>
+    <div class="pdot" id="pd4"></div>
+  </div>
+</header>
+<div class="header-offset"></div>
+
+<!-- ════════════════════════════════════════════════════════
+     DAY 1 — WHAT IS HEALTH? (LOTS: Knowledge / Understanding)
+════════════════════════════════════════════════════════ -->
+<div class="day-panel active" id="day0">
+  <div class="day-hero d1-hero">
+    <span class="hero-day-tag">Day 1 · Knowledge &amp; Understanding</span>
+    <span class="hero-icon">🌈</span>
+    <h2>What is Health?<br>The Six Dimensions</h2>
+    <p>Health is more than just not being sick. In this lesson, you will discover the <strong>six dimensions of health</strong> and how they all work together to make you feel well as a growing adolescent.</p>
+    <span class="lc-tag">📌 Learning Competency: Evaluate how changes in different health dimensions affect adolescents' well-being.</span>
+  </div>
+
+  <div class="day-content">
+
+    <!-- OBJECTIVES -->
+    <div class="sec">
+      <span class="sec-label sl-purple">🎯 Learning Objectives</span>
+      <div class="obj-grid">
+        <div class="obj-cell"><div class="obj-type">Know</div><p>Name and define the six dimensions of health.</p></div>
+        <div class="obj-cell"><div class="obj-type">Understand</div><p>Explain what each health dimension means for an adolescent.</p></div>
+        <div class="obj-cell"><div class="obj-type">Value</div><p>Recognize that all dimensions are equally important to overall well-being.</p></div>
+      </div>
+    </div>
+
+    <!-- ENGAGE -->
+    <div class="sec">
+      <span class="sec-label sl-coral">🔥 Engage — What Does "Healthy" Mean to You?</span>
+      <h3>Think Before You Read</h3>
+      <p>Before we begin, tap ALL the things you think being "healthy" means:</p>
+      <div class="chip-row" id="engage1-chips">
+        <span class="chip" onclick="toggleChip(this)">Not being sick</span>
+        <span class="chip" onclick="toggleChip(this)">Feeling happy</span>
+        <span class="chip" onclick="toggleChip(this)">Having good friends</span>
+        <span class="chip" onclick="toggleChip(this)">Being able to run</span>
+        <span class="chip" onclick="toggleChip(this)">Believing in something</span>
+        <span class="chip" onclick="toggleChip(this)">Being free from stress</span>
+        <span class="chip" onclick="toggleChip(this)">Living in a clean place</span>
+        <span class="chip" onclick="toggleChip(this)">Feeling good about yourself</span>
+      </div>
+      <div class="feedback-strip" id="engage1-fb"></div>
+      <button class="btn btn-violet" onclick="checkEngage1()">See What Health Really Means 👉</button>
+    </div>
+
+    <!-- EXPLAIN: Dimensions -->
+    <div class="sec">
+      <span class="sec-label sl-teal">📖 Learn — The Six Dimensions of Health</span>
+      <h3>Tap each dimension to learn more</h3>
+      <p>The <strong>World Health Organization (WHO)</strong> defines health as a state of complete physical, mental, and social well-being — not just the absence of disease. Scientists have identified <strong>six key dimensions</strong> of health.</p>
+      <div class="dim-grid" style="margin-top:18px;">
+        <div class="dim-card dc-ph" onclick="toggleDim(this)">
+          <span class="dim-icon">💪</span>
+          <h4>Physical</h4>
+          <p>How well your body works. Includes exercise, sleep, nutrition, hygiene, and freedom from disease.</p>
+        </div>
+        <div class="dim-card dc-me" onclick="toggleDim(this)">
+          <span class="dim-icon">🧠</span>
+          <h4>Mental / Intellectual</h4>
+          <p>Your ability to think clearly, learn, solve problems, and use your mind in healthy ways.</p>
+        </div>
+        <div class="dim-card dc-em" onclick="toggleDim(this)">
+          <span class="dim-icon">❤️</span>
+          <h4>Emotional</h4>
+          <p>Understanding and expressing your feelings in healthy ways. Being able to cope with stress and sadness.</p>
+        </div>
+        <div class="dim-card dc-so" onclick="toggleDim(this)">
+          <span class="dim-icon">🤝</span>
+          <h4>Social</h4>
+          <p>Your ability to build positive relationships with family, friends, and your community.</p>
+        </div>
+        <div class="dim-card dc-sp" onclick="toggleDim(this)">
+          <span class="dim-icon">✨</span>
+          <h4>Spiritual</h4>
+          <p>Having a sense of purpose, values, and meaning in life. It may or may not involve religion.</p>
+        </div>
+        <div class="dim-card dc-en" onclick="toggleDim(this)">
+          <span class="dim-icon">🌿</span>
+          <h4>Environmental</h4>
+          <p>Living in a safe, clean environment and taking care of the world around you.</p>
+        </div>
+      </div>
+      <div class="hl-box hl-violet" style="margin-top:18px;">
+        <p>💡 <strong>Key Idea:</strong> All six dimensions are connected. When one dimension is affected — for example, if you are physically sick — your emotional, social, and mental health can also be impacted.</p>
+      </div>
+    </div>
+
+    <!-- ADOLESCENCE CONTEXT -->
+    <div class="sec">
+      <span class="sec-label sl-amber">🌱 Health &amp; Adolescence</span>
+      <h3>Why Does This Matter to You?</h3>
+      <p>You are an <strong>adolescent</strong> — a person between 10 and 19 years old. This is one of the most important stages of human development. Your body, mind, and emotions are all changing rapidly.</p>
+      <div class="hotspot-body">
+        <div class="hotspot-item" onclick="toggleHotspot(this)">
+          <span class="hotspot-icon">🏃</span>
+          <div class="hotspot-text">
+            <h4>Physical Changes</h4>
+            <div class="hotspot-detail">During adolescence, the body grows quickly. You may notice changes in height, weight, body shape, and the development of secondary sex characteristics. These changes are normal and natural.</div>
+          </div>
+        </div>
+        <div class="hotspot-item" onclick="toggleHotspot(this)">
+          <span class="hotspot-icon">🎭</span>
+          <div class="hotspot-text">
+            <h4>Emotional Ups and Downs</h4>
+            <div class="hotspot-detail">Hormones affect your mood. You may feel excited, sad, angry, or confused — sometimes all in one day! Learning to understand and manage these emotions is part of healthy emotional development.</div>
+          </div>
+        </div>
+        <div class="hotspot-item" onclick="toggleHotspot(this)">
+          <span class="hotspot-icon">👫</span>
+          <div class="hotspot-text">
+            <h4>Social Identity</h4>
+            <div class="hotspot-detail">Friendships become very important during adolescence. You begin to think about who you are, where you belong, and what values you hold. Peer pressure can also become a challenge during this stage.</div>
+          </div>
+        </div>
+        <div class="hotspot-item" onclick="toggleHotspot(this)">
+          <span class="hotspot-icon">🔍</span>
+          <div class="hotspot-text">
+            <h4>Search for Identity</h4>
+            <div class="hotspot-detail">Adolescents often ask "Who am I?" This is healthy! You are developing your own values, beliefs, and sense of self. Spiritual and mental health dimensions are especially active during this time.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- EXPLORE: MY HEALTH TODAY -->
+    <div class="sec">
+      <span class="sec-label sl-sky">🔍 Activity — My Health Check-In</span>
+      <h3>How are your health dimensions today?</h3>
+      <p>Rate each dimension from 1 (needs care) to 5 (feeling great). Be honest — there are no wrong answers!</p>
+      <div id="checkin-list">
+        <div class="likert-wrap"><span class="likert-label">💪 Physical Health</span><div class="likert-scale" data-dim="physical"><button class="likert-btn" onclick="setLikert(this,1)">1</button><button class="likert-btn" onclick="setLikert(this,2)">2</button><button class="likert-btn" onclick="setLikert(this,3)">3</button><button class="likert-btn" onclick="setLikert(this,4)">4</button><button class="likert-btn" onclick="setLikert(this,5)">5</button></div></div>
+        <div class="likert-wrap"><span class="likert-label">🧠 Mental/Intellectual Health</span><div class="likert-scale" data-dim="mental"><button class="likert-btn" onclick="setLikert(this,1)">1</button><button class="likert-btn" onclick="setLikert(this,2)">2</button><button class="likert-btn" onclick="setLikert(this,3)">3</button><button class="likert-btn" onclick="setLikert(this,4)">4</button><button class="likert-btn" onclick="setLikert(this,5)">5</button></div></div>
+        <div class="likert-wrap"><span class="likert-label">❤️ Emotional Health</span><div class="likert-scale" data-dim="emotional"><button class="likert-btn" onclick="setLikert(this,1)">1</button><button class="likert-btn" onclick="setLikert(this,2)">2</button><button class="likert-btn" onclick="setLikert(this,3)">3</button><button class="likert-btn" onclick="setLikert(this,4)">4</button><button class="likert-btn" onclick="setLikert(this,5)">5</button></div></div>
+        <div class="likert-wrap"><span class="likert-label">🤝 Social Health</span><div class="likert-scale" data-dim="social"><button class="likert-btn" onclick="setLikert(this,1)">1</button><button class="likert-btn" onclick="setLikert(this,2)">2</button><button class="likert-btn" onclick="setLikert(this,3)">3</button><button class="likert-btn" onclick="setLikert(this,4)">4</button><button class="likert-btn" onclick="setLikert(this,5)">5</button></div></div>
+        <div class="likert-wrap"><span class="likert-label">✨ Spiritual Health</span><div class="likert-scale" data-dim="spiritual"><button class="likert-btn" onclick="setLikert(this,1)">1</button><button class="likert-btn" onclick="setLikert(this,2)">2</button><button class="likert-btn" onclick="setLikert(this,3)">3</button><button class="likert-btn" onclick="setLikert(this,4)">4</button><button class="likert-btn" onclick="setLikert(this,5)">5</button></div></div>
+        <div class="likert-wrap"><span class="likert-label">🌿 Environmental Health</span><div class="likert-scale" data-dim="environmental"><button class="likert-btn" onclick="setLikert(this,1)">1</button><button class="likert-btn" onclick="setLikert(this,2)">2</button><button class="likert-btn" onclick="setLikert(this,3)">3</button><button class="likert-btn" onclick="setLikert(this,4)">4</button><button class="likert-btn" onclick="setLikert(this,5)">5</button></div></div>
+      </div>
+      <div class="reflection-box" style="margin-top:14px;">
+        <label>Which dimension did you rate lowest? What might help improve it?</label>
+        <textarea id="checkin-reflect" placeholder="Write your answer here..."></textarea>
+      </div>
+      <button class="btn btn-teal" onclick="submitCheckin()">Save My Health Check-In ✅</button>
+      <div class="feedback-strip" id="checkin-fb"></div>
+    </div>
+
+    <!-- DAY 1 QUIZ -->
+    <div class="quiz-sec" id="quiz-day0">
+      <h3>📝 Day 1 Quiz</h3>
+      <p class="quiz-sub">Answer all 5 questions. Each question will be marked after you choose. LOTS = Lower Order · HOTS = Higher Order</p>
+      <div id="qb-d0"></div>
+      <div class="quiz-submit-row">
+        <button class="btn btn-amber btn-sm" style="width:auto;padding:12px 30px;font-size:var(--fs-md);" onclick="submitQuiz('d0')">Submit Quiz →</button>
+      </div>
+      <div class="score-reveal" id="sc-d0"></div>
+    </div>
+
+    <div class="sec" style="margin-top:20px;">
+      <span class="sec-label sl-teal">📚 Extended Learning</span>
+      <div class="ext-card">
+        <p><strong>Tonight:</strong> Draw your own "Health Wheel." Make a circle and divide it into 6 equal sections — one for each health dimension. Color each section based on how healthy you feel in that area today. <strong>Share it with a family member</strong> and explain each dimension.</p>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════
+     DAY 2 — HOW CHANGES AFFECT HEALTH (LOTS → Low HOTS)
+════════════════════════════════════════════════════════ -->
+<div class="day-panel" id="day1">
+  <div class="day-hero d2-hero">
+    <span class="hero-day-tag">Day 2 · Comprehension &amp; Connection</span>
+    <span class="hero-icon">🔗</span>
+    <h2>How Changes Affect<br>Your Health Dimensions</h2>
+    <p>Every day, things change around you — and inside you. In this lesson, you'll explore how <strong>positive and negative changes</strong> in your life affect your six health dimensions.</p>
+    <span class="lc-tag">📌 Connecting events in life to health dimension changes.</span>
+  </div>
+
+  <div class="day-content">
+
+    <!-- REVIEW -->
+    <div class="sec">
+      <span class="sec-label sl-purple">🔄 Quick Review</span>
+      <h3>What did we learn yesterday?</h3>
+      <p>Match each description to the correct health dimension by tapping a description, then tapping the matching dimension name:</p>
+      <div id="match-game" class="match-grid"></div>
+      <div class="feedback-strip" id="match-fb"></div>
+      <button class="btn btn-violet btn-sm" style="margin-top:8px;" onclick="resetMatch()">Reset ↺</button>
+    </div>
+
+    <!-- LEARN: CHANGES -->
+    <div class="sec">
+      <span class="sec-label sl-teal">📖 Learn — Types of Changes That Affect Health</span>
+      <h3>Changes in Adolescence</h3>
+      <p>During adolescence, changes can come from <strong>inside your body</strong> (biological), from your <strong>thoughts and feelings</strong> (psychological), or from <strong>your environment</strong> (social/environmental). These changes affect all six health dimensions.</p>
+
+      <table class="impact-table">
+        <thead><tr><th>Type of Change</th><th>Example</th><th>Health Dimensions Affected</th><th>Impact</th></tr></thead>
+        <tbody>
+          <tr><td>Puberty / growth spurt</td><td>Growing taller, voice changes</td><td>Physical, Emotional, Social</td><td><span class="tag-neg">Can be stressful</span> <span class="tag-pos">Normal &amp; healthy</span></td></tr>
+          <tr><td>Moving to a new school</td><td>Leaving old friends</td><td>Social, Emotional, Mental</td><td><span class="tag-neg">Anxiety, loneliness</span></td></tr>
+          <tr><td>Starting to exercise regularly</td><td>Joining a sports team</td><td>Physical, Social, Mental</td><td><span class="tag-pos">Improved confidence</span></td></tr>
+          <tr><td>Conflict with parents</td><td>Disagreements at home</td><td>Emotional, Social, Spiritual</td><td><span class="tag-neg">Stress, confusion</span></td></tr>
+          <tr><td>Discovering a new hobby</td><td>Learning to draw or cook</td><td>Mental, Emotional, Spiritual</td><td><span class="tag-pos">Sense of purpose</span></td></tr>
+          <tr><td>Environmental pollution</td><td>Living near a factory</td><td>Physical, Environmental, Mental</td><td><span class="tag-neg">Health risks</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- HOLISTIC HEALTH CONNECTION -->
+    <div class="sec">
+      <span class="sec-label sl-amber">🔗 The Connection Between Dimensions</span>
+      <h3>No Dimension Stands Alone</h3>
+      <p>Read the story below, then answer the question:</p>
+      <div class="scenario-block">
+        <span class="scenario-name">📖 Scenario: Marco's Week</span>
+        <p>Marco, a Grade 6 student, got sick with flu last Monday. He had to miss school for three days. While resting at home, he felt bored, lonely, and worried about falling behind in class. His friends texted him, but he felt too tired to reply. By Friday, when he finally returned to school, he felt anxious about the lessons he missed and unsure how to reconnect with his friends.</p>
+      </div>
+      <div class="reflection-box">
+        <label>Which health dimensions were affected in Marco's story? How did one change (getting sick) affect his other dimensions?</label>
+        <textarea id="marco-reflect" placeholder="Write: Physical was affected because... then Emotional because... then Social because..."></textarea>
+      </div>
+      <button class="btn btn-teal" onclick="saveReflection('marco-reflect','marco-fb','Marco','Great analysis!')">Save My Answer ✅</button>
+      <div class="feedback-strip" id="marco-fb"></div>
+    </div>
+
+    <!-- POSITIVE CHANGES -->
+    <div class="sec">
+      <span class="sec-label sl-green">✅ Positive Changes That Improve Well-Being</span>
+      <h3>Building Healthy Habits</h3>
+      <p>Not all changes are negative! Positive changes in your life can strengthen multiple health dimensions at once. Tap each habit to see how it helps:</p>
+      <div class="hotspot-body">
+        <div class="hotspot-item" onclick="toggleHotspot(this)">
+          <span class="hotspot-icon">😴</span>
+          <div class="hotspot-text">
+            <h4>Getting 8–10 hours of sleep</h4>
+            <div class="hotspot-detail"><strong>Physical:</strong> Body repairs itself. <strong>Mental:</strong> Better concentration and memory. <strong>Emotional:</strong> More stable mood and lower irritability. Sleep is one of the most powerful health habits!</div>
+          </div>
+        </div>
+        <div class="hotspot-item" onclick="toggleHotspot(this)">
+          <span class="hotspot-icon">🥦</span>
+          <div class="hotspot-text">
+            <h4>Eating nutritious food</h4>
+            <div class="hotspot-detail"><strong>Physical:</strong> Stronger immune system and body. <strong>Mental:</strong> Brain foods (omega-3, leafy greens) improve focus. <strong>Emotional:</strong> Balanced blood sugar = better mood. Good food fuels all dimensions!</div>
+          </div>
+        </div>
+        <div class="hotspot-item" onclick="toggleHotspot(this)">
+          <span class="hotspot-icon">📖</span>
+          <div class="hotspot-text">
+            <h4>Reading or learning new things</h4>
+            <div class="hotspot-detail"><strong>Mental:</strong> Develops critical thinking and knowledge. <strong>Emotional:</strong> Builds confidence and self-worth. <strong>Spiritual:</strong> Reading about values and life can deepen your sense of purpose.</div>
+          </div>
+        </div>
+        <div class="hotspot-item" onclick="toggleHotspot(this)">
+          <span class="hotspot-icon">🤲</span>
+          <div class="hotspot-text">
+            <h4>Helping others / community service</h4>
+            <div class="hotspot-detail"><strong>Social:</strong> Builds strong, positive relationships. <strong>Spiritual:</strong> Gives a sense of meaning and purpose. <strong>Emotional:</strong> Helping others boosts happiness and self-esteem.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ACTIVITY: SORTER -->
+    <div class="sec">
+      <span class="sec-label sl-sky">🎮 Activity — Classify the Change</span>
+      <h3>Which dimension does this change affect MOST?</h3>
+      <p>For each scenario below, choose the health dimension that is <strong>most directly affected</strong>:</p>
+      <div id="sorter-activity"></div>
+      <div class="feedback-strip" id="sorter-fb"></div>
+    </div>
+
+    <!-- DAY 2 QUIZ -->
+    <div class="quiz-sec" id="quiz-day1">
+      <h3>📝 Day 2 Quiz</h3>
+      <p class="quiz-sub">Answer all 5 questions. Choices are randomized!</p>
+      <div id="qb-d1"></div>
+      <div class="quiz-submit-row">
+        <button class="btn btn-amber btn-sm" style="width:auto;padding:12px 30px;font-size:var(--fs-md);" onclick="submitQuiz('d1')">Submit Quiz →</button>
+      </div>
+      <div class="score-reveal" id="sc-d1"></div>
+    </div>
+
+    <div class="sec" style="margin-top:20px;">
+      <span class="sec-label sl-teal">📚 Extended Learning</span>
+      <div class="ext-card">
+        <p><strong>Tonight:</strong> In your journal, write about <strong>one positive change</strong> you can make this week to improve one of your health dimensions. Be specific — name the dimension, the change, and how you will do it.</p>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════
+     DAY 3 — APPLYING KNOWLEDGE (Application / Analysis)
+════════════════════════════════════════════════════════ -->
+<div class="day-panel" id="day2">
+  <div class="day-hero d3-hero">
+    <span class="hero-day-tag">Day 3 · Application &amp; Analysis</span>
+    <span class="hero-icon">🔬</span>
+    <h2>Analyzing Real-Life<br>Health Situations</h2>
+    <p>Apply what you've learned! Today you'll analyze real-world adolescent scenarios, identify which health dimensions are affected, and explain why the changes matter.</p>
+    <span class="lc-tag">📌 Applying knowledge to analyze health dimension impacts in scenarios.</span>
+  </div>
+
+  <div class="day-content">
+
+    <!-- CASE STUDIES -->
+    <div class="sec">
+      <span class="sec-label sl-purple">🔬 Case Study Analysis</span>
+      <h3>Read, Analyze, and Reflect</h3>
+      <p>Read each case study carefully. Identify which health dimensions are affected and explain the impact.</p>
+
+      <div class="case-card" style="margin-bottom:16px;">
+        <span class="case-label">Case Study 1</span>
+        <h4>🧒 Aisha's Social Media Struggle</h4>
+        <p>Aisha, 12 years old, recently started spending 5–6 hours daily on social media. She began comparing herself to other people's photos online and felt ugly and inferior. She started skipping meals to "look better," and withdrew from family dinners. Her grades started dropping as she stayed up late scrolling her phone.</p>
+      </div>
+      <div class="reflection-box">
+        <label>In Aisha's case: (1) List all health dimensions affected. (2) For each, explain HOW it was affected. (3) What do you think will happen to her overall well-being if this continues?</label>
+        <textarea id="case1-ans" rows="5" placeholder="Physical: She skipped meals so...&#10;Mental: Her grades dropped because...&#10;Emotional: She felt...&#10;Social: She withdrew from...&#10;If this continues..."></textarea>
+      </div>
+      <button class="btn btn-violet" onclick="saveReflection('case1-ans','case1-fb','Great analysis!','Please write at least one dimension.')">Save Analysis ✅</button>
+      <div class="feedback-strip" id="case1-fb"></div>
+
+      <div class="case-card" style="margin:20px 0 16px;">
+        <span class="case-label">Case Study 2</span>
+        <h4>🧒 Carlos Joins the School Team</h4>
+        <p>Carlos, 11 years old, was shy and had very few friends. His teacher encouraged him to join the school basketball team. At first, he was nervous and made many mistakes. But over time, he practiced daily, improved his skills, and made new friends. His confidence grew, and he started participating more in class discussions.</p>
+      </div>
+      <div class="reflection-box">
+        <label>In Carlos's case: Which health dimensions improved and WHY? What specific change (joining the team) caused these improvements? How are the dimensions connected to each other in this story?</label>
+        <textarea id="case2-ans" rows="5" placeholder="Physical improved because...&#10;Social improved because...&#10;Emotional improved because...&#10;The dimensions are connected because..."></textarea>
+      </div>
+      <button class="btn btn-violet" onclick="saveReflection('case2-ans','case2-fb','Excellent thinking!','Please write your analysis.')">Save Analysis ✅</button>
+      <div class="feedback-strip" id="case2-fb"></div>
+    </div>
+
+    <!-- COMPARE AND CONTRAST -->
+    <div class="sec">
+      <span class="sec-label sl-coral">⚖️ Compare — Positive vs. Negative Changes</span>
+      <h3>Aisha vs. Carlos — What's the Difference?</h3>
+      <p>Both Aisha and Carlos went through changes in Grade 6. But the outcomes were very different.</p>
+      <div class="hl-box hl-coral">
+        <p>🔴 <strong>Aisha's change</strong> (spending too much time on social media) led to <em>negative impacts</em> across multiple dimensions — physical, mental, emotional, and social health all suffered.</p>
+      </div>
+      <div class="hl-box hl-green">
+        <p>🟢 <strong>Carlos's change</strong> (joining the basketball team) led to <em>positive impacts</em> — physical fitness improved, social connections grew, and his emotional and mental health strengthened.</p>
+      </div>
+      <div class="reflection-box">
+        <label>🤔 HIGHER ORDER QUESTION: Can the SAME change (e.g., joining social media) have both positive AND negative effects on health dimensions? Explain your thinking with an example.</label>
+        <textarea id="compare-ans" placeholder="Yes/No, because... For example, social media can..."></textarea>
+      </div>
+      <button class="btn btn-coral" onclick="saveReflection('compare-ans','compare-fb','Excellent critical thinking!','Give this one more thought — what if the same change had different effects on different people?')">Submit Thinking ✅</button>
+      <div class="feedback-strip" id="compare-fb"></div>
+    </div>
+
+    <!-- RANKING ACTIVITY -->
+    <div class="sec">
+      <span class="sec-label sl-amber">📊 Ranking Activity</span>
+      <h3>Which health dimension matters most to YOU?</h3>
+      <p>Rank the six health dimensions from 1 (most important to you right now) to 6 (least). Use the ▲ ▼ arrows to reorder:</p>
+      <div id="rank-list"></div>
+      <div class="reflection-box" style="margin-top:12px;">
+        <label>Why did you put your top choice first? What is happening in your life right now that influenced your ranking?</label>
+        <textarea id="rank-reflect" placeholder="I ranked ___ first because..."></textarea>
+      </div>
+      <button class="btn btn-amber" onclick="saveReflection('rank-reflect','rank-fb','Your personal reflection has been saved!','Share your thoughts — why did you rank them that way?')">Save My Ranking ✅</button>
+      <div class="feedback-strip" id="rank-fb"></div>
+    </div>
+
+    <!-- CREATIVE: HEALTH ACTION PLAN -->
+    <div class="sec">
+      <span class="sec-label sl-green">📋 My Health Action Plan</span>
+      <h3>What can YOU do?</h3>
+      <p>Choose ONE health dimension you want to improve. Write a simple action plan:</p>
+      <div class="reflection-box">
+        <label>The dimension I want to improve: (e.g., Emotional Health)</label>
+        <input type="text" id="plan-dim" placeholder="Type the dimension name...">
+      </div>
+      <div class="reflection-box">
+        <label>What is the problem or challenge in this dimension right now?</label>
+        <textarea id="plan-problem" rows="2" placeholder="Right now, I am struggling with..."></textarea>
+      </div>
+      <div class="reflection-box">
+        <label>What are THREE specific actions you will take this week to improve it?</label>
+        <textarea id="plan-actions" rows="3" placeholder="1. I will...&#10;2. I will...&#10;3. I will..."></textarea>
+      </div>
+      <div class="reflection-box">
+        <label>How will you know that your health in this dimension has improved?</label>
+        <textarea id="plan-success" rows="2" placeholder="I will know it worked when..."></textarea>
+      </div>
+      <button class="btn btn-green" onclick="saveActionPlan()">Submit My Action Plan 🌟</button>
+      <div class="feedback-strip" id="plan-fb"></div>
+    </div>
+
+    <!-- DAY 3 QUIZ -->
+    <div class="quiz-sec">
+      <h3>📝 Day 3 Quiz</h3>
+      <p class="quiz-sub">Application &amp; Analysis Level Questions. Choices are randomized!</p>
+      <div id="qb-d2"></div>
+      <div class="quiz-submit-row">
+        <button class="btn btn-amber btn-sm" style="width:auto;padding:12px 30px;font-size:var(--fs-md);" onclick="submitQuiz('d2')">Submit Quiz →</button>
+      </div>
+      <div class="score-reveal" id="sc-d2"></div>
+    </div>
+
+    <div class="sec" style="margin-top:20px;">
+      <span class="sec-label sl-teal">📚 Extended Learning</span>
+      <div class="ext-card">
+        <p><strong>Tonight:</strong> Interview a family member (parent, older sibling, or relative). Ask them: <strong>"What was the biggest health challenge you faced as a young person, and which health dimension was most affected?"</strong> Write their answer in 3–5 sentences.</p>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════
+     DAY 4 — DEEPER ANALYSIS (Analysis / Synthesis)
+════════════════════════════════════════════════════════ -->
+<div class="day-panel" id="day3">
+  <div class="day-hero d4-hero">
+    <span class="hero-day-tag">Day 4 · Analysis &amp; Synthesis</span>
+    <span class="hero-icon">🧩</span>
+    <h2>The Ripple Effect:<br>How One Change Affects All</h2>
+    <p>When one health dimension changes, it creates a <strong>ripple effect</strong> — like dropping a stone in water. Today you will analyze these ripple effects and synthesize what you've learned into a deeper understanding of well-being.</p>
+    <span class="lc-tag">📌 Analyzing cause-and-effect relationships across health dimensions.</span>
+  </div>
+
+  <div class="day-content">
+
+    <!-- THE RIPPLE EFFECT -->
+    <div class="sec">
+      <span class="sec-label sl-purple">🌊 The Ripple Effect</span>
+      <h3>One change can affect everything</h3>
+      <p>Scientists and health experts agree that the six dimensions of health do not work in isolation. A change in one dimension sends "ripples" to all others. Let's explore this using a real adolescent situation.</p>
+      <div class="hl-box hl-violet">
+        <p>💡 <strong>Definition:</strong> The <strong>ripple effect</strong> in health means that a change or problem in one health dimension causes related changes in other dimensions — just like how a single stone dropped in a pond creates waves that spread outward.</p>
+      </div>
+
+      <div class="case-card" style="margin-top:16px;">
+        <span class="case-label">Ripple Scenario</span>
+        <h4>😰 Sam's Stressful Exam Week</h4>
+        <p>Sam has a major exam next week. He is so worried that he cannot sleep at night. Because he is not sleeping well, he feels tired all day and does not eat properly. He becomes irritable and snaps at his friends, who then avoid him. He feels lonely and begins to doubt his abilities. By the end of the week, Sam feels completely overwhelmed.</p>
+      </div>
+
+      <div class="reflection-box">
+        <label>🔍 HOTS Question: Map the ripple effect in Sam's situation. Start with the FIRST change (exam stress → mental health), then show how it spread to each other dimension. Use this format: Mental → Physical → Emotional → Social → ...</label>
+        <textarea id="ripple-ans" rows="6" placeholder="Mental: Sam felt stressed because...&#10;Physical: This caused him to...&#10;Emotional: As a result, he felt...&#10;Social: His friends...&#10;Spiritual: Eventually, he began to doubt...&#10;Environmental: ..."></textarea>
+      </div>
+      <button class="btn btn-violet" onclick="saveReflection('ripple-ans','ripple-fb','Excellent mapping! You understand the ripple effect.','Try to trace the ripple through at least 3 dimensions.')">Save My Ripple Map ✅</button>
+      <div class="feedback-strip" id="ripple-fb"></div>
+    </div>
+
+    <!-- COPING STRATEGIES -->
+    <div class="sec">
+      <span class="sec-label sl-teal">🛡️ Coping Strategies for Adolescents</span>
+      <h3>How to Handle Changes in Health Dimensions</h3>
+      <p>Understanding what is happening to your health is the first step. The second step is knowing how to <strong>cope and respond</strong> in healthy ways.</p>
+      <div class="hotspot-body">
+        <div class="hotspot-item" onclick="toggleHotspot(this)">
+          <span class="hotspot-icon">🗣️</span>
+          <div class="hotspot-text">
+            <h4>Talk to a Trusted Adult (Social + Emotional)</h4>
+            <div class="hotspot-detail">When you feel overwhelmed, talking to a parent, teacher, or school counselor can help you process your emotions and find solutions. Keeping problems inside can make them feel bigger than they are. Asking for help is a sign of strength, not weakness.</div>
+          </div>
+        </div>
+        <div class="hotspot-item" onclick="toggleHotspot(this)">
+          <span class="hotspot-icon">🏃</span>
+          <div class="hotspot-text">
+            <h4>Physical Activity (Physical + Emotional + Mental)</h4>
+            <div class="hotspot-detail">Exercise releases endorphins — natural chemicals in your brain that reduce stress and improve mood. Even 30 minutes of walking, dancing, or playing a sport can significantly improve your emotional and mental health.</div>
+          </div>
+        </div>
+        <div class="hotspot-item" onclick="toggleHotspot(this)">
+          <span class="hotspot-icon">📔</span>
+          <div class="hotspot-text">
+            <h4>Journaling (Emotional + Mental)</h4>
+            <div class="hotspot-detail">Writing about your feelings and experiences helps you process emotions and think more clearly. It also helps you notice patterns — for example, noticing that you feel worst after too much screen time.</div>
+          </div>
+        </div>
+        <div class="hotspot-item" onclick="toggleHotspot(this)">
+          <span class="hotspot-icon">🌄</span>
+          <div class="hotspot-text">
+            <h4>Time in Nature (Environmental + Physical + Spiritual)</h4>
+            <div class="hotspot-detail">Spending time outdoors — walking in a park, gardening, or just sitting under a tree — reduces cortisol (stress hormone) levels, boosts mood, and can create feelings of peace and connection to something bigger than yourself.</div>
+          </div>
+        </div>
+        <div class="hotspot-item" onclick="toggleHotspot(this)">
+          <span class="hotspot-icon">🙏</span>
+          <div class="hotspot-text">
+            <h4>Prayer, Meditation, or Reflection (Spiritual + Emotional)</h4>
+            <div class="hotspot-detail">Having a spiritual practice — whether it's prayer, meditation, or simply quiet reflection — can provide a sense of calm, purpose, and perspective when life feels chaotic. Many adolescents find comfort in their faith or in moments of stillness.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CRITICAL THINKING: BARRIERS TO HEALTH -->
+    <div class="sec">
+      <span class="sec-label sl-coral">⚠️ Barriers to Good Health</span>
+      <h3>What stops adolescents from being healthy?</h3>
+      <p>Even if adolescents know what's healthy, many face <strong>real barriers</strong> that make healthy choices difficult. Understanding these barriers is important for finding solutions.</p>
+      <div class="hl-box hl-coral">
+        <p>📊 <strong>Examples of Health Barriers for Filipino Adolescents:</strong><br>
+        • Limited access to nutritious food (poverty)<br>
+        • Peer pressure to engage in risky behavior<br>
+        • Unsafe neighborhoods limiting outdoor activity<br>
+        • Social media and internet addiction<br>
+        • Mental health stigma (fear of being judged for having feelings)<br>
+        • Lack of health education or information</p>
+      </div>
+      <div class="reflection-box">
+        <label>🤔 HIGHER ORDER: Choose ONE barrier from above. Explain how it affects at least THREE different health dimensions. Then suggest two REALISTIC solutions that a Grade 6 student could actually do.</label>
+        <textarea id="barrier-ans" rows="6" placeholder="The barrier I chose: ___&#10;&#10;It affects Physical health because...&#10;It affects Emotional health because...&#10;It affects Social health because...&#10;&#10;Solution 1: A student could...&#10;Solution 2: A student could..."></textarea>
+      </div>
+      <button class="btn btn-coral" onclick="saveReflection('barrier-ans','barrier-fb','Excellent critical thinking and problem-solving!','Try to analyze at least three health dimensions and suggest practical solutions.')">Submit My Analysis ✅</button>
+      <div class="feedback-strip" id="barrier-fb"></div>
+    </div>
+
+    <!-- SYNTHESIS: LETTER -->
+    <div class="sec">
+      <span class="sec-label sl-amber">💌 Synthesis Activity</span>
+      <h3>Write a Letter to Your Future Self</h3>
+      <p>Imagine yourself at age 25. Write a short letter from your <strong>current self (age 11–12)</strong> to your future self about what you are doing NOW to take care of your health across all dimensions.</p>
+      <div class="reflection-box">
+        <label>Dear Future Me... (Write 4–6 sentences covering at least 3 health dimensions)</label>
+        <textarea id="letter-ans" rows="7" placeholder="Dear Future Me,&#10;&#10;Right now, I am taking care of my physical health by...&#10;For my emotional health, I am learning to...&#10;In terms of my social health...&#10;&#10;I hope you remember that...&#10;&#10;From,&#10;[Your name]"></textarea>
+      </div>
+      <button class="btn btn-amber" onclick="saveReflection('letter-ans','letter-fb','Beautiful! Your letter has been saved.','Write at least 4 sentences covering your health journey.')">Send to Future Me 📬</button>
+      <div class="feedback-strip" id="letter-fb"></div>
+    </div>
+
+    <!-- DAY 4 QUIZ -->
+    <div class="quiz-sec">
+      <h3>📝 Day 4 Quiz</h3>
+      <p class="quiz-sub">Analysis &amp; Synthesis Level — Think carefully! Choices are randomized.</p>
+      <div id="qb-d3"></div>
+      <div class="quiz-submit-row">
+        <button class="btn btn-amber btn-sm" style="width:auto;padding:12px 30px;font-size:var(--fs-md);" onclick="submitQuiz('d3')">Submit Quiz →</button>
+      </div>
+      <div class="score-reveal" id="sc-d3"></div>
+    </div>
+
+    <div class="sec" style="margin-top:20px;">
+      <span class="sec-label sl-teal">📚 Extended Learning</span>
+      <div class="ext-card">
+        <p><strong>Tonight:</strong> Look at your community or neighborhood. Identify <strong>one environmental health problem</strong> (e.g., pollution, lack of safe spaces for play, poor garbage collection). In 3–5 sentences, explain how this environmental problem affects at least two OTHER health dimensions.</p>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════
+     DAY 5 — EVALUATION & CREATION (HOTS)
+════════════════════════════════════════════════════════ -->
+<div class="day-panel" id="day4">
+  <div class="day-hero d5-hero">
+    <span class="hero-day-tag">Day 5 · Evaluation &amp; Creation (HOTS)</span>
+    <span class="hero-icon">⭐</span>
+    <h2>Evaluate &amp; Create:<br>Your Health Vision</h2>
+    <p>This is your final day! Use everything you've learned to <strong>evaluate, judge, and create</strong>. You'll assess health situations critically and build your personal vision for adolescent well-being.</p>
+    <span class="lc-tag">📌 Evaluate how changes in different health dimensions affect adolescents' overall well-being.</span>
+  </div>
+
+  <div class="day-content">
+
+    <!-- WEEK REVIEW -->
+    <div class="sec">
+      <span class="sec-label sl-purple">🗓️ Week in Review</span>
+      <h3>What have we learned this week?</h3>
+      <div class="hl-box hl-violet"><p>📌 <strong>Day 1:</strong> The six dimensions of health and how they apply to adolescents.</p></div>
+      <div class="hl-box hl-teal"><p>📌 <strong>Day 2:</strong> How positive and negative changes affect health dimensions.</p></div>
+      <div class="hl-box hl-coral"><p>📌 <strong>Day 3:</strong> Applying knowledge to analyze real-life scenarios and plan improvements.</p></div>
+      <div class="hl-box hl-amber"><p>📌 <strong>Day 4:</strong> The ripple effect, coping strategies, and barriers to adolescent health.</p></div>
+      <div class="hl-box hl-green"><p>📌 <strong>Day 5:</strong> Evaluating and creating — your highest-order health thinking!</p></div>
+    </div>
+
+    <!-- EVALUATION TASK 1: JUDGE THE ADVICE -->
+    <div class="sec">
+      <span class="sec-label sl-coral">⚖️ HOTS Task 1 — Evaluate the Advice</span>
+      <h3>Is this good health advice?</h3>
+      <p>Below are statements made by different people. <strong>Evaluate</strong> whether each statement reflects a correct and complete understanding of health. Tap your verdict:</p>
+      <div id="advice-judge"></div>
+    </div>
+
+    <!-- EVALUATION TASK 2: DESIGN A HEALTH PROGRAM -->
+    <div class="sec">
+      <span class="sec-label sl-teal">🏗️ HOTS Task 2 — Design a School Health Program</span>
+      <h3>You are the School Health Officer!</h3>
+      <p>Your school wants to improve the well-being of Grade 6 students. You have been chosen to design a <strong>one-week health program</strong> that addresses at least 4 health dimensions.</p>
+      <div class="reflection-box">
+        <label>Program Name:</label>
+        <input type="text" id="prog-name" placeholder="e.g., Grade 6 Wellness Week">
+      </div>
+      <div class="reflection-box">
+        <label>What health problem in your school/community does this program address?</label>
+        <textarea id="prog-problem" rows="2" placeholder="e.g., Many students feel stressed and isolated because..."></textarea>
+      </div>
+      <div class="reflection-box">
+        <label>Describe 4 activities — one per day — and identify which health dimension each activity addresses:</label>
+        <textarea id="prog-activities" rows="6" placeholder="Day 1 Activity: [name] — Dimension: [which one] — Because: [why it helps]&#10;Day 2 Activity: ...&#10;Day 3 Activity: ...&#10;Day 4 Activity: ..."></textarea>
+      </div>
+      <div class="reflection-box">
+        <label>How will you measure if the program was successful?</label>
+        <textarea id="prog-measure" rows="2" placeholder="I will know it worked if students..."></textarea>
+      </div>
+      <button class="btn btn-teal" onclick="saveProgram()">Submit My Program Design 🏅</button>
+      <div class="feedback-strip" id="prog-fb"></div>
+    </div>
+
+    <!-- EVALUATION TASK 3: PERSONAL MANIFESTO -->
+    <div class="sec">
+      <span class="sec-label sl-amber">📜 HOTS Task 3 — My Health Manifesto</span>
+      <h3>What do YOU believe about health?</h3>
+      <p>A <strong>manifesto</strong> is a powerful statement of what you believe and value. Write your personal health manifesto — at least 5 statements about what health means to you as an adolescent, using what you've learned this week.</p>
+      <div class="hl-box hl-amber">
+        <p>📝 <strong>Start each statement with:</strong> "I believe that..." or "I commit to..." or "As a healthy adolescent, I will..."</p>
+      </div>
+      <div class="reflection-box">
+        <label>My Health Manifesto:</label>
+        <textarea id="manifesto-ans" rows="8" placeholder="I believe that health is not just about my body...&#10;I commit to...&#10;I believe that my emotional health matters because...&#10;As a healthy adolescent, I will...&#10;I believe that..."></textarea>
+      </div>
+      <button class="btn btn-amber" onclick="saveReflection('manifesto-ans','manifesto-fb','Your manifesto is powerful! Well done!','Write at least 5 belief statements about your health.')">Publish My Manifesto 🌟</button>
+      <div class="feedback-strip" id="manifesto-fb"></div>
+    </div>
+
+    <!-- FINAL REFLECTION -->
+    <div class="sec">
+      <span class="sec-label sl-green">💡 Final Reflection</span>
+      <h3>Looking Back, Looking Forward</h3>
+      <div class="reflection-box">
+        <label>🌱 GROWTH Question: How has your understanding of health changed after this 5-day lesson? What is ONE thing you will do differently starting today to protect your well-being?</label>
+        <textarea id="final-reflect" rows="5" placeholder="Before this lesson, I thought health meant...&#10;Now I understand that health is...&#10;The most important thing I learned was...&#10;Starting today, I will..."></textarea>
+      </div>
+      <button class="btn btn-green" onclick="saveFinalReflect()">Submit Final Reflection 🎓</button>
+      <div class="feedback-strip" id="final-fb"></div>
+    </div>
+
+    <!-- DAY 5 FINAL QUIZ -->
+    <div class="quiz-sec">
+      <h3>📝 Day 5 Final Quiz — HOTS Level</h3>
+      <p class="quiz-sub">Evaluation &amp; Creation level questions. Think deeply! Choices are randomized.</p>
+      <div id="qb-d4"></div>
+      <div class="quiz-submit-row">
+        <button class="btn btn-amber btn-sm" style="width:auto;padding:12px 30px;font-size:var(--fs-md);" onclick="submitQuiz('d4')">Submit Final Quiz →</button>
+      </div>
+      <div class="score-reveal" id="sc-d4"></div>
+    </div>
+
+    <div class="sec" style="margin-top:20px;">
+      <span class="sec-label sl-teal">📚 Extended Learning</span>
+      <div class="ext-card">
+        <p><strong>This week:</strong> Share your <strong>Health Manifesto</strong> with your family. Read it aloud at dinner or post it on your wall. Ask a family member to write their own health belief statement and share it with you. <strong>Health is a family conversation!</strong></p>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<footer>
+  <p>MAPEH Grade 6 · Health · Alternative Delivery Mode · 5-Day Interactive Lesson<br>
+  <span>Evaluate how changes in the different health dimensions affect adolescents' well-being</span></p>
+</footer>
+
+<script>
+/* ═══════════════════════════════════════════════════════════
+   DATA
+═══════════════════════════════════════════════════════════ */
+
+// QUIZ BANK — each entry: {q, opts[4], ans(0-indexed correct), level, fb}
+const QUIZZES = {
+  d0: [
+    {
+      q: "Which of the following BEST describes what 'health' means according to the World Health Organization (WHO)?",
+      opts: [
+        "Being free from any disease or physical illness",
+        "A state of complete physical, mental, and social well-being, not just the absence of disease",
+        "Having enough money to see a doctor when sick",
+        "Eating healthy food and exercising every day"
+      ],
+      ans: 1, level: "LOTS",
+      fb: "WHO defines health as complete well-being across all dimensions — not just the absence of disease."
+    },
+    {
+      q: "A Grade 6 student joins a community clean-up drive every Saturday. Which health dimension is MOST directly strengthened by this activity?",
+      opts: ["Mental health","Emotional health","Environmental health","Spiritual health"],
+      ans: 2, level: "LOTS",
+      fb: "Environmental health involves caring for and living in a clean, safe environment."
+    },
+    {
+      q: "Ana feels sad after a fight with her best friend, but she talks about it with her mom and feels better. Which health dimension is MOST involved in Ana's coping strategy?",
+      opts: ["Physical health","Spiritual health","Environmental health","Emotional health"],
+      ans: 3, level: "LOTS",
+      fb: "Emotional health includes understanding feelings and coping with stress in healthy ways."
+    },
+    {
+      q: "Why is it important for adolescents to understand ALL SIX dimensions of health — not just physical health?",
+      opts: [
+        "Because physical health is actually the least important dimension",
+        "Because a problem in one dimension can cause problems in other dimensions, affecting overall well-being",
+        "Because teachers and schools require students to know all dimensions",
+        "Because other dimensions are more important than physical health"
+      ],
+      ans: 1, level: "HOTS",
+      fb: "The six dimensions are interconnected. A change in one ripples across the others — understanding all six gives you a complete picture of health."
+    },
+    {
+      q: "Miguel gets enough sleep, eats nutritious food, and exercises regularly — but he often feels lonely and has no close friends. Which statement BEST evaluates Miguel's health?",
+      opts: [
+        "Miguel is completely healthy because his body is well taken care of",
+        "Miguel is not healthy at all because he has no friends",
+        "Miguel has strong physical health but his social health needs attention — overall well-being is incomplete",
+        "Miguel should focus less on physical health and more on his social life"
+      ],
+      ans: 2, level: "HOTS",
+      fb: "Well-being requires balance across ALL dimensions. Strong physical health does not compensate for poor social health — overall well-being is still incomplete."
+    }
+  ],
+  d1: [
+    {
+      q: "Sofia just moved to a new city and started at a new school. Which health dimensions are MOST LIKELY to be negatively affected by this change?",
+      opts: [
+        "Physical and environmental health only",
+        "Spiritual and environmental health only",
+        "Social and emotional health, as she may feel lonely and anxious",
+        "Mental health only, because she will need to catch up academically"
+      ],
+      ans: 2, level: "LOTS",
+      fb: "Moving to a new school most directly impacts social health (losing friendships) and emotional health (anxiety, loneliness)."
+    },
+    {
+      q: "A factory was built near Lena's neighborhood. The air quality became poor and there is constant loud noise. Which type of health change is Lena experiencing?",
+      opts: [
+        "A positive change in environmental health",
+        "A negative change in environmental health that may also affect physical and mental health",
+        "A change in social health only",
+        "A change that only affects spiritual health"
+      ],
+      ans: 1, level: "LOTS",
+      fb: "Poor air quality and noise pollution are negative environmental health changes that can cascade into physical health problems (respiratory issues) and mental health issues (stress from noise)."
+    },
+    {
+      q: "Carlos starts exercising daily for 30 minutes. After two weeks, he notices he sleeps better, his mood has improved, and he feels more confident. This BEST illustrates which concept?",
+      opts: [
+        "That physical health is more important than other dimensions",
+        "That one positive change (exercise) can create ripple effects across multiple health dimensions",
+        "That exercise only affects physical health",
+        "That 30 minutes of exercise is the cure for all health problems"
+      ],
+      ans: 1, level: "HOTS",
+      fb: "This illustrates the positive ripple effect — one healthy habit (exercise) strengthened physical, emotional, and mental health simultaneously."
+    },
+    {
+      q: "Which of the following situations shows the MOST NEGATIVE impact on an adolescent's overall well-being?",
+      opts: [
+        "Failing one quiz in school",
+        "Having a small argument with a friend that is quickly resolved",
+        "Experiencing bullying at school, leading to fear, loneliness, and difficulty concentrating",
+        "Feeling nervous before a school presentation"
+      ],
+      ans: 2, level: "HOTS",
+      fb: "Bullying causes simultaneous damage to emotional (fear), social (loneliness/isolation), and mental (difficulty concentrating) health — the most comprehensive negative impact."
+    },
+    {
+      q: "A student who eats junk food daily, stays up past midnight, and never exercises is described as 'healthy' by his friends because he never gets sick. Why is this description INCOMPLETE?",
+      opts: [
+        "It is incomplete because he should exercise more",
+        "It is correct — not getting sick means you are healthy",
+        "It is incomplete because health involves all six dimensions; his habits may already be harming his mental and long-term physical health",
+        "It is incomplete because health is only about what you eat"
+      ],
+      ans: 2, level: "HOTS",
+      fb: "Not getting sick does not mean someone is healthy. Health includes multiple dimensions — his poor habits may currently be invisible in symptoms but are damaging long-term physical and mental health."
+    }
+  ],
+  d2: [
+    {
+      q: "In Aisha's case study, she spends 5–6 hours on social media, skips meals, and withdraws from family. Which sequence BEST shows the ripple effect of her behavior?",
+      opts: [
+        "Social media use → more friends → better social health",
+        "Social media use → low self-esteem (emotional) → skipping meals (physical) → withdrawal (social) → poor grades (mental)",
+        "Social media use → better grades → improved mental health",
+        "Social media use → physical health problems only"
+      ],
+      ans: 1, level: "HOTS",
+      fb: "Aisha's story shows how one behavior (excessive social media) created a cascade of negative effects across emotional, physical, social, and mental health dimensions."
+    },
+    {
+      q: "Carlos joined the basketball team and became more confident and sociable. If we APPLY this knowledge to another student named Rina who is shy, which recommendation is MOST appropriate?",
+      opts: [
+        "Tell Rina to use social media more to meet friends",
+        "Encourage Rina to join a group activity aligned with her interests, as this may improve her social, emotional, and physical health",
+        "Tell Rina that shyness is a permanent personality trait she cannot change",
+        "Advise Rina to study harder to improve her mental health"
+      ],
+      ans: 1, level: "HOTS",
+      fb: "Applying Carlos's experience, group activities can simultaneously improve social, emotional, and physical health for shy adolescents."
+    },
+    {
+      q: "An adolescent who successfully manages school stress by talking to friends, sleeping well, and exercising is demonstrating which skill?",
+      opts: [
+        "Academic intelligence",
+        "Physical strength",
+        "Holistic health literacy — understanding and actively maintaining multiple health dimensions",
+        "Social dominance"
+      ],
+      ans: 2, level: "HOTS",
+      fb: "Using multiple healthy coping strategies across different dimensions demonstrates holistic health literacy — the ability to understand and care for your complete well-being."
+    },
+    {
+      q: "Which of the following is the BEST example of an adolescent making a health-promoting change in the spiritual dimension?",
+      opts: [
+        "Eating more vegetables every day",
+        "Joining a school prayer group and reflecting on personal values and purpose",
+        "Exercising for 30 minutes daily",
+        "Spending more time studying"
+      ],
+      ans: 1, level: "LOTS",
+      fb: "Spiritual health involves finding meaning, purpose, and values. Prayer, reflection, and connecting with one's beliefs directly strengthens the spiritual dimension."
+    },
+    {
+      q: "A researcher finds that adolescents who have strong social connections (good friends and family relationships) are less likely to develop depression. Which conclusion BEST fits this finding?",
+      opts: [
+        "Social health has no connection to mental health",
+        "Physical health is more important than social health",
+        "Strong social health can protect and support emotional and mental health — the dimensions are interconnected",
+        "Depression is caused only by poor physical health"
+      ],
+      ans: 2, level: "HOTS",
+      fb: "This research supports the interconnectedness of health dimensions — strong social health actively protects mental and emotional health."
+    }
+  ],
+  d3: [
+    {
+      q: "Sam cannot sleep because of exam stress. This causes him to feel tired, eat poorly, become irritable, and avoid his friends. This situation BEST illustrates:",
+      opts: [
+        "That exams are harmful and should be removed",
+        "The ripple effect — a problem in one dimension (mental) spreads to affect physical, emotional, and social dimensions",
+        "That Sam has a physical health condition",
+        "That social health is the most important dimension"
+      ],
+      ans: 1, level: "HOTS",
+      fb: "Sam's situation is a classic ripple effect: mental health stress ripples outward to affect physical (sleep, nutrition), emotional (irritability), and social (avoidance) health."
+    },
+    {
+      q: "Which coping strategy would address the MOST health dimensions at once for a stressed adolescent?",
+      opts: [
+        "Staying at home and watching television",
+        "Eating more comfort food",
+        "Joining a community sports team — getting exercise, making friends, and working toward a goal",
+        "Sleeping all weekend"
+      ],
+      ans: 2, level: "HOTS",
+      fb: "Joining a sports team addresses physical (exercise), social (friendship), mental (learning skills, goals), and emotional (confidence, stress relief) health simultaneously."
+    },
+    {
+      q: "A family in a poor community cannot afford nutritious food regularly. This situation creates a barrier to adolescent health. Which analysis is MOST ACCURATE?",
+      opts: [
+        "This only affects physical health since food is a physical need",
+        "This barrier affects physical health (malnutrition), mental health (difficulty concentrating), and emotional health (stress and shame) simultaneously",
+        "Poor families cannot improve their health until they become wealthy",
+        "This problem only affects the parents, not the adolescent children"
+      ],
+      ans: 1, level: "HOTS",
+      fb: "Poverty as a health barrier creates cascading effects: physical (malnutrition), mental (poor concentration from hunger), and emotional (shame, stress) — multiple dimensions are impacted."
+    },
+    {
+      q: "An adolescent is asked to evaluate two options: (A) Spend the weekend gaming alone OR (B) Join a community youth club. Which option BETTER supports holistic health, and why?",
+      opts: [
+        "Option A — gaming improves mental health and that is the most important dimension",
+        "Both options are equally healthy for adolescents",
+        "Option B — it supports social, physical, emotional, and potentially spiritual health; gaming alone primarily serves entertainment without broad health benefits",
+        "Neither option is healthy for adolescents"
+      ],
+      ans: 2, level: "HOTS",
+      fb: "Evaluation requires comparing benefits across dimensions. Option B addresses more dimensions of health — social connection, potential physical activity, emotional growth — while gaming alone provides minimal cross-dimensional benefit."
+    },
+    {
+      q: "A student says: 'I don't need to worry about spiritual health because I don't follow any religion.' Which response BEST corrects this misunderstanding?",
+      opts: [
+        "The student is correct — spiritual health only matters for religious people",
+        "Spiritual health includes having a sense of purpose, values, and meaning in life, which applies to everyone regardless of religious belief",
+        "Spiritual health is the least important dimension and can be ignored",
+        "Without religion, a person cannot have good spiritual health"
+      ],
+      ans: 1, level: "HOTS",
+      fb: "Spiritual health is broader than religion — it includes having purpose, personal values, and meaning in life, which everyone needs regardless of their religious beliefs."
+    }
+  ],
+  d4: [
+    {
+      q: "A school health program focuses ONLY on physical health (nutrition and exercise) and ignores emotional, social, and mental health. Based on what you have learned, which evaluation is MOST ACCURATE?",
+      opts: [
+        "The program is excellent because physical health is the most important dimension",
+        "The program is partially effective but incomplete — a truly effective health program must address all interconnected dimensions",
+        "The program is wrong because physical health is not important",
+        "The program is complete because nutrition and exercise fix all health problems"
+      ],
+      ans: 1, level: "HOTS",
+      fb: "Evaluating the program requires applying knowledge of interconnected dimensions. Physical-only programs miss crucial aspects of adolescent well-being — emotional, social, and mental health are equally critical."
+    },
+    {
+      q: "Maria experiences a positive change in her spiritual health (she discovers a passion for helping the elderly through volunteering). Predict how this will MOST LIKELY affect her OTHER health dimensions:",
+      opts: [
+        "It will only affect her spiritual health — other dimensions are separate",
+        "It will improve her social health (new connections), emotional health (fulfillment and joy), and possibly mental health (sense of purpose and meaning)",
+        "It will only improve her physical health because volunteering involves movement",
+        "It will have no effect on other health dimensions"
+      ],
+      ans: 1, level: "HOTS",
+      fb: "This requires synthesizing knowledge: spiritual health improvements ripple positively to social (new relationships), emotional (fulfillment, happiness), and mental (purpose, meaning) dimensions."
+    },
+    {
+      q: "Which of the following adolescent situations presents the GREATEST RISK to overall well-being, and why?",
+      opts: [
+        "Failing one school exam while having strong family support and good friends",
+        "Experiencing a minor physical injury that heals in one week",
+        "Facing simultaneous problems in multiple dimensions: being bullied (social), feeling depressed (emotional), unable to concentrate (mental), and living in an unsafe neighborhood (environmental)",
+        "Feeling nervous before a school presentation"
+      ],
+      ans: 2, level: "HOTS",
+      fb: "The greatest risk comes from simultaneous damage across multiple health dimensions — each weakened dimension reduces the resources available to cope with the others, creating a compounding negative effect."
+    },
+    {
+      q: "A classmate argues: 'My emotional health problems are private — they don't affect my schoolwork or friendships.' Based on your study of health dimensions, which response BEST evaluates this claim?",
+      opts: [
+        "The classmate is correct — emotional health is completely separate from other dimensions",
+        "The classmate is partially correct — emotional health problems only affect mental health",
+        "The classmate's claim is inaccurate — research consistently shows that emotional health problems (like anxiety or depression) directly reduce academic performance (mental health) and damage friendships (social health)",
+        "The classmate is correct because everyone has the right to keep their health private"
+      ],
+      ans: 2, level: "HOTS",
+      fb: "This requires evaluation using evidence: emotional health directly impacts mental performance and social relationships. The claim of complete separation contradicts the interconnected nature of health dimensions."
+    },
+    {
+      q: "If you were to CREATE the most effective strategy to improve the overall well-being of adolescents in your community, which approach would you EVALUATE as most comprehensive and why?",
+      opts: [
+        "Build more hospitals and clinics to treat physical diseases",
+        "Create school programs that address only academic stress",
+        "Develop community programs that simultaneously address physical activity, emotional support, social connection, mental stimulation, environmental safety, and spiritual growth",
+        "Provide free food to all adolescents to improve physical health"
+      ],
+      ans: 2, level: "HOTS",
+      fb: "Creating truly comprehensive well-being programs requires simultaneously addressing all six dimensions — single-dimension approaches fail because of the interconnected ripple effects between dimensions."
+    }
+  ]
+};
+
+const SORTER_DATA = [
+  { scenario: "Ben starts having nightmares and trouble sleeping after watching scary videos late at night.", correct: "Mental / Emotional", opts: ["Physical","Mental / Emotional","Social","Environmental"] },
+  { scenario: "Lara stops talking to her friends because she is embarrassed about her changing body.", correct: "Social", opts: ["Mental / Emotional","Social","Spiritual","Physical"] },
+  { scenario: "A student feels inspired and hopeful after attending a church retreat about life purpose.", correct: "Spiritual", opts: ["Social","Environmental","Spiritual","Mental / Emotional"] },
+  { scenario: "Josie gets rashes and coughs frequently because her family lives near an open dumpsite.", correct: "Environmental", opts: ["Environmental","Physical","Social","Mental / Emotional"] }
+];
+
+const MATCH_DATA = [
+  { desc: "Ability to think clearly and learn", dim: "Mental" },
+  { desc: "Building positive relationships", dim: "Social" },
+  { desc: "Caring for your surroundings", dim: "Environmental" },
+  { desc: "Expressing feelings in healthy ways", dim: "Emotional" },
+  { desc: "Physical fitness and body function", dim: "Physical" },
+  { desc: "Sense of purpose and values", dim: "Spiritual" }
+];
+
+const ADVICE_DATA = [
+  { advice: '"If you eat healthy, you will be completely healthy — nutrition is the only thing that matters."', verdict: false, explanation: "This is INCOMPLETE. Nutrition supports physical health, but overall well-being requires attention to all six dimensions — emotional, social, mental, spiritual, and environmental health also matter." },
+  { advice: '"Being healthy means feeling good in your body AND your mind AND your relationships."', verdict: true, explanation: "This is CORRECT! This statement recognizes that health is multi-dimensional and includes physical, mental, and social well-being — consistent with WHO's definition." },
+  { advice: '"A teenager who cries sometimes or feels sad is emotionally unhealthy and needs medicine immediately."', verdict: false, explanation: "This is INCORRECT. Experiencing sadness or crying is a normal part of emotional health. Emotional health means being ABLE to experience and process a range of feelings — not always being happy." },
+  { advice: '"Helping my community and living by my values makes me spiritually healthy, even if I\'m not religious."', verdict: true, explanation: "This is CORRECT! Spiritual health does not require religious belief. Having values, purpose, and meaning in life is the core of spiritual health." }
+];
+
+const RANK_ITEMS = ["💪 Physical Health","🧠 Mental Health","❤️ Emotional Health","🤝 Social Health","✨ Spiritual Health","🌿 Environmental Health"];
+
+/* ═══════════════════════════════════════════════════════════
+   STATE
+═══════════════════════════════════════════════════════════ */
+let quizState = { d0:{ans:[], done:false}, d1:{ans:[], done:false}, d2:{ans:[], done:false}, d3:{ans:[], done:false}, d4:{ans:[], done:false} };
+let quizOrders = {};
+let matchState = { selected: null, matched: [] };
+let sorterState = {};
+let rankList = [...RANK_ITEMS];
+let adviceState = {};
+let completedDays = new Set();
+
+/* ═══════════════════════════════════════════════════════════
+   HEADER HIDE/SHOW ON SCROLL
+═══════════════════════════════════════════════════════════ */
+let lastScroll = 0;
+const hdr = document.getElementById('siteHeader');
+window.addEventListener('scroll', ()=>{
+  const cur = window.scrollY;
+  if(cur < 60){ hdr.classList.remove('hidden'); }
+  else if(cur > lastScroll + 8){ hdr.classList.add('hidden'); }
+  else if(cur < lastScroll - 8){ hdr.classList.remove('hidden'); }
+  lastScroll = cur;
+}, {passive:true});
+
+/* ═══════════════════════════════════════════════════════════
+   TABS
+═══════════════════════════════════════════════════════════ */
+function goDay(n){
+  document.querySelectorAll('.day-panel').forEach((p,i)=>p.classList.toggle('active',i===n));
+  document.querySelectorAll('.tab-btn').forEach((b,i)=>b.classList.toggle('active',i===n));
+  window.scrollTo({top:0,behavior:'smooth'});
+  hdr.classList.remove('hidden');
+}
+
+/* ═══════════════════════════════════════════════════════════
+   CHIP TOGGLE
+═══════════════════════════════════════════════════════════ */
+function toggleChip(el){ el.classList.toggle('on'); }
+
+/* ═══════════════════════════════════════════════════════════
+   ENGAGE DAY 1
+═══════════════════════════════════════════════════════════ */
+function checkEngage1(){
+  const sel = document.querySelectorAll('#engage1-chips .chip.on').length;
+  const fb = document.getElementById('engage1-fb');
+  fb.className = 'feedback-strip fb-ok';
+  if(sel === 0){
+    fb.className = 'feedback-strip fb-warn';
+    fb.textContent = '⚠️ Please tap at least one option to see the result!';
+    return;
+  }
+  fb.textContent = `✅ You selected ${sel} idea(s). Excellent! ALL of those choices relate to at least one of the six health dimensions. Health is truly about your WHOLE self — not just your body. Every one of those aspects matters.`;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   DIM CARDS
+═══════════════════════════════════════════════════════════ */
+function toggleDim(el){ el.classList.toggle('on'); }
+
+/* ═══════════════════════════════════════════════════════════
+   HOTSPOT
+═══════════════════════════════════════════════════════════ */
+function toggleHotspot(el){ el.classList.toggle('open'); }
+
+/* ═══════════════════════════════════════════════════════════
+   LIKERT
+═══════════════════════════════════════════════════════════ */
+function setLikert(btn, val){
+  const scale = btn.closest('.likert-scale');
+  scale.querySelectorAll('.likert-btn').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  scale.dataset.val = val;
+}
+
+function submitCheckin(){
+  const scales = document.querySelectorAll('#checkin-list .likert-scale');
+  let allFilled = true;
+  scales.forEach(s=>{ if(!s.dataset.val) allFilled=false; });
+  const reflect = document.getElementById('checkin-reflect').value.trim();
+  const fb = document.getElementById('checkin-fb');
+  if(!allFilled || !reflect){
+    fb.className='feedback-strip fb-warn';
+    fb.textContent='⚠️ Please rate all six dimensions and write your reflection before saving.';
+    return;
+  }
+  fb.className='feedback-strip fb-ok';
+  fb.textContent='✅ Your Health Check-In is saved! Self-awareness is the first step toward improving your well-being. Well done for being honest with yourself.';
+  markDayProgress(0);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   MATCH GAME (Day 2)
+═══════════════════════════════════════════════════════════ */
+function initMatch(){
+  const container = document.getElementById('match-game');
+  if(!container) return;
+  matchState = { selected: null, matched: [], selectedEl: null };
+  // shuffle descriptions and dimensions separately
+  const descs = shuffle([...MATCH_DATA]);
+  const dims  = shuffle([...MATCH_DATA]);
+  container.innerHTML = '';
+  const leftCol = document.createElement('div');
+  const rightCol = document.createElement('div');
+  leftCol.style.cssText = 'display:flex;flex-direction:column;gap:10px;';
+  rightCol.style.cssText = 'display:flex;flex-direction:column;gap:10px;';
+
+  descs.forEach(item=>{
+    const el = document.createElement('div');
+    el.className='match-item';
+    el.dataset.key = item.desc;
+    el.dataset.side = 'desc';
+    el.textContent = item.desc;
+    el.onclick = ()=>handleMatch(el, item.dim, item.desc);
+    leftCol.appendChild(el);
+  });
+  dims.forEach(item=>{
+    const el = document.createElement('div');
+    el.className='match-item';
+    el.dataset.key = item.dim;
+    el.dataset.side = 'dim';
+    el.textContent = item.dim;
+    el.onclick = ()=>handleMatchDim(el, item.dim);
+    rightCol.appendChild(el);
+  });
+
+  container.style.gridTemplateColumns='1fr 1fr';
+  container.innerHTML='';
+  // Flatten interleaved for mobile
+  const leftItems = [...leftCol.children];
+  const rightItems = [...rightCol.children];
+  leftItems.forEach((l,i)=>{ container.appendChild(l); if(rightItems[i]) container.appendChild(rightItems[i]); });
+  window._matchDescs = descs;
+  window._matchDims = dims;
+}
+
+let _matchSelectedDesc = null;
+let _matchSelectedDescEl = null;
+let _matchExpectedDim = null;
+
+function handleMatch(el, expectedDim, desc){
+  if(el.classList.contains('matched')) return;
+  document.querySelectorAll('#match-game .match-item[data-side="desc"]').forEach(e=>e.classList.remove('selected-a'));
+  _matchSelectedDesc = desc;
+  _matchSelectedDescEl = el;
+  _matchExpectedDim = expectedDim;
+  el.classList.add('selected-a');
+}
+
+function handleMatchDim(el, dim){
+  if(el.classList.contains('matched')) return;
+  if(!_matchSelectedDescEl){ document.getElementById('match-fb').className='feedback-strip fb-warn'; document.getElementById('match-fb').textContent='⚠️ Tap a description on the left first!'; return; }
+  if(dim === _matchExpectedDim){
+    _matchSelectedDescEl.classList.add('matched');
+    _matchSelectedDescEl.classList.remove('selected-a');
+    el.classList.add('matched');
+    _matchSelectedDescEl = null;
+    _matchExpectedDim = null;
+    const matched = document.querySelectorAll('#match-game .match-item.matched').length / 2;
+    const fb = document.getElementById('match-fb');
+    if(matched === MATCH_DATA.length){
+      fb.className='feedback-strip fb-ok';
+      fb.textContent='🎉 Perfect! You matched all six health dimensions correctly!';
+      markDayProgress(1);
+    } else {
+      fb.className='feedback-strip fb-ok';
+      fb.textContent=`✅ Correct! ${matched} of ${MATCH_DATA.length} matched.`;
+    }
+  } else {
+    el.classList.add('wrong-flash');
+    _matchSelectedDescEl.classList.add('wrong-flash');
+    setTimeout(()=>{ el.classList.remove('wrong-flash'); if(_matchSelectedDescEl) _matchSelectedDescEl.classList.remove('wrong-flash','selected-a'); _matchSelectedDescEl=null; }, 800);
+    const fb = document.getElementById('match-fb');
+    fb.className='feedback-strip fb-warn';
+    fb.textContent='❌ Not quite — try again! Think about what each dimension focuses on.';
+  }
+}
+
+function resetMatch(){ initMatch(); document.getElementById('match-fb').className='feedback-strip'; }
+
+/* ═══════════════════════════════════════════════════════════
+   SORTER (Day 2)
+═══════════════════════════════════════════════════════════ */
+function initSorter(){
+  const container = document.getElementById('sorter-activity');
+  if(!container) return;
+  sorterState = {};
+  container.innerHTML = SORTER_DATA.map((item,i)=>`
+    <div style="margin-bottom:20px;">
+      <div class="scenario-block" style="margin-bottom:10px;"><p>${item.scenario}</p></div>
+      <div style="display:flex;flex-wrap:wrap;gap:8px;">
+        ${item.opts.map(opt=>`<button class="chip" data-q="${i}" data-opt="${opt}" onclick="pickSorter(this,${i},'${opt}','${item.correct}')">${opt}</button>`).join('')}
+      </div>
+      <div class="feedback-strip" id="sf-${i}"></div>
+    </div>
+  `).join('');
+}
+
+function pickSorter(el, qi, opt, correct){
+  document.querySelectorAll(`.chip[data-q="${qi}"]`).forEach(c=>c.classList.remove('on'));
+  el.classList.add('on');
+  const fb = document.getElementById(`sf-${qi}`);
+  if(opt===correct){
+    fb.className='feedback-strip fb-ok';
+    fb.textContent=`✅ Correct! This scenario most directly affects ${correct} health.`;
+    sorterState[qi]=true;
+  } else {
+    fb.className='feedback-strip fb-warn';
+    fb.textContent=`❌ Think again. The scenario is most directly linked to ${correct} health. Can you see why?`;
+    sorterState[qi]=false;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   RANKING (Day 3)
+═══════════════════════════════════════════════════════════ */
+function initRank(){
+  const container = document.getElementById('rank-list');
+  if(!container) return;
+  renderRank();
+}
+function renderRank(){
+  const container = document.getElementById('rank-list');
+  container.innerHTML = rankList.map((item,i)=>`
+    <div class="rank-item">
+      <div class="rank-num">${i+1}</div>
+      <span>${item}</span>
+      <div class="rank-btns">
+        ${i>0?`<button class="rank-btn" onclick="moveRank(${i},-1)">▲</button>`:'<span style="width:30px;display:inline-block;"></span>'}
+        ${i<rankList.length-1?`<button class="rank-btn" onclick="moveRank(${i},1)">▼</button>`:'<span style="width:30px;display:inline-block;"></span>'}
+      </div>
+    </div>
+  `).join('');
+}
+function moveRank(i, dir){
+  const j = i+dir;
+  [rankList[i], rankList[j]] = [rankList[j], rankList[i]];
+  renderRank();
+}
+
+/* ═══════════════════════════════════════════════════════════
+   ADVICE JUDGE (Day 5)
+═══════════════════════════════════════════════════════════ */
+function initAdviceJudge(){
+  const container = document.getElementById('advice-judge');
+  if(!container) return;
+  container.innerHTML = ADVICE_DATA.map((item,i)=>`
+    <div style="margin-bottom:20px;">
+      <div class="hl-box hl-amber" style="margin-bottom:10px;"><p style="font-style:italic;">${item.advice}</p></div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;">
+        <button class="btn btn-sm btn-green" onclick="judgeAdvice(this,${i},true,${item.verdict})">✅ This is CORRECT advice</button>
+        <button class="btn btn-sm btn-coral" onclick="judgeAdvice(this,${i},false,${item.verdict})">❌ This is INCORRECT / INCOMPLETE</button>
+      </div>
+      <div class="feedback-strip" id="af-${i}"></div>
+    </div>
+  `).join('');
+}
+
+function judgeAdvice(el, i, chosen, correct){
+  const fb = document.getElementById(`af-${i}`);
+  el.closest('div').querySelectorAll('button').forEach(b=>b.disabled=true);
+  const isRight = (chosen===correct);
+  fb.className = isRight ? 'feedback-strip fb-ok' : 'feedback-strip fb-warn';
+  fb.textContent = (isRight ? '✅ Correct! ' : '❌ Not quite. ') + ADVICE_DATA[i].explanation;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   REFLECTIONS / FORM SAVES
+═══════════════════════════════════════════════════════════ */
+function saveReflection(inputId, fbId, okMsg, warnMsg){
+  const val = document.getElementById(inputId)?.value.trim();
+  const fb = document.getElementById(fbId);
+  if(!fb) return;
+  if(!val || val.length < 15){
+    fb.className='feedback-strip fb-warn';
+    fb.textContent=`⚠️ ${warnMsg || 'Please write a more complete answer.'}`;
+    return;
+  }
+  fb.className='feedback-strip fb-ok';
+  fb.textContent=`✅ ${okMsg || 'Your answer has been saved!'}`;
+}
+
+function saveActionPlan(){
+  const dim    = document.getElementById('plan-dim')?.value.trim();
+  const prob   = document.getElementById('plan-problem')?.value.trim();
+  const acts   = document.getElementById('plan-actions')?.value.trim();
+  const succ   = document.getElementById('plan-success')?.value.trim();
+  const fb     = document.getElementById('plan-fb');
+  if(!dim||!prob||!acts||!succ){
+    fb.className='feedback-strip fb-warn';
+    fb.textContent='⚠️ Please fill in all four parts of your action plan.';
+    return;
+  }
+  fb.className='feedback-strip fb-ok';
+  fb.textContent=`🌟 Your Health Action Plan for "${dim}" has been saved! Now the challenge is to follow through this week. You have this!`;
+  markDayProgress(2);
+}
+
+function saveProgram(){
+  const name = document.getElementById('prog-name')?.value.trim();
+  const prob = document.getElementById('prog-problem')?.value.trim();
+  const acts = document.getElementById('prog-activities')?.value.trim();
+  const meas = document.getElementById('prog-measure')?.value.trim();
+  const fb = document.getElementById('prog-fb');
+  if(!name||!prob||!acts||!meas){
+    fb.className='feedback-strip fb-warn';
+    fb.textContent='⚠️ Complete all four sections of your program design.';
+    return;
+  }
+  fb.className='feedback-strip fb-ok';
+  fb.textContent=`🏅 "${name}" has been submitted! You have just designed a real health program — this kind of systems thinking is what public health officials do. Excellent work!`;
+  markDayProgress(4);
+}
+
+function saveFinalReflect(){
+  const val = document.getElementById('final-reflect')?.value.trim();
+  const fb = document.getElementById('final-fb');
+  if(!val||val.length<30){
+    fb.className='feedback-strip fb-warn';
+    fb.textContent='⚠️ Please write a thoughtful reflection — at least a few sentences.';
+    return;
+  }
+  fb.className='feedback-strip fb-ok';
+  fb.textContent='🎓 Congratulations on completing the 5-day lesson! Your reflection shows real growth in understanding health. Take these lessons with you every day!';
+  markDayProgress(4);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   QUIZ ENGINE
+═══════════════════════════════════════════════════════════ */
+function shuffle(arr){
+  const a=[...arr];
+  for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]; }
+  return a;
+}
+
+function buildQuizzes(){
+  ['d0','d1','d2','d3','d4'].forEach(day=>{
+    const container = document.getElementById('qb-'+day);
+    if(!container) return;
+    const questions = QUIZZES[day];
+    quizOrders[day] = questions.map(q=>{
+      const indices = [0,1,2,3];
+      const shuffled = shuffle(indices);
+      return { shuffled, newCorrect: shuffled.indexOf(q.ans) };
+    });
+    quizState[day].ans = new Array(questions.length).fill(null);
+    container.innerHTML = questions.map((q,qi)=>{
+      const order = quizOrders[day][qi];
+      const opts = order.shuffled.map(i=>q.opts[i]);
+      return `
+        <div class="q-block" id="qblock-${day}-${qi}">
+          <span class="q-num">Q${qi+1}</span>
+          <span class="q-hots">${q.level}</span>
+          <p class="q-text">${q.q}</p>
+          <div class="q-opts">
+            ${opts.map((opt,oi)=>`
+              <button class="q-opt" id="qo-${day}-${qi}-${oi}" onclick="pickAnswer('${day}',${qi},${oi})">
+                ${['A','B','C','D'][oi]}. ${opt}
+              </button>`).join('')}
+          </div>
+          <div class="q-fb" id="qfb-${day}-${qi}"></div>
+        </div>`;
+    }).join('');
+  });
+}
+
+function pickAnswer(day, qi, oi){
+  if(quizState[day].done) return;
+  if(quizState[day].ans[qi]!==null) return;
+  quizState[day].ans[qi]=oi;
+  const correct = quizOrders[day][qi].newCorrect;
+  const q = QUIZZES[day][qi];
+  for(let i=0;i<4;i++){
+    const btn=document.getElementById(`qo-${day}-${qi}-${i}`);
+    if(btn) btn.disabled=true;
+  }
+  const chosen=document.getElementById(`qo-${day}-${qi}-${oi}`);
+  const fb=document.getElementById(`qfb-${day}-${qi}`);
+  if(oi===correct){
+    chosen.classList.add('correct');
+    fb.className='q-fb vis q-fb-ok';
+    fb.textContent='✅ Correct! '+q.fb;
+  } else {
+    chosen.classList.add('wrong');
+    const cb=document.getElementById(`qo-${day}-${qi}-${correct}`);
+    if(cb) cb.classList.add('correct');
+    fb.className='q-fb vis q-fb-no';
+    fb.textContent='❌ Incorrect. '+q.fb;
+  }
+}
+
+function submitQuiz(day){
+  if(quizState[day].done) return;
+  const unanswered = quizState[day].ans.filter(a=>a===null).length;
+  if(unanswered>0){
+    alert(`Please answer all ${QUIZZES[day].length} questions before submitting. You have ${unanswered} unanswered.`);
+    return;
+  }
+  quizState[day].done=true;
+  let score=0;
+  quizState[day].ans.forEach((a,i)=>{ if(a===quizOrders[day][i].newCorrect) score++; });
+  const total=QUIZZES[day].length;
+  const pct=score/total;
+  const sc=document.getElementById('sc-'+day);
+  sc.classList.add('vis');
+  const msg = pct===1?'🌟 Perfect Score! Outstanding understanding!'
+    :pct>=0.8?'🎉 Excellent! You have a strong grasp of this lesson.'
+    :pct>=0.6?'👍 Good job! Review the items you missed and try to understand why.'
+    :'📚 Keep reviewing! Re-read the lesson and try again — you can do it!';
+  sc.innerHTML=`
+    <div class="score-num">${score}/${total}</div>
+    <div class="score-msg">${msg}</div>
+    <div class="score-bar"><div class="score-bar-fill" style="width:${Math.round(pct*100)}%"></div></div>
+  `;
+  if(score>=3) markDayProgress({'d0':0,'d1':1,'d2':2,'d3':3,'d4':4}[day]);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   PROGRESS DOTS
+═══════════════════════════════════════════════════════════ */
+function markDayProgress(n){
+  completedDays.add(n);
+  const dot = document.getElementById('pd'+n);
+  if(dot) dot.classList.add('done');
+}
+
+/* ═══════════════════════════════════════════════════════════
+   INIT
+═══════════════════════════════════════════════════════════ */
+window.onload = function(){
+  buildQuizzes();
+  initMatch();
+  initSorter();
+  initRank();
+  initAdviceJudge();
+};
+</script>
+</body>
+</html>

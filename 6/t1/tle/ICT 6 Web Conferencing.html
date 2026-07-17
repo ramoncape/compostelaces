@@ -1,0 +1,1543 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Web Conferencing – ADM Module</title>
+<style>
+  :root {
+    --navy: #0F2137;
+    --teal: #00C9A7;
+    --teal-dark: #009F84;
+    --sky: #F0F6FF;
+    --gold: #FFD166;
+    --slate: #6B7FA3;
+    --white: #FFFFFF;
+    --text: #1A2B3C;
+    --border: #D0DCF0;
+    --e1: #E8F4FD; --e1b: #2196F3;
+    --e2: #FFF8E1; --e2b: #FF9800;
+    --e3: #E8F5E9; --e3b: #4CAF50;
+    --e4: #F3E5F5; --e4b: #9C27B0;
+    --e5: #FFF3E0; --e5b: #FF5722;
+    --radius: 12px;
+    --shadow: 0 4px 20px rgba(15,33,55,0.10);
+    --shadow-lg: 0 8px 40px rgba(15,33,55,0.16);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: var(--sky);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ─── HEADER ─── */
+  .app-header {
+    background: var(--navy);
+    padding: 16px 20px 12px;
+    text-align: center;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .app-header h1 {
+    color: var(--white);
+    font-size: clamp(14px, 3.5vw, 20px);
+    font-weight: 700;
+    letter-spacing: 0.3px;
+  }
+  .app-header p {
+    color: var(--teal);
+    font-size: clamp(10px, 2.5vw, 13px);
+    margin-top: 2px;
+    opacity: 0.9;
+  }
+
+  /* ─── TAB BAR ─── */
+  .tab-bar {
+    background: var(--navy);
+    border-bottom: 3px solid var(--teal);
+    display: flex;
+    justify-content: center;
+    gap: 0;
+    position: sticky;
+    top: 64px;
+    z-index: 99;
+    transition: transform 0.35s cubic-bezier(.4,0,.2,1);
+    will-change: transform;
+  }
+  .tab-bar.hidden {
+    transform: translateY(-130px);
+  }
+  .tab-btn {
+    flex: 1;
+    max-width: 160px;
+    padding: 12px 6px 10px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: var(--slate);
+    font-size: clamp(10px, 2.5vw, 13px);
+    font-weight: 600;
+    letter-spacing: 0.4px;
+    text-transform: uppercase;
+    transition: color 0.2s, background 0.2s;
+    position: relative;
+    border-bottom: 3px solid transparent;
+    margin-bottom: -3px;
+  }
+  .tab-btn span.icon { display: block; font-size: 18px; margin-bottom: 2px; }
+  .tab-btn:hover { color: var(--teal); }
+  .tab-btn.active { color: var(--gold); border-bottom-color: var(--gold); }
+
+  /* ─── PAGES ─── */
+  .page { display: none; padding: 24px 16px 60px; max-width: 780px; margin: 0 auto; }
+  .page.active { display: block; }
+
+  /* ─── HERO BANNER ─── */
+  .day-hero {
+    background: linear-gradient(135deg, var(--navy) 0%, #1B3A5C 100%);
+    border-radius: var(--radius);
+    padding: 28px 24px;
+    margin-bottom: 24px;
+    color: var(--white);
+    box-shadow: var(--shadow-lg);
+    position: relative;
+    overflow: hidden;
+  }
+  .day-hero::after {
+    content: '';
+    position: absolute;
+    right: -20px; top: -20px;
+    width: 120px; height: 120px;
+    border-radius: 50%;
+    background: var(--teal);
+    opacity: 0.10;
+  }
+  .day-hero .day-label {
+    background: var(--teal);
+    color: var(--navy);
+    font-weight: 700;
+    font-size: 11px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 20px;
+    margin-bottom: 10px;
+  }
+  .day-hero h2 { font-size: clamp(18px, 5vw, 28px); font-weight: 800; line-height: 1.2; }
+  .day-hero p { color: #A8C8E8; margin-top: 8px; font-size: 14px; line-height: 1.6; }
+
+  /* ─── 5E PHASE PILLS ─── */
+  .phases-bar {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 24px;
+  }
+  .phase-pill {
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: transform 0.15s;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .phase-pill:hover { transform: translateY(-1px); }
+
+  /* ─── 5E SECTIONS ─── */
+  .e-section {
+    border-radius: var(--radius);
+    margin-bottom: 20px;
+    box-shadow: var(--shadow);
+    overflow: hidden;
+  }
+  .e-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 20px;
+    cursor: pointer;
+    user-select: none;
+  }
+  .e-header:hover { filter: brightness(0.97); }
+  .e-badge {
+    width: 38px; height: 38px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 800; font-size: 14px;
+    flex-shrink: 0;
+  }
+  .e-title-block h3 { font-size: 16px; font-weight: 700; }
+  .e-title-block p { font-size: 12px; margin-top: 1px; opacity: 0.7; }
+  .e-toggle { margin-left: auto; font-size: 18px; transition: transform 0.3s; }
+  .e-toggle.open { transform: rotate(180deg); }
+  .e-body { padding: 0 20px 20px; display: none; }
+  .e-body.open { display: block; }
+
+  /* E1 Engage */
+  .e1 .e-header { background: var(--e1); }
+  .e1 .e-badge { background: var(--e1b); color: white; }
+  /* E2 Explore */
+  .e2 .e-header { background: var(--e2); }
+  .e2 .e-badge { background: var(--e2b); color: white; }
+  /* E3 Explain */
+  .e3 .e-header { background: var(--e3); }
+  .e3 .e-badge { background: var(--e3b); color: white; }
+  /* E4 Elaborate */
+  .e4 .e-header { background: var(--e4); }
+  .e4 .e-badge { background: var(--e4b); color: white; }
+  /* E5 Evaluate */
+  .e5 .e-header { background: var(--e5); }
+  .e5 .e-badge { background: var(--e5b); color: white; }
+
+  /* E body backgrounds */
+  .e1 { background: #F7FCFF; }
+  .e2 { background: #FFFDF5; }
+  .e3 { background: #F7FFF8; }
+  .e4 { background: #FCF5FF; }
+  .e5 { background: #FFFAF5; }
+
+  /* ─── CONTENT STYLES ─── */
+  .content-card {
+    background: var(--white);
+    border-radius: 10px;
+    padding: 16px;
+    margin-bottom: 14px;
+    border-left: 4px solid var(--teal);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  }
+  .content-card h4 { font-size: 14px; font-weight: 700; margin-bottom: 6px; color: var(--navy); }
+  .content-card p, .content-card li { font-size: 14px; line-height: 1.7; color: #3A4A5C; }
+  .content-card ul, .content-card ol { padding-left: 18px; }
+  .content-card li { margin-bottom: 4px; }
+
+  .activity-card {
+    background: linear-gradient(135deg, #e8f4ff 0%, #f0fff8 100%);
+    border: 2px dashed var(--teal);
+    border-radius: 10px;
+    padding: 16px;
+    margin-bottom: 14px;
+  }
+  .activity-card .act-label {
+    display: inline-block;
+    background: var(--teal);
+    color: white;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 2px 8px;
+    border-radius: 4px;
+    margin-bottom: 8px;
+  }
+  .activity-card h4 { font-size: 14px; font-weight: 700; color: var(--navy); margin-bottom: 6px; }
+  .activity-card p, .activity-card li { font-size: 13px; line-height: 1.7; color: #3A4A5C; }
+  .activity-card ul { padding-left: 18px; }
+
+  .tip-box {
+    background: #FFF8E7;
+    border: 1px solid var(--gold);
+    border-radius: 10px;
+    padding: 14px 16px;
+    margin-bottom: 14px;
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+  }
+  .tip-box .tip-icon { font-size: 20px; flex-shrink: 0; }
+  .tip-box p { font-size: 13px; line-height: 1.6; color: #5A4010; }
+  .tip-box p strong { color: #3A2800; }
+
+  .law-card {
+    background: #FFF0F0;
+    border-left: 4px solid #E53935;
+    border-radius: 10px;
+    padding: 14px 16px;
+    margin-bottom: 12px;
+  }
+  .law-card h4 { font-size: 14px; font-weight: 700; color: #C62828; margin-bottom: 4px; }
+  .law-card p { font-size: 13px; line-height: 1.6; color: #4A1515; }
+
+  .tool-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+  .tool-card {
+    background: var(--white);
+    border-radius: 10px;
+    padding: 14px 10px;
+    text-align: center;
+    box-shadow: var(--shadow);
+    border-top: 3px solid var(--teal);
+  }
+  .tool-card .tool-icon { font-size: 28px; display: block; margin-bottom: 6px; }
+  .tool-card .tool-name { font-size: 13px; font-weight: 700; color: var(--navy); }
+  .tool-card .tool-type { font-size: 11px; color: var(--slate); margin-top: 2px; }
+
+  .compare-table { width: 100%; border-collapse: collapse; font-size: 13px; margin-bottom: 14px; }
+  .compare-table th { background: var(--navy); color: var(--white); padding: 10px 12px; text-align: left; }
+  .compare-table td { padding: 9px 12px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  .compare-table tr:nth-child(even) td { background: #F7FAFF; }
+  .compare-table tr:last-child td { border-bottom: none; }
+
+  /* ─── QUIZ ─── */
+  .quiz-wrapper { margin-top: 10px; }
+  .quiz-title {
+    text-align: center;
+    font-size: 17px;
+    font-weight: 800;
+    color: var(--navy);
+    margin-bottom: 16px;
+  }
+  .quiz-subtitle { text-align: center; font-size: 13px; color: var(--slate); margin-bottom: 20px; }
+
+  .q-item {
+    background: var(--white);
+    border-radius: 10px;
+    padding: 16px;
+    margin-bottom: 14px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+  }
+  .q-num {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--teal-dark);
+    margin-bottom: 6px;
+  }
+  .q-text { font-size: 14px; font-weight: 600; color: var(--navy); margin-bottom: 12px; line-height: 1.5; }
+
+  .choice-list { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+  .choice-item { display: flex; align-items: flex-start; gap: 10px; }
+  .choice-item input[type="radio"],
+  .choice-item input[type="checkbox"] {
+    margin-top: 2px;
+    accent-color: var(--teal);
+    flex-shrink: 0;
+    width: 16px; height: 16px;
+  }
+  .choice-item label {
+    font-size: 13px;
+    line-height: 1.5;
+    cursor: pointer;
+    color: #3A4A5C;
+  }
+
+  .tf-options { display: flex; gap: 10px; flex-wrap: wrap; }
+  .tf-btn {
+    padding: 8px 20px;
+    border: 2px solid var(--border);
+    border-radius: 8px;
+    background: var(--white);
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 600;
+    transition: all 0.2s;
+    color: var(--text);
+  }
+  .tf-btn:hover { border-color: var(--teal); color: var(--teal-dark); }
+  .tf-btn.selected { background: var(--teal); border-color: var(--teal); color: white; }
+
+  .fillblank-input {
+    width: 100%;
+    padding: 8px 12px;
+    border: 2px solid var(--border);
+    border-radius: 8px;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.2s;
+    color: var(--text);
+  }
+  .fillblank-input:focus { border-color: var(--teal); }
+
+  .submit-quiz-btn {
+    display: block;
+    width: 100%;
+    padding: 14px;
+    background: var(--teal);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    margin-top: 6px;
+    transition: background 0.2s, transform 0.1s;
+  }
+  .submit-quiz-btn:hover { background: var(--teal-dark); transform: translateY(-1px); }
+
+  .quiz-result {
+    display: none;
+    background: var(--white);
+    border-radius: 12px;
+    padding: 24px;
+    margin-top: 16px;
+    text-align: center;
+    box-shadow: var(--shadow-lg);
+  }
+  .result-score { font-size: 48px; font-weight: 900; color: var(--teal); margin: 8px 0; }
+  .result-label { font-size: 22px; font-weight: 700; color: var(--navy); }
+  .result-msg { font-size: 14px; color: var(--slate); margin: 8px 0 16px; }
+  .result-details { text-align: left; font-size: 13px; border-top: 1px solid var(--border); padding-top: 16px; }
+  .result-details .r-item { margin-bottom: 10px; padding: 10px; border-radius: 8px; }
+  .result-details .r-item.correct { background: #E8F5E9; border-left: 3px solid #4CAF50; }
+  .result-details .r-item.wrong { background: #FFEBEE; border-left: 3px solid #E53935; }
+  .result-details .r-q { font-weight: 600; margin-bottom: 4px; }
+  .result-details .r-a { color: #555; }
+  .result-details .r-correct { color: #2E7D32; font-weight: 600; }
+
+  .retry-btn {
+    margin-top: 16px;
+    padding: 10px 28px;
+    background: var(--navy);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .retry-btn:hover { background: #1B3A5C; }
+
+  /* ─── INTERFACE DIAGRAM ─── */
+  .interface-map {
+    background: #1A1A2E;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 14px;
+    position: relative;
+  }
+  .interface-map .screen-bar {
+    background: #2D2D44;
+    border-radius: 8px 8px 0 0;
+    padding: 8px 14px;
+    display: flex;
+    gap: 6px;
+    align-items: center;
+  }
+  .interface-map .dot { width: 10px; height: 10px; border-radius: 50%; }
+  .interface-map .screen-body {
+    background: #111122;
+    border-radius: 0 0 8px 8px;
+    padding: 14px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    min-height: 120px;
+  }
+  .video-tile {
+    border-radius: 6px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    gap: 6px;
+    padding: 12px;
+  }
+  .video-tile span { font-size: 11px; color: rgba(255,255,255,0.7); }
+  .toolbar {
+    background: #1A1A2E;
+    border-radius: 8px;
+    padding: 10px 16px;
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    margin-top: 8px;
+  }
+  .t-btn { font-size: 20px; cursor: default; }
+
+  /* ─── SUMMATIVE ─── */
+  .summative-hero {
+    background: linear-gradient(135deg, #1B003E 0%, #0F2137 100%);
+    border-radius: var(--radius);
+    padding: 28px 24px;
+    margin-bottom: 24px;
+    text-align: center;
+    color: white;
+    box-shadow: var(--shadow-lg);
+  }
+  .summative-hero h2 { font-size: clamp(20px, 5vw, 30px); font-weight: 900; }
+  .summative-hero p { color: #C4A4E0; margin-top: 8px; font-size: 14px; }
+  .summative-hero .s-badge {
+    display: inline-block;
+    background: var(--gold);
+    color: var(--navy);
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 4px 12px;
+    border-radius: 20px;
+    margin-bottom: 12px;
+  }
+
+  .section-header {
+    background: var(--navy);
+    color: var(--white);
+    padding: 10px 16px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    margin: 20px 0 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  /* ─── RESPONSIVE ─── */
+  @media (max-width: 480px) {
+    .tool-grid { grid-template-columns: repeat(2, 1fr); }
+    .compare-table { font-size: 12px; }
+    .compare-table th, .compare-table td { padding: 7px 8px; }
+    .tab-btn { padding: 10px 4px 8px; }
+  }
+
+  /* ─── SCROLL REVEAL ─── */
+  .reveal { opacity: 0; transform: translateY(16px); transition: opacity 0.5s, transform 0.5s; }
+  .reveal.shown { opacity: 1; transform: none; }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="app-header">
+  <h1>📡 Web Conferencing – ICT ADM Module</h1>
+  <p>Perform web conferencing in a safe and responsible manner</p>
+</div>
+
+<!-- TAB BAR -->
+<nav class="tab-bar" id="tabBar">
+  <button class="tab-btn active" onclick="switchTab(1)" id="tab1">
+    <span class="icon">📖</span>Day 1
+  </button>
+  <button class="tab-btn" onclick="switchTab(2)" id="tab2">
+    <span class="icon">💻</span>Day 2
+  </button>
+  <button class="tab-btn" onclick="switchTab(3)" id="tab3">
+    <span class="icon">🛡️</span>Day 3
+  </button>
+  <button class="tab-btn" onclick="switchTab(4)" id="tab4">
+    <span class="icon">📝</span>Summative
+  </button>
+</nav>
+
+<!-- ══════════════════════════════════════════════
+     DAY 1
+══════════════════════════════════════════════ -->
+<div class="page active" id="page1">
+
+  <div class="day-hero reveal">
+    <div class="day-label">Day 1 of 3</div>
+    <h2>What is Web Conferencing?</h2>
+    <p>Discover what web conferencing means, the different types of tools, and how they are used effectively in real life.</p>
+  </div>
+
+  <!-- E1 ENGAGE -->
+  <div class="e-section e1 reveal">
+    <div class="e-header" onclick="toggleE(this)">
+      <div class="e-badge">E1</div>
+      <div class="e-title-block">
+        <h3>Engage</h3>
+        <p>Spark curiosity & connect to prior knowledge</p>
+      </div>
+      <span class="e-toggle open">▼</span>
+    </div>
+    <div class="e-body open">
+      <div class="activity-card">
+        <span class="act-label">🎯 Warm-Up Activity</span>
+        <h4>Think About It!</h4>
+        <p>Before reading, answer these questions in your activity notebook:</p>
+        <ul>
+          <li>Have you ever joined a class or meeting online? What app did you use?</li>
+          <li>How was it different from meeting in person?</li>
+          <li>What problems did you notice during that online meeting?</li>
+        </ul>
+      </div>
+      <div class="tip-box">
+        <span class="tip-icon">💡</span>
+        <p><strong>Did you know?</strong> During the COVID-19 pandemic, millions of students and workers around the world had to suddenly learn how to communicate online. Web conferencing became one of the most important digital skills of our time!</p>
+      </div>
+      <div class="content-card">
+        <h4>Essential Question</h4>
+        <p>How can web conferencing help us stay connected, learn, and work together — and how can we do it safely and responsibly?</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- E2 EXPLORE -->
+  <div class="e-section e2 reveal">
+    <div class="e-header" onclick="toggleE(this)">
+      <div class="e-badge">E2</div>
+      <div class="e-title-block">
+        <h3>Explore</h3>
+        <p>Discover & investigate the topic</p>
+      </div>
+      <span class="e-toggle open">▼</span>
+    </div>
+    <div class="e-body open">
+      <div class="activity-card">
+        <span class="act-label">🔍 Exploration Activity</span>
+        <h4>Web Conferencing Tool Hunt</h4>
+        <p>Look around your home or school. Ask a parent, sibling, or neighbor:</p>
+        <ul>
+          <li>Which app do they use to video call or do online meetings?</li>
+          <li>What do they use it for (work, family, school)?</li>
+          <li>List at least 3 different tools you find.</li>
+        </ul>
+        <p style="margin-top:8px;">Write your findings in your notebook before reading the explanation below.</p>
+      </div>
+
+      <div class="tool-grid">
+        <div class="tool-card"><span class="tool-icon">🟢</span><div class="tool-name">Google Meet</div><div class="tool-type">Video Conferencing</div></div>
+        <div class="tool-card"><span class="tool-icon">🔵</span><div class="tool-name">Zoom</div><div class="tool-type">Video Conferencing</div></div>
+        <div class="tool-card"><span class="tool-icon">🟣</span><div class="tool-name">MS Teams</div><div class="tool-type">Collaboration</div></div>
+        <div class="tool-card"><span class="tool-icon">📘</span><div class="tool-name">FB Messenger</div><div class="tool-type">Video Call</div></div>
+        <div class="tool-card"><span class="tool-icon">📱</span><div class="tool-name">Viber</div><div class="tool-type">Group Call</div></div>
+        <div class="tool-card"><span class="tool-icon">🌐</span><div class="tool-name">Webex</div><div class="tool-type">Webinar</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- E3 EXPLAIN -->
+  <div class="e-section e3 reveal">
+    <div class="e-header" onclick="toggleE(this)">
+      <div class="e-badge">E3</div>
+      <div class="e-title-block">
+        <h3>Explain</h3>
+        <p>Understand the key concepts</p>
+      </div>
+      <span class="e-toggle open">▼</span>
+    </div>
+    <div class="e-body open">
+      <div class="content-card">
+        <h4>📌 What is Web Conferencing?</h4>
+        <p>Web conferencing is the use of the internet to hold real-time meetings, classes, or presentations between people in different locations. It allows participants to see each other via video, hear each other through audio, share screens, chat in text, and collaborate on documents — all at the same time.</p>
+      </div>
+      <div class="content-card">
+        <h4>🗂️ Types of Web Conferencing</h4>
+        <ul>
+          <li><strong>Video Conferencing</strong> – Two-way audio and video communication (e.g., Google Meet, Zoom). Best for classes, group discussions, and team meetings.</li>
+          <li><strong>Webinars</strong> – One-to-many presentations where the audience mainly listens and asks questions (e.g., Webex Webinars, Zoom Webinar). Best for lectures, seminars, and training.</li>
+          <li><strong>Web Meetings</strong> – Collaborative sessions with screen sharing and interactive tools. Best for project planning and group work.</li>
+          <li><strong>Group Video Calls</strong> – Informal video calls for small groups (e.g., Messenger, Viber). Best for family check-ins and friend chats.</li>
+        </ul>
+      </div>
+      <div class="content-card">
+        <h4>✅ Purposes of Web Conferencing</h4>
+        <ul>
+          <li><strong>Education:</strong> Online classes, tutorials, group study sessions</li>
+          <li><strong>Work:</strong> Remote meetings, client presentations, team coordination</li>
+          <li><strong>Healthcare:</strong> Teleconsultation with doctors (telemedicine)</li>
+          <li><strong>Government:</strong> Virtual briefings and public hearings</li>
+          <li><strong>Social:</strong> Connecting with family and friends</li>
+        </ul>
+      </div>
+      <div class="content-card">
+        <h4>💡 Samples of Effective Usage</h4>
+        <ul>
+          <li>A teacher hosts a Google Meet class where students share their screens to present projects.</li>
+          <li>A company holds a Zoom meeting for employees working from home to discuss quarterly reports.</li>
+          <li>A doctor consults with a patient via video call, reducing the need to travel.</li>
+          <li>A student attends a free online webinar to learn coding from an expert abroad.</li>
+        </ul>
+      </div>
+      <div class="tip-box">
+        <span class="tip-icon">🇵🇭</span>
+        <p><strong>Philippine Context:</strong> The Department of Education (DepEd) used Google Meet and Zoom heavily during the pandemic. Many LGUs also held virtual barangay meetings to reach constituents safely.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- E4 ELABORATE -->
+  <div class="e-section e4 reveal">
+    <div class="e-header" onclick="toggleE(this)">
+      <div class="e-badge">E4</div>
+      <div class="e-title-block">
+        <h3>Elaborate</h3>
+        <p>Apply & deepen understanding</p>
+      </div>
+      <span class="e-toggle open">▼</span>
+    </div>
+    <div class="e-body open">
+      <div class="activity-card">
+        <span class="act-label">✏️ Written Activity</span>
+        <h4>Match Me!</h4>
+        <p>In your notebook, draw two columns. On the left, write the situation. On the right, write the best web conferencing type. Then explain your choice in 1–2 sentences.</p>
+        <ul>
+          <li>A company wants to train 500 employees across the country at once.</li>
+          <li>Five classmates need to review for an exam together.</li>
+          <li>A student wants to chat with their grandparent in Mindanao.</li>
+          <li>A principal needs to present the school calendar to teachers with a slideshow.</li>
+        </ul>
+      </div>
+      <div class="activity-card">
+        <span class="act-label">🎨 Creative Task</span>
+        <h4>Design Your Ideal Online Class</h4>
+        <p>Draw or describe (in your notebook) what your ideal online class setup looks like. Include:</p>
+        <ul>
+          <li>Which web conferencing tool you would use and why</li>
+          <li>What features you would use (video, chat, screen share, polls)</li>
+          <li>How you would make it engaging for classmates</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- E5 EVALUATE -->
+  <div class="e-section e5 reveal">
+    <div class="e-header" onclick="toggleE(this)">
+      <div class="e-badge">E5</div>
+      <div class="e-title-block">
+        <h3>Evaluate</h3>
+        <p>Day 1 Quiz – 5 Items</p>
+      </div>
+      <span class="e-toggle open">▼</span>
+    </div>
+    <div class="e-body open">
+      <div class="quiz-wrapper" id="quiz1-wrapper">
+        <p class="quiz-title">📋 Day 1 Quiz</p>
+        <p class="quiz-subtitle">Answer all 5 items. Check your answers when done.</p>
+        <div id="quiz1-questions"></div>
+        <button class="submit-quiz-btn" onclick="submitQuiz(1)">Submit Answers ✓</button>
+        <div class="quiz-result" id="quiz1-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     DAY 2
+══════════════════════════════════════════════ -->
+<div class="page" id="page2">
+
+  <div class="day-hero reveal" style="background: linear-gradient(135deg, #0D3B4F 0%, #0A2033 100%);">
+    <div class="day-label">Day 2 of 3</div>
+    <h2>Using Web Conferencing Tools</h2>
+    <p>Explore the most common platforms, understand the interface and controls, and pick up practical tips for a better online experience.</p>
+  </div>
+
+  <!-- E1 ENGAGE -->
+  <div class="e-section e1 reveal">
+    <div class="e-header" onclick="toggleE(this)">
+      <div class="e-badge">E1</div>
+      <div class="e-title-block"><h3>Engage</h3><p>Connect to experience</p></div>
+      <span class="e-toggle open">▼</span>
+    </div>
+    <div class="e-body open">
+      <div class="activity-card">
+        <span class="act-label">🎯 Warm-Up</span>
+        <h4>My First Online Meeting Story</h4>
+        <p>In your notebook, write a short paragraph (5–7 sentences) about the first time you joined or watched someone in an online meeting or class. Describe:</p>
+        <ul>
+          <li>What platform was used?</li>
+          <li>What buttons or icons did you notice?</li>
+          <li>Was anything confusing? What did you wish you knew beforehand?</li>
+        </ul>
+      </div>
+      <div class="tip-box">
+        <span class="tip-icon">🤔</span>
+        <p><strong>Think about this:</strong> A study found that 70% of workers say poor audio quality is the #1 reason meetings feel unproductive. Knowing your tools well makes everyone's experience better!</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- E2 EXPLORE -->
+  <div class="e-section e2 reveal">
+    <div class="e-header" onclick="toggleE(this)">
+      <div class="e-badge">E2</div>
+      <div class="e-title-block"><h3>Explore</h3><p>Investigate & discover</p></div>
+      <span class="e-toggle open">▼</span>
+    </div>
+    <div class="e-body open">
+      <div class="activity-card">
+        <span class="act-label">🔍 Observation Task</span>
+        <h4>Platform Scavenger Hunt</h4>
+        <p>If you have access to a device, open Google Meet, Zoom, or MS Teams (you can use a free account). Without joining a meeting, just look at the home screen. In your notebook, list:</p>
+        <ul>
+          <li>At least 5 buttons or menu items you see</li>
+          <li>What you think each one does (guess before you read!)</li>
+          <li>Which platform feels easiest to understand — and why?</li>
+        </ul>
+        <p style="margin-top:8px;"><em>No device? Study the interface diagram below and do the same activity.</em></p>
+      </div>
+
+      <!-- Visual Interface Map -->
+      <div class="interface-map">
+        <div class="screen-bar">
+          <div class="dot" style="background:#FF5F57;"></div>
+          <div class="dot" style="background:#FEBC2E;"></div>
+          <div class="dot" style="background:#28C840;"></div>
+          <span style="color:#aaa; font-size:12px; margin-left:8px;">📡 Google Meet – In a Meeting</span>
+        </div>
+        <div class="screen-body">
+          <div class="video-tile" style="background:#1a3a5c;">🧑‍🏫<span>Teacher (Host)</span></div>
+          <div class="video-tile" style="background:#2a1a4c;">👩‍🎓<span>Student 1</span></div>
+          <div class="video-tile" style="background:#1a4c2a;">👦<span>Student 2</span></div>
+          <div class="video-tile" style="background:#4c2a1a;">👧<span>Student 3</span></div>
+        </div>
+        <div class="toolbar">
+          <span class="t-btn" title="Microphone">🎤</span>
+          <span class="t-btn" title="Camera">📷</span>
+          <span class="t-btn" title="Share Screen">🖥️</span>
+          <span class="t-btn" title="Chat">💬</span>
+          <span class="t-btn" title="Participants">👥</span>
+          <span class="t-btn" title="End Call">🔴</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- E3 EXPLAIN -->
+  <div class="e-section e3 reveal">
+    <div class="e-header" onclick="toggleE(this)">
+      <div class="e-badge">E3</div>
+      <div class="e-title-block"><h3>Explain</h3><p>Key concepts & interface guide</p></div>
+      <span class="e-toggle open">▼</span>
+    </div>
+    <div class="e-body open">
+      <div class="content-card">
+        <h4>🟢 Google Meet</h4>
+        <p>Google Meet is a free video conferencing tool by Google. It is integrated with Google Workspace (Gmail, Google Calendar, Google Classroom) making it popular in Philippine schools.</p>
+        <ul>
+          <li><strong>Host Controls:</strong> Mute participants, remove attendees, lock the meeting</li>
+          <li><strong>Screen Share:</strong> Share your entire screen, a window, or a browser tab</li>
+          <li><strong>Captions:</strong> Real-time subtitles (helps students who have hearing difficulties)</li>
+          <li><strong>Breakout Rooms:</strong> Divide students into smaller groups</li>
+          <li><strong>Whiteboard:</strong> Collaborate on a virtual drawing board (via Jamboard)</li>
+        </ul>
+      </div>
+
+      <div class="content-card">
+        <h4>🔵 Zoom</h4>
+        <p>Zoom is one of the most popular global video conferencing tools, known for its stability and rich features even on slower internet connections.</p>
+        <ul>
+          <li><strong>Breakout Rooms:</strong> Easy to set up group activities</li>
+          <li><strong>Polls:</strong> Quick in-meeting surveys</li>
+          <li><strong>Virtual Backgrounds:</strong> Replace your background with any image</li>
+          <li><strong>Reactions:</strong> Raise hand, thumbs up, clap without speaking</li>
+          <li><strong>Recording:</strong> Record the meeting for students who missed it</li>
+        </ul>
+      </div>
+
+      <div class="content-card">
+        <h4>🟣 Microsoft Teams</h4>
+        <p>MS Teams combines video conferencing with a full workspace — chat channels, file sharing, assignments, and apps all in one place.</p>
+        <ul>
+          <li><strong>Channels:</strong> Organize discussions by subject or topic</li>
+          <li><strong>Together Mode:</strong> Places all participants in a shared virtual space</li>
+          <li><strong>Assignments:</strong> Teachers can post and grade tasks inside Teams</li>
+          <li><strong>Integration:</strong> Works with all Microsoft 365 apps (Word, PowerPoint, Excel)</li>
+        </ul>
+      </div>
+
+      <table class="compare-table">
+        <tr><th>Feature</th><th>🟢 Google Meet</th><th>🔵 Zoom</th><th>🟣 MS Teams</th></tr>
+        <tr><td>Free Tier</td><td>✅ Yes (1hr limit)</td><td>✅ Yes (40 min)</td><td>✅ Yes (limited)</td></tr>
+        <tr><td>Max Participants (Free)</td><td>100</td><td>100</td><td>60</td></tr>
+        <tr><td>Screen Sharing</td><td>✅</td><td>✅</td><td>✅</td></tr>
+        <tr><td>Breakout Rooms</td><td>✅</td><td>✅</td><td>✅</td></tr>
+        <tr><td>Recording</td><td>✅ (Workspace)</td><td>✅</td><td>✅</td></tr>
+        <tr><td>Best For</td><td>Schools (DepEd)</td><td>Webinars</td><td>Workplaces</td></tr>
+      </table>
+
+      <div class="content-card">
+        <h4>📋 Common Interface Parts & Functions</h4>
+        <ul>
+          <li><strong>🎤 Microphone Button</strong> – Mute or unmute yourself. Always mute when not speaking!</li>
+          <li><strong>📷 Camera Button</strong> – Turn your video on or off.</li>
+          <li><strong>🖥️ Share Screen</strong> – Show your screen to all participants.</li>
+          <li><strong>💬 Chat Panel</strong> – Type messages without interrupting the speaker.</li>
+          <li><strong>👥 Participants Panel</strong> – See who is in the meeting.</li>
+          <li><strong>✋ Raise Hand</strong> – Signal that you want to speak or ask a question.</li>
+          <li><strong>🔴 End/Leave</strong> – Exit the meeting. (Hosts can end for everyone.)</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- E4 ELABORATE -->
+  <div class="e-section e4 reveal">
+    <div class="e-header" onclick="toggleE(this)">
+      <div class="e-badge">E4</div>
+      <div class="e-title-block"><h3>Elaborate</h3><p>Apply what you learned</p></div>
+      <span class="e-toggle open">▼</span>
+    </div>
+    <div class="e-body open">
+      <div class="content-card">
+        <h4>🌟 Practical Tips for Better Web Conferencing</h4>
+        <ul>
+          <li><strong>Lighting:</strong> Sit facing a window or light source — not with your back to it.</li>
+          <li><strong>Background:</strong> Use a clean, neutral background or a virtual background.</li>
+          <li><strong>Internet:</strong> If possible, connect using a LAN cable instead of WiFi for stability.</li>
+          <li><strong>Headset:</strong> Use earphones to reduce echo and background noise.</li>
+          <li><strong>Mute when idle:</strong> Always mute your mic when you're not talking.</li>
+          <li><strong>Test first:</strong> Test your camera and mic 10 minutes before the meeting.</li>
+          <li><strong>Be on time:</strong> Join 2–3 minutes early to check your connection.</li>
+          <li><strong>Minimize distractions:</strong> Close other browser tabs and apps to save bandwidth.</li>
+        </ul>
+      </div>
+      <div class="activity-card">
+        <span class="act-label">✏️ Written Activity</span>
+        <h4>My Meeting Checklist</h4>
+        <p>Create a personal "Before Meeting Checklist" with at least 8 items you will do before joining your next online class. Think about your device, internet, appearance, and environment.</p>
+      </div>
+      <div class="activity-card">
+        <span class="act-label">🎨 Creative Task</span>
+        <h4>Label the Interface</h4>
+        <p>In your notebook, draw a simple rectangle representing a video call screen. Draw and label at least 6 interface elements (buttons, panels, video tiles). Briefly describe what each element does.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- E5 EVALUATE -->
+  <div class="e-section e5 reveal">
+    <div class="e-header" onclick="toggleE(this)">
+      <div class="e-badge">E5</div>
+      <div class="e-title-block"><h3>Evaluate</h3><p>Day 2 Quiz – 5 Items</p></div>
+      <span class="e-toggle open">▼</span>
+    </div>
+    <div class="e-body open">
+      <div class="quiz-wrapper" id="quiz2-wrapper">
+        <p class="quiz-title">📋 Day 2 Quiz</p>
+        <p class="quiz-subtitle">Answer all 5 items. Check your answers when done.</p>
+        <div id="quiz2-questions"></div>
+        <button class="submit-quiz-btn" onclick="submitQuiz(2)">Submit Answers ✓</button>
+        <div class="quiz-result" id="quiz2-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     DAY 3
+══════════════════════════════════════════════ -->
+<div class="page" id="page3">
+
+  <div class="day-hero reveal" style="background: linear-gradient(135deg, #1B0A0A 0%, #1A0F33 100%);">
+    <div class="day-label">Day 3 of 3</div>
+    <h2>Safety, Responsibility & Philippine Laws</h2>
+    <p>Learn safety precautions, the dos and don'ts of online meetings, responsible digital behavior, and the Philippine laws that protect you online.</p>
+  </div>
+
+  <!-- E1 ENGAGE -->
+  <div class="e-section e1 reveal">
+    <div class="e-header" onclick="toggleE(this)">
+      <div class="e-badge">E1</div>
+      <div class="e-title-block"><h3>Engage</h3><p>Connect to experience</p></div>
+      <span class="e-toggle open">▼</span>
+    </div>
+    <div class="e-body open">
+      <div class="activity-card">
+        <span class="act-label">🎯 Scenario Analysis</span>
+        <h4>What Would You Do?</h4>
+        <p>Read each situation. In your notebook, write what you would do and explain why:</p>
+        <ul>
+          <li>You receive a link to join a "bonus class" from someone you don't recognize. There's no teacher's name on it.</li>
+          <li>A classmate turns off their camera and starts making disruptive noises during class.</li>
+          <li>You accidentally share your screen and reveal your home address visible in a document.</li>
+          <li>Someone takes a screenshot of you without your permission during a class and posts it online.</li>
+        </ul>
+      </div>
+      <div class="tip-box">
+        <span class="tip-icon">⚠️</span>
+        <p><strong>"Zoomboming"</strong> is a real term for when uninvited people crash an online meeting to disrupt it. It became widespread in 2020, leading platforms to add more security features. Safety isn't just about your device — it's about protecting your online space!</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- E2 EXPLORE -->
+  <div class="e-section e2 reveal">
+    <div class="e-header" onclick="toggleE(this)">
+      <div class="e-badge">E2</div>
+      <div class="e-title-block"><h3>Explore</h3><p>Investigate risks & responsibilities</p></div>
+      <span class="e-toggle open">▼</span>
+    </div>
+    <div class="e-body open">
+      <div class="activity-card">
+        <span class="act-label">🔍 Research Activity</span>
+        <h4>Online Safety News Hunt</h4>
+        <p>If you have internet access, search for a recent news article (within the past 2 years) about an online safety incident in the Philippines. In your notebook:</p>
+        <ul>
+          <li>Summarize the incident in 3–5 sentences.</li>
+          <li>What mistake was made? How could it have been prevented?</li>
+          <li>Was a Philippine law violated? Which one?</li>
+        </ul>
+        <p style="margin-top:8px;"><em>No internet? Ask an adult about a news story they heard regarding online safety.</em></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- E3 EXPLAIN -->
+  <div class="e-section e3 reveal">
+    <div class="e-header" onclick="toggleE(this)">
+      <div class="e-badge">E3</div>
+      <div class="e-title-block"><h3>Explain</h3><p>Safety rules, laws & responsible use</p></div>
+      <span class="e-toggle open">▼</span>
+    </div>
+    <div class="e-body open">
+      <div class="content-card">
+        <h4>✅ Safety Precautions in Web Conferencing</h4>
+        <ul>
+          <li><strong>Use strong passwords</strong> for your accounts and meeting rooms.</li>
+          <li><strong>Enable waiting rooms</strong> — don't let anyone in automatically.</li>
+          <li><strong>Only join verified meetings</strong> — from your teacher or school only.</li>
+          <li><strong>Lock the meeting</strong> after all participants have joined.</li>
+          <li><strong>Use the "Remove" feature</strong> to kick out uninvited guests.</li>
+          <li><strong>Do not share meeting links publicly</strong> on social media.</li>
+          <li><strong>Log out</strong> of all accounts after every session.</li>
+          <li><strong>Update your app</strong> regularly to get the latest security patches.</li>
+        </ul>
+      </div>
+
+      <div class="content-card">
+        <h4>✅ DOs During Web Conferencing</h4>
+        <ul>
+          <li>DO dress appropriately — treat online meetings like face-to-face ones.</li>
+          <li>DO mute yourself when not speaking to minimize noise.</li>
+          <li>DO ask permission before recording any session.</li>
+          <li>DO use your real name as your display name in school meetings.</li>
+          <li>DO pay attention and stay focused on the meeting.</li>
+          <li>DO use the chat for questions rather than interrupting.</li>
+          <li>DO inform the host if there is a technical problem.</li>
+        </ul>
+      </div>
+
+      <div class="law-card">
+        <h4>❌ DON'Ts During Web Conferencing</h4>
+        <p>• DON'T eat loudly or have a messy background.</p>
+        <p style="margin-top:5px;">• DON'T share the meeting link with people who are not invited.</p>
+        <p style="margin-top:5px;">• DON'T record or screenshot other participants without their consent.</p>
+        <p style="margin-top:5px;">• DON'T use disrespectful or offensive language in chat or in speech.</p>
+        <p style="margin-top:5px;">• DON'T open or share inappropriate content during a meeting.</p>
+        <p style="margin-top:5px;">• DON'T let other people use your account or login credentials.</p>
+        <p style="margin-top:5px;">• DON'T reveal personal information (address, ID numbers) during sessions.</p>
+      </div>
+
+      <div class="content-card">
+        <h4>🔒 Online Privacy & Security Practices</h4>
+        <ul>
+          <li><strong>Two-Factor Authentication (2FA):</strong> Enable this on all accounts to add an extra layer of protection.</li>
+          <li><strong>Don't reuse passwords:</strong> Use a unique, strong password for each account.</li>
+          <li><strong>Beware of phishing:</strong> Fake meeting invites may steal your login info.</li>
+          <li><strong>Blur or replace your background:</strong> Protect your home environment from being seen.</li>
+          <li><strong>Private networks:</strong> Avoid joining meetings on public/unsecured WiFi.</li>
+          <li><strong>Camera covers:</strong> Use a physical camera cover when not in a meeting.</li>
+        </ul>
+      </div>
+
+      <div class="content-card">
+        <h4>🇵🇭 Relevant Philippine Laws</h4>
+      </div>
+
+      <div class="law-card">
+        <h4>Republic Act 10175 – Cybercrime Prevention Act of 2012</h4>
+        <p>This law punishes cyber offenses including online harassment, cyberbullying, illegal access to computer systems, and cyber libel. Penalties range from prison time to fines. This applies fully to web conferencing — bullying a classmate in a Zoom meeting is a crime.</p>
+      </div>
+
+      <div class="law-card">
+        <h4>Republic Act 10173 – Data Privacy Act of 2012</h4>
+        <p>This law protects the personal information of every Filipino. Recording someone in a web conference without consent, or sharing personal data collected during meetings, may violate this law. The National Privacy Commission (NPC) enforces it.</p>
+      </div>
+
+      <div class="law-card">
+        <h4>Republic Act 9995 – Anti-Photo and Video Voyeurism Act of 2009</h4>
+        <p>It is illegal to take photos or videos of a person — especially in private situations — without consent and to distribute them. Taking screenshots of classmates in embarrassing situations during online class and sharing them online violates this law.</p>
+      </div>
+
+      <div class="law-card">
+        <h4>Republic Act 10627 – Anti-Bullying Act of 2013</h4>
+        <p>This law requires all schools to adopt anti-bullying policies, including for cyberbullying. Online harassment of a student during a web conference by a schoolmate falls under this law, and schools are required to act on it.</p>
+      </div>
+
+      <div class="law-card">
+        <h4>Republic Act 11930 – Anti-OSAEC and Anti-CSAEM Act of 2022</h4>
+        <p>This is the newest law that addresses Online Sexual Abuse and Exploitation of Children (OSAEC). It protects minors from being sexually exploited through online platforms. All web conferencing participants — especially minors — are protected by this law.</p>
+      </div>
+
+      <div class="tip-box">
+        <span class="tip-icon">🧑‍⚖️</span>
+        <p><strong>Remember:</strong> Ignorance of the law is not an excuse (ignorantia legis non excusat). Being a student does not exempt you from legal accountability. Your parents or guardians may also be held responsible for your actions online.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- E4 ELABORATE -->
+  <div class="e-section e4 reveal">
+    <div class="e-header" onclick="toggleE(this)">
+      <div class="e-badge">E4</div>
+      <div class="e-title-block"><h3>Elaborate</h3><p>Apply safety knowledge</p></div>
+      <span class="e-toggle open">▼</span>
+    </div>
+    <div class="e-body open">
+      <div class="activity-card">
+        <span class="act-label">✏️ Written Activity</span>
+        <h4>Safety Pledge &amp; Poster Plan</h4>
+        <p>In your notebook, write a personal "Online Safety Pledge" — a commitment to yourself and your classmates about how you will behave during web conferencing. Include:</p>
+        <ul>
+          <li>At least 5 specific behaviors you promise to follow</li>
+          <li>At least 2 things you will avoid doing</li>
+          <li>One Philippine law you will remember to respect</li>
+        </ul>
+        <p style="margin-top:8px;">Then, sketch a design for an "Online Safety" poster you could share with your class or community. What message do you want to highlight?</p>
+      </div>
+      <div class="activity-card">
+        <span class="act-label">💭 Reflection</span>
+        <h4>Case Study: What Would You Do?</h4>
+        <p>Read the scenario and write a response (5–8 sentences):</p>
+        <p style="margin-top:8px; padding: 12px; background: rgba(0,0,0,0.05); border-radius:8px;"><em>"During an online class, a student named Juan suddenly starts showing an inappropriate video to everyone using screen share. The teacher cannot immediately mute him or stop the share. Another student takes a screenshot and posts it in the class group chat saying 'Look at what Juan did! 😂'"</em></p>
+        <p style="margin-top:8px;">Who violated what? What laws may apply? What should the teacher, Juan, and the other student have done differently?</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- E5 EVALUATE -->
+  <div class="e-section e5 reveal">
+    <div class="e-header" onclick="toggleE(this)">
+      <div class="e-badge">E5</div>
+      <div class="e-title-block"><h3>Evaluate</h3><p>Day 3 Quiz – 5 Items</p></div>
+      <span class="e-toggle open">▼</span>
+    </div>
+    <div class="e-body open">
+      <div class="quiz-wrapper" id="quiz3-wrapper">
+        <p class="quiz-title">📋 Day 3 Quiz</p>
+        <p class="quiz-subtitle">Answer all 5 items. Check your answers when done.</p>
+        <div id="quiz3-questions"></div>
+        <button class="submit-quiz-btn" onclick="submitQuiz(3)">Submit Answers ✓</button>
+        <div class="quiz-result" id="quiz3-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     SUMMATIVE TEST
+══════════════════════════════════════════════ -->
+<div class="page" id="page4">
+  <div class="summative-hero reveal">
+    <div class="s-badge">⭐ Summative Test</div>
+    <h2>20-Item Final Assessment</h2>
+    <p>This test covers all three days of the Web Conferencing module. Read each item carefully.</p>
+  </div>
+  <div id="summative-questions"></div>
+  <button class="submit-quiz-btn" onclick="submitQuiz('sum')" style="max-width:400px; margin: 0 auto 40px; display:block;">Submit Final Test ✓</button>
+  <div class="quiz-result" id="quizsum-result" style="max-width:780px; margin: 0 auto;"></div>
+</div>
+
+<script>
+// ── QUIZ DATA ──────────────────────────────────────────────────────────────
+
+const quiz1Data = [
+  {
+    type: 'mc',
+    q: 'What is web conferencing?',
+    choices: [
+      'Sending emails through the internet',
+      'Using the internet to hold real-time meetings or classes between people in different locations',
+      'Downloading video files for later viewing',
+      'A type of social media platform'
+    ],
+    answer: 1
+  },
+  {
+    type: 'mc',
+    q: 'Which type of web conferencing is BEST suited for a one-to-many lecture attended by 500 participants who mainly listen and ask questions?',
+    choices: ['Group Video Call', 'Webinar', 'Web Meeting', 'Video Conferencing'],
+    answer: 1
+  },
+  {
+    type: 'tf',
+    q: 'True or False: Web conferencing can ONLY be used for educational purposes.',
+    answer: 'False'
+  },
+  {
+    type: 'mc',
+    q: 'Which of the following is an example of EFFECTIVE web conferencing usage?',
+    choices: [
+      'Playing online games during a class meeting',
+      'A doctor consulting a patient through video call',
+      'Downloading movies from the internet',
+      'Typing messages on social media'
+    ],
+    answer: 1
+  },
+  {
+    type: 'fill',
+    q: 'Fill in the blank: A ________ is an online meeting where one presenter shares content with a large audience who mainly observe and ask questions.',
+    answer: 'webinar'
+  }
+];
+
+const quiz2Data = [
+  {
+    type: 'mc',
+    q: 'Which web conferencing platform is most commonly integrated with Google Classroom and Gmail used by Philippine DepEd schools?',
+    choices: ['Microsoft Teams', 'Zoom', 'Google Meet', 'Cisco Webex'],
+    answer: 2
+  },
+  {
+    type: 'mc',
+    q: 'What is the function of the "Raise Hand" feature in web conferencing tools?',
+    choices: [
+      'To turn off your microphone',
+      'To signal that you want to speak without interrupting',
+      'To share your screen with others',
+      'To end the meeting'
+    ],
+    answer: 1
+  },
+  {
+    type: 'tf',
+    q: 'True or False: You should always mute your microphone when you are not speaking during an online meeting.',
+    answer: 'True'
+  },
+  {
+    type: 'mc',
+    q: 'Which of the following is the BEST practice for your internet connection during an important web conference?',
+    choices: [
+      'Use public WiFi for speed',
+      'Connect via a LAN cable instead of WiFi when possible',
+      'Use your phone data even if the signal is weak',
+      'Share your WiFi password with neighbors to reduce congestion'
+    ],
+    answer: 1
+  },
+  {
+    type: 'mc',
+    q: 'What feature allows a teacher to divide a class into smaller groups within a web conferencing session?',
+    choices: ['Polls', 'Virtual Background', 'Breakout Rooms', 'Reactions'],
+    answer: 2
+  }
+];
+
+const quiz3Data = [
+  {
+    type: 'mc',
+    q: 'Which Philippine law penalizes online harassment, cyberbullying, and illegal access to computer systems?',
+    choices: [
+      'RA 9995 – Anti-Photo and Video Voyeurism Act',
+      'RA 10175 – Cybercrime Prevention Act of 2012',
+      'RA 10627 – Anti-Bullying Act',
+      'RA 10173 – Data Privacy Act'
+    ],
+    answer: 1
+  },
+  {
+    type: 'tf',
+    q: 'True or False: You may record a web conferencing session without the participants\' consent as long as you do not share it online.',
+    answer: 'False'
+  },
+  {
+    type: 'mc',
+    q: 'A student takes a screenshot of a classmate in an embarrassing moment during an online class and shares it in a group chat. Which law is most likely violated?',
+    choices: [
+      'RA 10175 (Cybercrime Prevention Act) and RA 9995 (Anti-Photo and Video Voyeurism Act)',
+      'RA 11930 (Anti-OSAEC Act) only',
+      'No law is violated since it happened inside a school meeting',
+      'RA 10627 (Anti-Bullying Act) only'
+    ],
+    answer: 0
+  },
+  {
+    type: 'mc',
+    q: 'Which of the following is a responsible behavior during web conferencing?',
+    choices: [
+      'Sharing the meeting link in a public Facebook group',
+      'Using a fake name to hide your identity',
+      'Dressing appropriately and keeping your background clean',
+      'Eating loudly and letting background noise distract others'
+    ],
+    answer: 2
+  },
+  {
+    type: 'fill',
+    q: 'Fill in the blank: ________ is the term used when uninvited strangers crash and disrupt an online meeting.',
+    answer: 'zoombombing'
+  }
+];
+
+const summativeData = [
+  { type:'mc', q:'What does web conferencing allow people to do?', choices:['Only send text messages','Hold real-time audio and video meetings over the internet','Download videos for offline viewing','Play multiplayer games online'], answer:1 },
+  { type:'mc', q:'Which type of web conferencing is BEST for a company training 1,000 employees at once?', choices:['Group video call','Web meeting','Webinar','Video conferencing'], answer:2 },
+  { type:'tf', q:'True or False: Google Meet is owned by Microsoft and integrates with Microsoft 365.', answer:'False' },
+  { type:'mc', q:'What is the primary purpose of the "Mute" button during a web conference?', choices:['To end the call','To turn off your camera','To silence your microphone so background noise does not disturb others','To remove a participant'], answer:2 },
+  { type:'mc', q:'Which platform is BEST known for its Breakout Rooms, Polls, and Virtual Backgrounds features?', choices:['Google Meet','Viber','Zoom','Facebook Messenger'], answer:2 },
+  { type:'tf', q:'True or False: It is safe to join any online meeting link you receive, even from unknown senders.', answer:'False' },
+  { type:'mc', q:'What Philippine law protects personal information collected during web conferencing sessions?', choices:['RA 10175 – Cybercrime Prevention Act','RA 10173 – Data Privacy Act of 2012','RA 9995 – Anti-Voyeurism Act','RA 11930 – Anti-OSAEC Act'], answer:1 },
+  { type:'mc', q:'Which of the following is a DO during web conferencing?', choices:['Eat and drink noisily','Share your screen for personal entertainment','Ask permission before recording a session','Post the meeting link on social media'], answer:2 },
+  { type:'fill', q:'Fill in the blank: A ________ room feature allows a host to split participants into smaller groups during an online meeting.', answer:'breakout' },
+  { type:'mc', q:'Which internet connection setup is MOST recommended for stable web conferencing?', choices:['Public WiFi at a coffee shop','Mobile data on 2G','LAN (wired) cable connection','Shared WiFi with many users'], answer:2 },
+  { type:'mc', q:'What does "Two-Factor Authentication (2FA)" do for your web conferencing account?', choices:['Speeds up your internet connection','Adds an extra layer of security beyond just a password','Automatically records all your meetings','Removes the need for a password'], answer:1 },
+  { type:'tf', q:'True or False: The Anti-Bullying Act of 2013 (RA 10627) covers cyberbullying done during online class sessions.', answer:'True' },
+  { type:'mc', q:'A student uses screen share to display inappropriate content during a class Zoom meeting. What should the HOST do FIRST?', choices:['Take a screenshot and post it online','Ignore it and continue class','Immediately revoke the student\'s screen sharing privilege and remove them','Send a private message to the student apologizing'], answer:2 },
+  { type:'mc', q:'Which of the following is an example of protecting your ONLINE PRIVACY during a web conference?', choices:['Showing your home address in a visible document','Blurring or replacing your background so your home is not visible','Sharing your login credentials with a friend','Disabling your waiting room'], answer:1 },
+  { type:'mc', q:'Microsoft Teams is BEST described as:', choices:['A simple video call app for personal use','A combination of video conferencing, channels, file sharing, and assignment tools for workplaces and schools','Only a messaging platform with no video feature','A tool made exclusively for the Philippine government'], answer:1 },
+  { type:'tf', q:'True or False: RA 11930 (Anti-OSAEC Act of 2022) specifically protects minors from online sexual exploitation through digital platforms.', answer:'True' },
+  { type:'fill', q:'Fill in the blank: ________ is the practice of uninvited people entering and disrupting an online video meeting.', answer:'zoombombing' },
+  { type:'mc', q:'Which of the following actions VIOLATES responsible behavior in web conferencing?', choices:['Muting yourself when not speaking','Using your real name as your display name in school meetings','Sharing confidential meeting links on public social media platforms','Informing the host about a technical problem'], answer:2 },
+  { type:'mc', q:'What is the role of the "Waiting Room" feature in a web conference?', choices:['Plays music before the meeting starts','Allows the host to screen participants before letting them in','Records the meeting automatically','Provides virtual backgrounds to attendees'], answer:1 },
+  { type:'mc', q:'Which combination of laws would apply if someone recorded a classmate in an embarrassing moment during an online class and shared it publicly online?', choices:['RA 10175 only','RA 9995 and RA 10175','RA 10627 only','RA 10173 only'], answer:1 }
+];
+
+// ── QUIZ ENGINE ─────────────────────────────────────────────────────────────
+
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+const scrambledChoices = {}; // store shuffled choices per question
+
+function buildQuiz(data, containerId, prefix) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
+  container.innerHTML = '';
+  scrambledChoices[prefix] = {};
+
+  data.forEach((item, idx) => {
+    const qId = `${prefix}_q${idx}`;
+    const div = document.createElement('div');
+    div.className = 'q-item';
+    div.innerHTML = `<div class="q-num">Question ${idx + 1}</div><div class="q-text">${item.q}</div>`;
+
+    if (item.type === 'mc') {
+      const shuffled = shuffle(item.choices.map((c, i) => ({ text: c, original: i })));
+      scrambledChoices[prefix][idx] = shuffled;
+      const ul = document.createElement('ul');
+      ul.className = 'choice-list';
+      shuffled.forEach(choice => {
+        const li = document.createElement('li');
+        li.className = 'choice-item';
+        li.innerHTML = `<input type="radio" name="${qId}" value="${choice.original}" id="${qId}_${choice.original}">
+          <label for="${qId}_${choice.original}">${choice.text}</label>`;
+        ul.appendChild(li);
+      });
+      div.appendChild(ul);
+
+    } else if (item.type === 'tf') {
+      const wrapper = document.createElement('div');
+      wrapper.className = 'tf-options';
+      ['True', 'False'].forEach(val => {
+        const btn = document.createElement('button');
+        btn.className = 'tf-btn';
+        btn.textContent = val;
+        btn.dataset.qid = qId;
+        btn.dataset.val = val;
+        btn.onclick = function() {
+          document.querySelectorAll(`[data-qid="${qId}"]`).forEach(b => b.classList.remove('selected'));
+          this.classList.add('selected');
+        };
+        wrapper.appendChild(btn);
+      });
+      div.appendChild(wrapper);
+
+    } else if (item.type === 'fill') {
+      const inp = document.createElement('input');
+      inp.type = 'text';
+      inp.className = 'fillblank-input';
+      inp.id = qId;
+      inp.placeholder = 'Type your answer here…';
+      div.appendChild(inp);
+    }
+
+    container.appendChild(div);
+  });
+}
+
+function getAnswer(item, idx, prefix, qId) {
+  if (item.type === 'mc') {
+    const sel = document.querySelector(`input[name="${qId}"]:checked`);
+    return sel ? parseInt(sel.value) : null;
+  } else if (item.type === 'tf') {
+    const sel = document.querySelector(`[data-qid="${qId}"].selected`);
+    return sel ? sel.dataset.val : null;
+  } else if (item.type === 'fill') {
+    const inp = document.getElementById(qId);
+    return inp ? inp.value.trim() : null;
+  }
+  return null;
+}
+
+function checkAnswer(item, userAns) {
+  if (userAns === null || userAns === '') return false;
+  if (item.type === 'mc') return userAns === item.answer;
+  if (item.type === 'tf') return userAns.toLowerCase() === item.answer.toLowerCase();
+  if (item.type === 'fill') return userAns.toLowerCase().replace(/[^a-z]/g,'') === item.answer.toLowerCase().replace(/[^a-z]/g,'');
+  return false;
+}
+
+function getCorrectText(item) {
+  if (item.type === 'mc') return item.choices[item.answer];
+  if (item.type === 'tf') return item.answer;
+  if (item.type === 'fill') return item.answer;
+  return '';
+}
+
+function submitQuiz(day) {
+  const map = {
+    1: { data: quiz1Data, prefix: 'q1', resultId: 'quiz1-result', wrapperId: 'quiz1-wrapper' },
+    2: { data: quiz2Data, prefix: 'q2', resultId: 'quiz2-result', wrapperId: 'quiz2-wrapper' },
+    3: { data: quiz3Data, prefix: 'q3', resultId: 'quiz3-result', wrapperId: 'quiz3-wrapper' },
+    'sum': { data: summativeData, prefix: 'qs', resultId: 'quizsum-result', wrapperId: null }
+  };
+  const cfg = map[day];
+  let score = 0;
+  const details = [];
+
+  cfg.data.forEach((item, idx) => {
+    const qId = `${cfg.prefix}_q${idx}`;
+    const userAns = getAnswer(item, idx, cfg.prefix, qId);
+    const correct = checkAnswer(item, userAns);
+    if (correct) score++;
+    let userText = '';
+    if (userAns === null || userAns === '') {
+      userText = '(no answer)';
+    } else if (item.type === 'mc') {
+      userText = item.choices[userAns] || '(no answer)';
+    } else {
+      userText = userAns;
+    }
+    details.push({ q: item.q, userText, correct, correctText: getCorrectText(item) });
+  });
+
+  const total = cfg.data.length;
+  const pct = Math.round((score / total) * 100);
+  let label = pct >= 90 ? '🌟 Excellent!' : pct >= 75 ? '👍 Good Job!' : pct >= 60 ? '📚 Keep Going!' : '💪 Try Again!';
+
+  const resultEl = document.getElementById(cfg.resultId);
+  let detailsHTML = details.map(d => `
+    <div class="r-item ${d.correct ? 'correct' : 'wrong'}">
+      <div class="r-q">${d.correct ? '✅' : '❌'} ${d.q}</div>
+      <div class="r-a">Your answer: ${d.userText}</div>
+      ${!d.correct ? `<div class="r-correct">✔ Correct answer: ${d.correctText}</div>` : ''}
+    </div>
+  `).join('');
+
+  resultEl.innerHTML = `
+    <div class="result-score">${score}/${total}</div>
+    <div class="result-label">${label}</div>
+    <div class="result-msg">${pct}% — ${day === 'sum' ? 'Summative Score' : 'Day ' + day + ' Quiz'}</div>
+    <div class="result-details">${detailsHTML}</div>
+    <button class="retry-btn" onclick="retryQuiz('${day}')">🔄 Retry</button>
+  `;
+  resultEl.style.display = 'block';
+  resultEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function retryQuiz(day) {
+  const map = {
+    '1': { data: quiz1Data, prefix: 'q1', containerId: 'quiz1-questions', resultId: 'quiz1-result' },
+    '2': { data: quiz2Data, prefix: 'q2', containerId: 'quiz2-questions', resultId: 'quiz2-result' },
+    '3': { data: quiz3Data, prefix: 'q3', containerId: 'quiz3-questions', resultId: 'quiz3-result' },
+    'sum': { data: summativeData, prefix: 'qs', containerId: 'summative-questions', resultId: 'quizsum-result' }
+  };
+  const cfg = map[day];
+  buildQuiz(cfg.data, cfg.containerId, cfg.prefix);
+  document.getElementById(cfg.resultId).style.display = 'none';
+}
+
+// ── TABS ────────────────────────────────────────────────────────────────────
+
+function switchTab(num) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('page' + num).classList.add('active');
+  document.getElementById('tab' + num).classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  triggerReveal();
+}
+
+// ── ACCORDION ───────────────────────────────────────────────────────────────
+
+function toggleE(header) {
+  const body = header.nextElementSibling;
+  const toggle = header.querySelector('.e-toggle');
+  if (body.classList.contains('open')) {
+    body.classList.remove('open');
+    body.style.display = 'none';
+    toggle.classList.remove('open');
+  } else {
+    body.classList.add('open');
+    body.style.display = 'block';
+    toggle.classList.add('open');
+  }
+}
+
+// ── SCROLL HIDE TAB BAR ──────────────────────────────────────────────────────
+
+let lastScrollY = window.scrollY;
+window.addEventListener('scroll', () => {
+  const current = window.scrollY;
+  if (current > lastScrollY && current > 120) {
+    document.getElementById('tabBar').classList.add('hidden');
+  } else {
+    document.getElementById('tabBar').classList.remove('hidden');
+  }
+  lastScrollY = current;
+  triggerReveal();
+}, { passive: true });
+
+// ── SCROLL REVEAL ────────────────────────────────────────────────────────────
+
+function triggerReveal() {
+  document.querySelectorAll('.reveal:not(.shown)').forEach(el => {
+    const rect = el.getBoundingClientRect();
+    if (rect.top < window.innerHeight - 40) {
+      el.classList.add('shown');
+    }
+  });
+}
+
+// ── INIT ─────────────────────────────────────────────────────────────────────
+
+buildQuiz(quiz1Data, 'quiz1-questions', 'q1');
+buildQuiz(quiz2Data, 'quiz2-questions', 'q2');
+buildQuiz(quiz3Data, 'quiz3-questions', 'q3');
+buildQuiz(summativeData, 'summative-questions', 'qs');
+
+// Add section headers for summative
+(function() {
+  const container = document.getElementById('summative-questions');
+  if (!container) return;
+  const items = container.querySelectorAll('.q-item');
+  const sectionLabels = [
+    { idx: 0, label: '📖 Day 1 – What is Web Conferencing?' },
+    { idx: 5, label: '💻 Day 2 – Using Web Conferencing Tools' },
+    { idx: 10, label: '🛡️ Day 3 – Safety, Responsibility & Laws' }
+  ];
+  sectionLabels.reverse().forEach(s => {
+    if (items[s.idx]) {
+      const header = document.createElement('div');
+      header.className = 'section-header';
+      header.innerHTML = s.label;
+      container.insertBefore(header, items[s.idx]);
+    }
+  });
+})();
+
+setTimeout(triggerReveal, 100);
+</script>
+</body>
+</html>

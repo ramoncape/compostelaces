@@ -1,0 +1,2077 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MAPEH: Philippine Arts & the Revolutionary Period</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --indigo: #1a1f5e;
+    --gold: #f5c518;
+    --gold-dark: #d4a800;
+    --ivory: #fdf6e3;
+    --parchment: #e8dcc8;
+    --red: #c0392b;
+    --red-light: #e74c3c;
+    --green: #27ae60;
+    --text: #2c2c2c;
+    --muted: #6b6b6b;
+    --white: #ffffff;
+    --shadow: 0 4px 20px rgba(26,31,94,0.12);
+    --radius: 14px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Nunito', sans-serif;
+    background: var(--ivory);
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  /* ── HEADER ── */
+  .site-header {
+    background: var(--indigo);
+    color: var(--white);
+    padding: 20px 24px 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 16px rgba(0,0,0,0.3);
+  }
+
+  .header-top {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+  }
+
+  .sun-icon {
+    width: 48px; height: 48px; flex-shrink: 0;
+  }
+
+  .header-text h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.1rem, 3vw, 1.5rem);
+    line-height: 1.2;
+    color: var(--gold);
+  }
+
+  .header-text p {
+    font-size: 0.8rem;
+    color: rgba(255,255,255,0.7);
+    margin-top: 2px;
+  }
+
+  /* ── TABS ── */
+  .tabs {
+    display: flex;
+    gap: 4px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    padding-bottom: 0;
+  }
+  .tabs::-webkit-scrollbar { display: none; }
+
+  .tab-btn {
+    background: rgba(255,255,255,0.08);
+    color: rgba(255,255,255,0.65);
+    border: none;
+    padding: 10px 18px;
+    border-radius: 10px 10px 0 0;
+    cursor: pointer;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 700;
+    font-size: 0.85rem;
+    white-space: nowrap;
+    transition: all 0.2s;
+    position: relative;
+    border-bottom: 3px solid transparent;
+  }
+
+  .tab-btn:hover {
+    background: rgba(255,255,255,0.15);
+    color: var(--white);
+  }
+
+  .tab-btn.active {
+    background: var(--gold);
+    color: var(--indigo);
+    border-bottom-color: var(--gold);
+  }
+
+  .tab-btn .day-label {
+    display: block;
+    font-size: 0.65rem;
+    font-weight: 600;
+    opacity: 0.7;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 1px;
+  }
+
+  .tab-btn.active .day-label { opacity: 0.6; }
+
+  /* ── CONTENT ── */
+  .day-panel { display: none; padding: 24px 16px 60px; max-width: 860px; margin: 0 auto; }
+  .day-panel.active { display: block; }
+
+  /* ── SECTION CARDS ── */
+  .section-card {
+    background: var(--white);
+    border-radius: var(--radius);
+    padding: 22px 24px;
+    margin-bottom: 20px;
+    box-shadow: var(--shadow);
+    border-left: 5px solid var(--indigo);
+  }
+
+  .section-card.gold-border { border-left-color: var(--gold-dark); }
+  .section-card.red-border { border-left-color: var(--red); }
+  .section-card.green-border { border-left-color: var(--green); }
+
+  .section-label {
+    display: inline-block;
+    background: var(--indigo);
+    color: var(--white);
+    font-size: 0.65rem;
+    font-weight: 800;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 3px 10px;
+    border-radius: 20px;
+    margin-bottom: 10px;
+  }
+
+  .section-label.gold { background: var(--gold-dark); }
+  .section-label.red { background: var(--red); }
+  .section-label.green { background: var(--green); }
+
+  .section-card h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.25rem;
+    color: var(--indigo);
+    margin-bottom: 10px;
+  }
+
+  .section-card p, .section-card li {
+    font-size: 0.9rem;
+    line-height: 1.65;
+    color: var(--text);
+  }
+
+  .section-card ul { padding-left: 20px; margin-top: 6px; }
+  .section-card ul li { margin-bottom: 4px; }
+
+  /* ── OBJECTIVES ── */
+  .obj-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-top: 12px; }
+
+  .obj-item {
+    background: var(--ivory);
+    border-radius: 10px;
+    padding: 14px 16px;
+    border-top: 3px solid var(--gold-dark);
+  }
+
+  .obj-item .obj-type {
+    font-size: 0.65rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: var(--gold-dark);
+    margin-bottom: 4px;
+  }
+
+  .obj-item p { font-size: 0.85rem; }
+
+  /* ── ENGAGE PICTURE GALLERY ── */
+  .gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 12px;
+    margin-top: 14px;
+  }
+
+  .gallery-item {
+    background: var(--parchment);
+    border-radius: 10px;
+    padding: 18px 12px;
+    text-align: center;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    border: 2px solid transparent;
+  }
+
+  .gallery-item:hover, .gallery-item.selected {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(26,31,94,0.18);
+    border-color: var(--gold-dark);
+  }
+
+  .gallery-icon { font-size: 2.2rem; margin-bottom: 8px; }
+  .gallery-item p { font-size: 0.8rem; font-weight: 700; color: var(--indigo); }
+  .gallery-caption { font-size: 0.75rem; color: var(--muted); margin-top: 4px; font-weight: 400 !important; }
+
+  .response-box {
+    background: var(--ivory);
+    border: 2px dashed var(--gold-dark);
+    border-radius: 10px;
+    padding: 14px 16px;
+    margin-top: 14px;
+    min-height: 60px;
+    display: none;
+    font-size: 0.88rem;
+    line-height: 1.6;
+    color: var(--indigo);
+  }
+
+  .response-box.visible { display: block; }
+
+  /* ── EXPLORE GROUP CARDS ── */
+  .group-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; margin-top: 14px; }
+
+  .group-card {
+    background: var(--parchment);
+    border-radius: 12px;
+    padding: 18px;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: all 0.2s;
+  }
+
+  .group-card:hover { border-color: var(--indigo); transform: translateY(-2px); }
+  .group-card.expanded { border-color: var(--indigo); background: var(--white); }
+
+  .group-card h4 { font-size: 0.95rem; color: var(--indigo); margin-bottom: 6px; }
+  .group-card p { font-size: 0.82rem; color: var(--muted); }
+
+  .group-card .card-detail {
+    margin-top: 12px;
+    font-size: 0.82rem;
+    line-height: 1.6;
+    color: var(--text);
+    display: none;
+    border-top: 1px solid var(--parchment);
+    padding-top: 10px;
+  }
+
+  .group-card.expanded .card-detail { display: block; }
+
+  /* ── EXPLAIN CONTENT ── */
+  .explain-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-top: 14px; }
+
+  .explain-item {
+    background: var(--indigo);
+    color: var(--white);
+    border-radius: 12px;
+    padding: 18px;
+  }
+
+  .explain-item h4 { font-size: 0.95rem; margin-bottom: 8px; color: var(--gold); }
+  .explain-item li { font-size: 0.82rem; margin-bottom: 4px; list-style: none; padding-left: 0; }
+  .explain-item li::before { content: "▶ "; color: var(--gold); font-size: 0.65rem; }
+
+  /* ── ELABORATE TEXTAREA ── */
+  .elaborate-form { margin-top: 14px; }
+  .elaborate-form label { font-size: 0.85rem; font-weight: 700; color: var(--indigo); display: block; margin-bottom: 6px; }
+  .elaborate-form textarea {
+    width: 100%;
+    min-height: 90px;
+    padding: 12px;
+    border: 2px solid var(--parchment);
+    border-radius: 10px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 0.88rem;
+    resize: vertical;
+    transition: border-color 0.2s;
+    background: var(--ivory);
+  }
+  .elaborate-form textarea:focus { outline: none; border-color: var(--gold-dark); }
+  .elaborate-form .form-row { margin-bottom: 14px; }
+
+  .btn {
+    display: inline-block;
+    padding: 10px 22px;
+    border-radius: 8px;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 700;
+    font-size: 0.88rem;
+    cursor: pointer;
+    border: none;
+    transition: all 0.2s;
+  }
+
+  .btn-primary { background: var(--indigo); color: var(--white); }
+  .btn-primary:hover { background: #272f8a; transform: translateY(-1px); }
+  .btn-gold { background: var(--gold); color: var(--indigo); }
+  .btn-gold:hover { background: var(--gold-dark); }
+
+  .share-output {
+    margin-top: 14px;
+    background: #eef7ee;
+    border-left: 4px solid var(--green);
+    border-radius: 8px;
+    padding: 12px 16px;
+    font-size: 0.85rem;
+    display: none;
+  }
+  .share-output.visible { display: block; }
+
+  /* ── EXIT TICKET / QUIZ ── */
+  .quiz-question { margin-bottom: 18px; }
+  .quiz-question p { font-size: 0.9rem; font-weight: 700; margin-bottom: 10px; color: var(--indigo); }
+
+  .quiz-options { display: grid; gap: 8px; }
+
+  .quiz-option {
+    background: var(--ivory);
+    border: 2px solid var(--parchment);
+    border-radius: 8px;
+    padding: 10px 14px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-weight: 600;
+    transition: all 0.18s;
+    text-align: left;
+  }
+
+  .quiz-option:hover { border-color: var(--indigo); background: #e8eaf6; }
+  .quiz-option.correct { background: #d4f0d4; border-color: var(--green); color: #1a6b1a; }
+  .quiz-option.wrong { background: #fde8e8; border-color: var(--red); color: var(--red); }
+  .quiz-option:disabled { cursor: default; }
+
+  .quiz-feedback {
+    font-size: 0.82rem;
+    margin-top: 6px;
+    padding: 6px 10px;
+    border-radius: 6px;
+    display: none;
+  }
+  .quiz-feedback.show { display: block; }
+  .quiz-feedback.ok { background: #d4f0d4; color: #1a6b1a; }
+  .quiz-feedback.no { background: #fde8e8; color: var(--red); }
+
+  .quiz-score {
+    background: var(--indigo);
+    color: var(--white);
+    border-radius: 12px;
+    padding: 16px 20px;
+    text-align: center;
+    margin-top: 16px;
+    display: none;
+  }
+  .quiz-score.visible { display: block; }
+  .quiz-score .score-num { font-family: 'Playfair Display', serif; font-size: 2.5rem; color: var(--gold); }
+  .quiz-score p { font-size: 0.9rem; margin-top: 4px; }
+
+  /* ── EXIT TICKET FILL-IN ── */
+  .fill-in-group { margin-bottom: 14px; }
+  .fill-in-group label { font-size: 0.88rem; font-weight: 700; color: var(--indigo); }
+  .fill-in-group input {
+    width: 100%;
+    margin-top: 6px;
+    padding: 10px 14px;
+    border: 2px solid var(--parchment);
+    border-radius: 8px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 0.88rem;
+    background: var(--ivory);
+    transition: border-color 0.2s;
+  }
+  .fill-in-group input:focus { outline: none; border-color: var(--gold-dark); }
+
+  /* ── VALUES REFLECTION ── */
+  .values-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+  .value-chip {
+    background: var(--parchment);
+    border: 2px solid transparent;
+    border-radius: 20px;
+    padding: 6px 14px;
+    font-size: 0.82rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+    color: var(--indigo);
+  }
+  .value-chip:hover, .value-chip.selected { background: var(--gold); border-color: var(--gold-dark); }
+
+  /* ── COMPARE TABLE ── */
+  .compare-table { width: 100%; border-collapse: collapse; margin-top: 14px; font-size: 0.85rem; }
+  .compare-table th { background: var(--indigo); color: var(--white); padding: 10px 14px; text-align: left; }
+  .compare-table td { padding: 10px 14px; border-bottom: 1px solid var(--parchment); vertical-align: top; }
+  .compare-table tr:nth-child(even) td { background: var(--ivory); }
+
+  /* ── PROGRESS BAR ── */
+  .day-progress { margin-bottom: 20px; }
+  .progress-label { font-size: 0.78rem; color: var(--muted); margin-bottom: 6px; display: flex; justify-content: space-between; }
+  .progress-track { background: var(--parchment); border-radius: 10px; height: 8px; overflow: hidden; }
+  .progress-fill { height: 100%; background: linear-gradient(90deg, var(--indigo), var(--gold)); border-radius: 10px; transition: width 0.5s ease; }
+
+  /* ── HERO BANNER ── */
+  .day-hero {
+    background: linear-gradient(135deg, var(--indigo) 0%, #2d3a8c 100%);
+    border-radius: var(--radius);
+    padding: 24px;
+    color: var(--white);
+    margin-bottom: 20px;
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    position: relative;
+    overflow: hidden;
+  }
+  .day-hero::after {
+    content: '';
+    position: absolute;
+    right: -20px; top: -20px;
+    width: 120px; height: 120px;
+    background: radial-gradient(circle, rgba(245,197,24,0.2) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+  .day-hero-icon { font-size: 2.8rem; flex-shrink: 0; }
+  .day-hero h2 { font-family: 'Playfair Display', serif; font-size: clamp(1.1rem, 3vw, 1.5rem); color: var(--gold); margin-bottom: 6px; }
+  .day-hero p { font-size: 0.85rem; color: rgba(255,255,255,0.8); line-height: 1.5; }
+  .day-hero .competency { font-size: 0.75rem; background: rgba(245,197,24,0.15); border: 1px solid rgba(245,197,24,0.3); border-radius: 6px; padding: 4px 10px; display: inline-block; margin-top: 8px; color: var(--gold); }
+
+  /* ── COLLAPSIBLE ACCORDION ── */
+  .accordion { margin-bottom: 20px; }
+  .accordion-header {
+    background: var(--white);
+    border: none;
+    width: 100%;
+    text-align: left;
+    padding: 16px 20px;
+    border-radius: var(--radius);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 800;
+    font-size: 0.95rem;
+    color: var(--indigo);
+    box-shadow: var(--shadow);
+    transition: background 0.2s;
+  }
+  .accordion-header:hover { background: var(--ivory); }
+  .accordion-header .acc-left { display: flex; align-items: center; gap: 12px; }
+  .acc-icon { font-size: 1.3rem; }
+  .acc-badge {
+    font-size: 0.65rem;
+    background: var(--indigo);
+    color: var(--white);
+    padding: 2px 8px;
+    border-radius: 10px;
+    margin-left: 8px;
+  }
+  .acc-arrow { transition: transform 0.3s; font-size: 1rem; color: var(--muted); }
+  .accordion-header.open .acc-arrow { transform: rotate(180deg); }
+  .accordion-body {
+    background: var(--white);
+    border-radius: 0 0 var(--radius) var(--radius);
+    padding: 0 20px;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease, padding 0.3s;
+    box-shadow: 0 6px 16px rgba(26,31,94,0.08);
+  }
+  .accordion-body.open { max-height: 2000px; padding: 16px 20px 20px; }
+
+  /* ── CONCEPT MAP ── */
+  .concept-map {
+    background: var(--ivory);
+    border-radius: 12px;
+    padding: 20px;
+    margin-top: 14px;
+    text-align: center;
+  }
+  .concept-center {
+    display: inline-block;
+    background: var(--indigo);
+    color: var(--gold);
+    font-family: 'Playfair Display', serif;
+    font-size: 0.95rem;
+    padding: 12px 20px;
+    border-radius: 50px;
+    margin-bottom: 20px;
+  }
+  .concept-branches { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; text-align: left; }
+  .concept-branch {
+    background: var(--white);
+    border-left: 4px solid var(--gold-dark);
+    border-radius: 8px;
+    padding: 12px 14px;
+  }
+  .concept-branch h5 { font-size: 0.82rem; color: var(--indigo); font-weight: 800; margin-bottom: 4px; }
+  .concept-branch p { font-size: 0.78rem; color: var(--muted); }
+
+  /* ── MINI PERFORMANCE ── */
+  .performance-options { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; margin-top: 14px; }
+  .perf-option {
+    background: var(--parchment);
+    border-radius: 12px;
+    padding: 16px 12px;
+    text-align: center;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: all 0.2s;
+  }
+  .perf-option:hover, .perf-option.chosen { background: var(--gold); border-color: var(--gold-dark); }
+  .perf-option .perf-icon { font-size: 2rem; margin-bottom: 6px; }
+  .perf-option p { font-size: 0.8rem; font-weight: 700; color: var(--indigo); }
+
+  /* Mobile responsive */
+  @media (max-width: 600px) {
+    .day-panel { padding: 16px 12px 60px; }
+    .section-card { padding: 16px; }
+    .accordion-body.open { padding: 12px 14px 16px; }
+    .concept-branches { grid-template-columns: 1fr; }
+  }
+
+  /* Utility */
+  .mt-10 { margin-top: 10px; }
+  .mt-14 { margin-top: 14px; }
+  .text-center { text-align: center; }
+  .tag {
+    display: inline-block;
+    background: var(--parchment);
+    border-radius: 6px;
+    padding: 3px 10px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: var(--indigo);
+    margin: 2px;
+  }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-top">
+    <svg class="sun-icon" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="24" cy="24" r="10" fill="#f5c518"/>
+      <g stroke="#f5c518" stroke-width="2.5" stroke-linecap="round">
+        <line x1="24" y1="4" x2="24" y2="10"/>
+        <line x1="24" y1="38" x2="24" y2="44"/>
+        <line x1="4" y1="24" x2="10" y2="24"/>
+        <line x1="38" y1="24" x2="44" y2="24"/>
+        <line x1="9.37" y1="9.37" x2="13.6" y2="13.6"/>
+        <line x1="34.4" y1="34.4" x2="38.63" y2="38.63"/>
+        <line x1="38.63" y1="9.37" x2="34.4" y2="13.6"/>
+        <line x1="13.6" y1="34.4" x2="9.37" y2="38.63"/>
+      </g>
+    </svg>
+    <div class="header-text">
+      <h1>MAPEH: Philippine Arts &amp; the Revolutionary Period</h1>
+      <p>Grade Level Lesson Plan • 5-Day Interactive Module</p>
+    </div>
+  </div>
+  <nav class="tabs" role="tablist">
+    <button class="tab-btn active" onclick="switchDay(0)" id="tab0" role="tab"><span class="day-label">Day 1</span>Monday</button>
+    <button class="tab-btn" onclick="switchDay(1)" id="tab1" role="tab"><span class="day-label">Day 2</span>Tuesday</button>
+    <button class="tab-btn" onclick="switchDay(2)" id="tab2" role="tab"><span class="day-label">Day 3</span>Wednesday</button>
+    <button class="tab-btn" onclick="switchDay(3)" id="tab3" role="tab"><span class="day-label">Day 4</span>Thursday</button>
+    <button class="tab-btn" onclick="switchDay(4)" id="tab4" role="tab"><span class="day-label">Day 5</span>Friday</button>
+  </nav>
+</header>
+
+<!-- ═══════════════════════════════ MONDAY ═══════════════════════════════ -->
+<div class="day-panel active" id="day0">
+  <div class="day-hero">
+    <div class="day-hero-icon">🎨</div>
+    <div>
+      <h2>Monday — Arts &amp; the Revolution</h2>
+      <p>Discover how the Philippine Revolutionary Period (1896–1898) ignited a powerful wave of artistic expression that united a nation.</p>
+      <span class="competency">📌 Explain how events and principles during the Revolutionary Period influenced Philippine visual and performing arts.</span>
+    </div>
+  </div>
+
+  <div class="day-progress">
+    <div class="progress-label"><span>Lesson Progress</span><span id="prog0">0 / 5 sections</span></div>
+    <div class="progress-track"><div class="progress-fill" id="bar0" style="width:0%"></div></div>
+  </div>
+
+  <!-- Learning Objectives -->
+  <div class="accordion" id="acc0-0">
+    <button class="accordion-header open" onclick="toggleAcc('acc0-0')">
+      <span class="acc-left"><span class="acc-icon">🎯</span> Learning Objectives</span>
+      <span class="acc-arrow">▼</span>
+    </button>
+    <div class="accordion-body open">
+      <div class="obj-grid">
+        <div class="obj-item"><div class="obj-type">Knowledge</div><p>Identify significant events and ideas during the Philippine Revolutionary Period.</p></div>
+        <div class="obj-item"><div class="obj-type">Skills</div><p>Explain how these events influenced the development of Philippine arts.</p></div>
+        <div class="obj-item"><div class="obj-type">Attitude</div><p>Appreciate the role of arts in expressing patriotism and nationalism.</p></div>
+      </div>
+      <div class="section-card green-border mt-10">
+        <span class="section-label green">Learning Context</span>
+        <p>The Philippine Revolutionary Period (1896–1898) inspired artists, musicians, writers, and performers to create works that expressed love of country, freedom, and national identity. These artistic expressions helped unite Filipinos in their struggle for independence.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ENGAGE -->
+  <div class="accordion" id="acc0-1">
+    <button class="accordion-header" onclick="toggleAcc('acc0-1')">
+      <span class="acc-left"><span class="acc-icon">🔥</span> A. Engage — "Picture Talk" <span class="acc-badge">10 min</span></span>
+      <span class="acc-arrow">▼</span>
+    </button>
+    <div class="accordion-body">
+      <p style="font-size:0.88rem;color:var(--muted);margin-bottom:14px;">Click on each image below to explore what it represents during the Revolution.</p>
+      <div class="gallery-grid">
+        <div class="gallery-item" onclick="showGalleryInfo(this,'mon','rev')">
+          <div class="gallery-icon">⚔️</div>
+          <p>Philippine Revolution</p>
+          <p class="gallery-caption">1896–1898</p>
+        </div>
+        <div class="gallery-item" onclick="showGalleryInfo(this,'mon','bon')">
+          <div class="gallery-icon">🦁</div>
+          <p>Andres Bonifacio</p>
+          <p class="gallery-caption">Supremo ng Katipunan</p>
+        </div>
+        <div class="gallery-item" onclick="showGalleryInfo(this,'mon','flag')">
+          <div class="gallery-icon">🚩</div>
+          <p>Katipunan Flag</p>
+          <p class="gallery-caption">Symbol of freedom</p>
+        </div>
+        <div class="gallery-item" onclick="showGalleryInfo(this,'mon','paint')">
+          <div class="gallery-icon">🖼️</div>
+          <p>Historical Paintings</p>
+          <p class="gallery-caption">Visual memory of struggle</p>
+        </div>
+      </div>
+      <div class="response-box" id="mon-gallery-info"></div>
+      <div class="section-card gold-border mt-14">
+        <span class="section-label gold">Processing Questions</span>
+        <ul>
+          <li>What important event is shown?</li>
+          <li>How can artists help people remember history?</li>
+          <li>What emotions do these pictures evoke in you?</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- EXPLORE -->
+  <div class="accordion" id="acc0-2">
+    <button class="accordion-header" onclick="toggleAcc('acc0-2')">
+      <span class="acc-left"><span class="acc-icon">🔍</span> B. Explore — "History &amp; Art Connection" <span class="acc-badge">15 min</span></span>
+      <span class="acc-arrow">▼</span>
+    </button>
+    <div class="accordion-body">
+      <p style="font-size:0.88rem;color:var(--muted);margin-bottom:14px;">Click each event card to explore the art connection:</p>
+      <div class="group-cards">
+        <div class="group-card" onclick="toggleCard(this)">
+          <h4>🔔 Cry of Pugad Lawin</h4>
+          <p>Tap to explore the art connection →</p>
+          <div class="card-detail">
+            <strong>Message:</strong> The tearing of cedulas symbolized breaking free from colonial rule. Artists depicted this moment to show collective defiance and courage. Paintings captured the raw emotion of unity and sacrifice.<br><br>
+            <strong>Artwork Connection:</strong> Dramatic illustrations showed mass action, inspiring Filipinos who saw them to join the cause.
+          </div>
+        </div>
+        <div class="group-card" onclick="toggleCard(this)">
+          <h4>🤝 Formation of Katipunan</h4>
+          <p>Tap to explore the art connection →</p>
+          <div class="card-detail">
+            <strong>Message:</strong> The Katipunan used symbols, codes, and secret art to communicate. The KKK initials became a powerful visual identity.<br><br>
+            <strong>Artwork Connection:</strong> Propaganda illustrations spread awareness and recruited members through emotional imagery of brotherhood and freedom.
+          </div>
+        </div>
+        <div class="group-card" onclick="toggleCard(this)">
+          <h4>🏛️ Declaration of Independence</h4>
+          <p>Tap to explore the art connection →</p>
+          <div class="card-detail">
+            <strong>Message:</strong> June 12, 1898 — The first waving of the Philippine flag was documented through art and music.<br><br>
+            <strong>Artwork Connection:</strong> Performers sang the national anthem "Lupang Hinirang" while visual artists captured the moment for posterity, cementing it in national memory.
+          </div>
+        </div>
+        <div class="group-card" onclick="toggleCard(this)">
+          <h4>⚔️ Revolution Against Spain</h4>
+          <p>Tap to explore the art connection →</p>
+          <div class="card-detail">
+            <strong>Message:</strong> The revolution inspired countless plays and dramatic reenactments (komedya/moro-moro) that dramatized Filipino heroism.<br><br>
+            <strong>Artwork Connection:</strong> Songs like "Bayan Ko" emerged from this spirit, communicating the pain of oppression and the hunger for liberty.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- EXPLAIN -->
+  <div class="accordion" id="acc0-3">
+    <button class="accordion-header" onclick="toggleAcc('acc0-3')">
+      <span class="acc-left"><span class="acc-icon">📖</span> C. Explain — Key Ideas &amp; Influences <span class="acc-badge">10 min</span></span>
+      <span class="acc-arrow">▼</span>
+    </button>
+    <div class="accordion-body">
+      <div class="explain-grid">
+        <div class="explain-item">
+          <h4>🗝️ Key Events</h4>
+          <ul>
+            <li>Formation of the Katipunan</li>
+            <li>Cry of Pugad Lawin</li>
+            <li>Revolution against Spain</li>
+            <li>Declaration of Independence</li>
+          </ul>
+        </div>
+        <div class="explain-item">
+          <h4>💡 Key Ideas</h4>
+          <ul>
+            <li>Patriotism</li>
+            <li>Nationalism</li>
+            <li>Freedom</li>
+            <li>Unity</li>
+          </ul>
+        </div>
+        <div class="explain-item">
+          <h4>🖼️ Visual Arts</h4>
+          <ul>
+            <li>Paintings &amp; illustrations</li>
+            <li>Propaganda posters</li>
+            <li>Showed heroism &amp; sacrifice</li>
+            <li>Expressed love for country</li>
+          </ul>
+        </div>
+        <div class="explain-item">
+          <h4>🎭 Performing Arts</h4>
+          <ul>
+            <li>Revolutionary songs</li>
+            <li>Plays &amp; dramatizations</li>
+            <li>Inspired freedom fighters</li>
+            <li>Spread patriotic ideas</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ELABORATE -->
+  <div class="accordion" id="acc0-4">
+    <button class="accordion-header" onclick="toggleAcc('acc0-4')">
+      <span class="acc-left"><span class="acc-icon">✏️</span> D. Elaborate — "If I Were an Artist" <span class="acc-badge">10 min</span></span>
+      <span class="acc-arrow">▼</span>
+    </button>
+    <div class="accordion-body">
+      <p style="font-size:0.88rem;margin-bottom:14px;color:var(--indigo);font-style:italic;">"If you lived during the Revolution, what kind of artwork, song, or performance would you create to inspire Filipinos?"</p>
+      <div class="elaborate-form">
+        <div class="form-row">
+          <label>I would create a... (choose a type)</label>
+          <div class="performance-options" style="margin-top:8px;">
+            <div class="perf-option" onclick="selectPerf(this,'art')"><div class="perf-icon">🖼️</div><p>Painting</p></div>
+            <div class="perf-option" onclick="selectPerf(this,'song')"><div class="perf-icon">🎵</div><p>Song</p></div>
+            <div class="perf-option" onclick="selectPerf(this,'play')"><div class="perf-icon">🎭</div><p>Play / Drama</p></div>
+            <div class="perf-option" onclick="selectPerf(this,'poster')"><div class="perf-icon">📢</div><p>Poster</p></div>
+          </div>
+        </div>
+        <div class="form-row">
+          <label>My idea / description:</label>
+          <textarea id="mon-elaborate" placeholder="Describe your artwork, song, or performance idea here..."></textarea>
+        </div>
+        <button class="btn btn-primary" onclick="submitElaborate('mon','mon-elaborate')">Share My Idea 🎨</button>
+        <div class="share-output" id="mon-share"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- EVALUATE -->
+  <div class="accordion" id="acc0-5">
+    <button class="accordion-header" onclick="toggleAcc('acc0-5')">
+      <span class="acc-left"><span class="acc-icon">📝</span> E. Evaluate — Exit Ticket &amp; Quiz <span class="acc-badge">5 min</span></span>
+      <span class="acc-arrow">▼</span>
+    </button>
+    <div class="accordion-body">
+      <div class="section-card gold-border">
+        <span class="section-label gold">Fill in the Blanks</span>
+        <div class="fill-in-group mt-10">
+          <label>1. One important event during the Revolutionary Period was:</label>
+          <input type="text" placeholder="e.g., Cry of Pugad Lawin..." id="mon-fill1">
+        </div>
+        <div class="fill-in-group">
+          <label>2. One idea that inspired Filipino artists was:</label>
+          <input type="text" placeholder="e.g., nationalism..." id="mon-fill2">
+        </div>
+        <div class="fill-in-group">
+          <label>3. Arts helped Filipinos by:</label>
+          <input type="text" placeholder="e.g., inspiring courage and unity..." id="mon-fill3">
+        </div>
+        <button class="btn btn-gold mt-10" onclick="saveFillIn('mon')">Save My Answers ✅</button>
+        <div class="share-output" id="mon-fill-out"></div>
+      </div>
+
+      <div class="section-card red-border mt-14">
+        <span class="section-label red">Multiple Choice Quiz</span>
+        <div id="quiz-mon"></div>
+        <button class="btn btn-primary mt-10" onclick="submitQuiz('mon')" id="btn-quiz-mon">Submit Quiz</button>
+        <div class="quiz-score" id="score-mon"></div>
+      </div>
+
+      <div class="section-card mt-14">
+        <span class="section-label">Values Integration</span>
+        <h2>How can we show patriotism today?</h2>
+        <p style="margin-top:8px;font-size:0.88rem;">Select all the ways you can show patriotism even without a revolution:</p>
+        <div class="values-chips mt-10">
+          <span class="value-chip" onclick="toggleChip(this)">Respect national symbols</span>
+          <span class="value-chip" onclick="toggleChip(this)">Preserve Filipino culture</span>
+          <span class="value-chip" onclick="toggleChip(this)">Join community activities</span>
+          <span class="value-chip" onclick="toggleChip(this)">Be a responsible citizen</span>
+          <span class="value-chip" onclick="toggleChip(this)">Create patriotic art</span>
+          <span class="value-chip" onclick="toggleChip(this)">Learn Filipino history</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-card green-border">
+    <span class="section-label green">📚 Extended Learning</span>
+    <p>At home, find a picture of a Philippine artwork, song, or performance that shows love for the country. Paste or draw it in your notebook and write <strong>3–5 sentences</strong> explaining its message.</p>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════ TUESDAY ═══════════════════════════════ -->
+<div class="day-panel" id="day1">
+  <div class="day-hero">
+    <div class="day-hero-icon">🖼️</div>
+    <div>
+      <h2>Tuesday — Visual Arts &amp; Nationalism</h2>
+      <p>Explore how paintings, posters, and illustrations became powerful weapons for freedom during the Philippine Revolution.</p>
+      <span class="competency">📌 Explain how visual arts during the Revolutionary Period reflected nationalism and patriotism.</span>
+    </div>
+  </div>
+
+  <div class="day-progress">
+    <div class="progress-label"><span>Lesson Progress</span><span id="prog1">0 / 5 sections</span></div>
+    <div class="progress-track"><div class="progress-fill" id="bar1" style="width:0%"></div></div>
+  </div>
+
+  <!-- Objectives -->
+  <div class="accordion" id="acc1-0">
+    <button class="accordion-header open" onclick="toggleAcc('acc1-0')">
+      <span class="acc-left"><span class="acc-icon">🎯</span> Learning Objectives</span>
+      <span class="acc-arrow">▼</span>
+    </button>
+    <div class="accordion-body open">
+      <div class="obj-grid">
+        <div class="obj-item"><div class="obj-type">Knowledge</div><p>Identify examples of visual arts during the Revolutionary Period.</p></div>
+        <div class="obj-item"><div class="obj-type">Skills</div><p>Explain how visual arts conveyed messages of nationalism and patriotism.</p></div>
+        <div class="obj-item"><div class="obj-type">Attitude</div><p>Appreciate the importance of visual arts in shaping Filipino identity.</p></div>
+      </div>
+      <div class="section-card green-border mt-10">
+        <span class="section-label green">Learning Context</span>
+        <p>During the Philippine Revolutionary Period, visual arts such as paintings, posters, and illustrations were used to express love for country, inspire courage, and encourage unity among Filipinos fighting for independence.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ENGAGE -->
+  <div class="accordion" id="acc1-1">
+    <button class="accordion-header" onclick="toggleAcc('acc1-1')">
+      <span class="acc-left"><span class="acc-icon">🔥</span> A. Engage — "What Do You See?" <span class="acc-badge">10 min</span></span>
+      <span class="acc-arrow">▼</span>
+    </button>
+    <div class="accordion-body">
+      <p style="font-size:0.88rem;color:var(--muted);margin-bottom:14px;">Click each artwork type to analyze what it communicates:</p>
+      <div class="gallery-grid">
+        <div class="gallery-item" onclick="showGalleryInfo(this,'tue','poster')">
+          <div class="gallery-icon">📜</div>
+          <p>Revolutionary Posters</p>
+          <p class="gallery-caption">Mass communication tools</p>
+        </div>
+        <div class="gallery-item" onclick="showGalleryInfo(this,'tue','sketch')">
+          <div class="gallery-icon">✏️</div>
+          <p>Sketches of Heroes</p>
+          <p class="gallery-caption">Portraits of courage</p>
+        </div>
+        <div class="gallery-item" onclick="showGalleryInfo(this,'tue','illus')">
+          <div class="gallery-icon">🗞️</div>
+          <p>Propaganda Illustrations</p>
+          <p class="gallery-caption">Visual persuasion</p>
+        </div>
+      </div>
+      <div class="response-box" id="tue-gallery-info"></div>
+      <div class="section-card gold-border mt-14">
+        <span class="section-label gold">Guide Questions — Reflect &amp; Respond</span>
+        <ul style="margin-top:8px;">
+          <li>What do you notice in these pictures?</li>
+          <li>What message do you think the artist wants to show?</li>
+          <li>How do these images make you feel?</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- EXPLORE -->
+  <div class="accordion" id="acc1-2">
+    <button class="accordion-header" onclick="toggleAcc('acc1-2')">
+      <span class="acc-left"><span class="acc-icon">🔍</span> B. Explore — "Art Detective" <span class="acc-badge">15 min</span></span>
+      <span class="acc-arrow">▼</span>
+    </button>
+    <div class="accordion-body">
+      <p style="font-size:0.88rem;color:var(--muted);margin-bottom:14px;">You are an Art Detective! Investigate each artwork:</p>
+      <div class="group-cards">
+        <div class="group-card" onclick="toggleCard(this)">
+          <h4>🎨 Artwork A: Battle Scene Painting</h4>
+          <p>Tap to analyze →</p>
+          <div class="card-detail">
+            <strong>What is shown?</strong> Filipino revolutionaries fighting Spanish colonial forces, depicted with fierce expressions and raised weapons.<br><br>
+            <strong>Symbols &amp; Messages:</strong> Philippine colors (red, blue, white, yellow sun), determined expressions, and rising sun in the background symbolizing hope.<br><br>
+            <strong>How it shows patriotism:</strong> The painting celebrates Filipino bravery and positions them as honorable fighters defending their homeland.
+          </div>
+        </div>
+        <div class="group-card" onclick="toggleCard(this)">
+          <h4>📢 Artwork B: Katipunan Poster</h4>
+          <p>Tap to analyze →</p>
+          <div class="card-detail">
+            <strong>What is shown?</strong> The KKK (Kataastaasang Kagalanggalangang Katipunan ng mga Anak ng Bayan) symbols with calls to join the revolution.<br><br>
+            <strong>Symbols &amp; Messages:</strong> Bold text, tribal markings, and imagery of brotherhood and sacrifice.<br><br>
+            <strong>How it shows patriotism:</strong> It actively recruited Filipinos and unified them around a shared national identity.
+          </div>
+        </div>
+        <div class="group-card" onclick="toggleCard(this)">
+          <h4>✏️ Artwork C: Portrait of Bonifacio</h4>
+          <p>Tap to analyze →</p>
+          <div class="card-detail">
+            <strong>What is shown?</strong> Andres Bonifacio depicted in heroic pose, dressed as a revolutionary leader.<br><br>
+            <strong>Symbols &amp; Messages:</strong> Strong posture, intense gaze, and bolo — representing working-class heroism distinct from ilustrado elite.<br><br>
+            <strong>How it shows patriotism:</strong> Elevates a common man to hero status, showing that love of country belongs to all Filipinos, not just the powerful.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- EXPLAIN -->
+  <div class="accordion" id="acc1-3">
+    <button class="accordion-header" onclick="toggleAcc('acc1-3')">
+      <span class="acc-left"><span class="acc-icon">📖</span> C. Explain — Visual Arts in Focus <span class="acc-badge">10 min</span></span>
+      <span class="acc-arrow">▼</span>
+    </button>
+    <div class="accordion-body">
+      <div class="explain-grid">
+        <div class="explain-item">
+          <h4>🖼️ Types of Visual Art</h4>
+          <ul>
+            <li>Paintings</li>
+            <li>Illustrations</li>
+            <li>Propaganda posters</li>
+            <li>Sketches of heroes</li>
+          </ul>
+        </div>
+        <div class="explain-item">
+          <h4>🌟 Themes</h4>
+          <ul>
+            <li>Nationalism</li>
+            <li>Courage &amp; sacrifice</li>
+            <li>Unity</li>
+            <li>Freedom</li>
+          </ul>
+        </div>
+        <div class="explain-item" style="grid-column: span 2;">
+          <h4>🎯 Purpose of Visual Arts</h4>
+          <ul>
+            <li>To inspire Filipinos to fight for their country</li>
+            <li>To spread revolutionary ideas widely</li>
+            <li>To strengthen love for country</li>
+            <li>To document and preserve historical events</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ELABORATE -->
+  <div class="accordion" id="acc1-4">
+    <button class="accordion-header" onclick="toggleAcc('acc1-4')">
+      <span class="acc-left"><span class="acc-icon">✏️</span> D. Elaborate — "Decode the Message" <span class="acc-badge">10 min</span></span>
+      <span class="acc-arrow">▼</span>
+    </button>
+    <div class="accordion-body">
+      <p style="font-size:0.88rem;margin-bottom:14px;color:var(--muted);">Choose an artwork from the Explore section and answer the questions below:</p>
+      <div class="elaborate-form">
+        <div class="form-row">
+          <label>Which artwork are you analyzing?</label>
+          <select style="width:100%;padding:10px;border:2px solid var(--parchment);border-radius:8px;font-family:'Nunito',sans-serif;font-size:0.88rem;background:var(--ivory);margin-top:6px;" id="tue-artwork-select">
+            <option value="">-- Select an artwork --</option>
+            <option>Artwork A: Battle Scene Painting</option>
+            <option>Artwork B: Katipunan Poster</option>
+            <option>Artwork C: Portrait of Bonifacio</option>
+          </select>
+        </div>
+        <div class="form-row">
+          <label>What is the message of this artwork?</label>
+          <textarea id="tue-decode1" placeholder="Describe the message..."></textarea>
+        </div>
+        <div class="form-row">
+          <label>Why was this artwork important during the Revolution?</label>
+          <textarea id="tue-decode2" placeholder="Explain its importance..."></textarea>
+        </div>
+        <div class="form-row">
+          <label>How would you improve or redesign it today?</label>
+          <textarea id="tue-decode3" placeholder="Share your creative ideas..."></textarea>
+        </div>
+        <button class="btn btn-primary" onclick="submitDecode()">Share My Analysis 🔎</button>
+        <div class="share-output" id="tue-share"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- EVALUATE -->
+  <div class="accordion" id="acc1-5">
+    <button class="accordion-header" onclick="toggleAcc('acc1-5')">
+      <span class="acc-left"><span class="acc-icon">📝</span> E. Evaluate — Exit Ticket &amp; Quiz <span class="acc-badge">5 min</span></span>
+      <span class="acc-arrow">▼</span>
+    </button>
+    <div class="accordion-body">
+      <div class="section-card gold-border">
+        <span class="section-label gold">Fill in the Blanks</span>
+        <div class="fill-in-group mt-10">
+          <label>1. One example of visual art is:</label>
+          <input type="text" placeholder="e.g., painting..." id="tue-fill1">
+        </div>
+        <div class="fill-in-group">
+          <label>2. Visual arts during the Revolution showed:</label>
+          <input type="text" placeholder="e.g., nationalism..." id="tue-fill2">
+        </div>
+        <div class="fill-in-group">
+          <label>3. These artworks helped Filipinos by:</label>
+          <input type="text" placeholder="e.g., inspiring courage..." id="tue-fill3">
+        </div>
+        <button class="btn btn-gold mt-10" onclick="saveFillIn('tue')">Save My Answers ✅</button>
+        <div class="share-output" id="tue-fill-out"></div>
+      </div>
+      <div class="section-card red-border mt-14">
+        <span class="section-label red">Multiple Choice Quiz</span>
+        <div id="quiz-tue"></div>
+        <button class="btn btn-primary mt-10" onclick="submitQuiz('tue')" id="btn-quiz-tue">Submit Quiz</button>
+        <div class="quiz-score" id="score-tue"></div>
+      </div>
+      <div class="section-card mt-14">
+        <span class="section-label">Values Integration</span>
+        <h2>How can visual arts promote love for the Philippines today?</h2>
+        <div class="values-chips mt-10">
+          <span class="value-chip" onclick="toggleChip(this)">Environmental care posters</span>
+          <span class="value-chip" onclick="toggleChip(this)">Murals about heroes</span>
+          <span class="value-chip" onclick="toggleChip(this)">Social media art</span>
+          <span class="value-chip" onclick="toggleChip(this)">Street art promoting unity</span>
+          <span class="value-chip" onclick="toggleChip(this)">Digital illustrations</span>
+          <span class="value-chip" onclick="toggleChip(this)">School art exhibits</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-card green-border">
+    <span class="section-label green">📚 Extended Learning</span>
+    <p>At home, look for a modern artwork (poster, mural, or digital art) that shows Filipino pride. Write a short explanation of its message in your notebook.</p>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════ WEDNESDAY ═══════════════════════════════ -->
+<div class="day-panel" id="day2">
+  <div class="day-hero">
+    <div class="day-hero-icon">🎵</div>
+    <div>
+      <h2>Wednesday — Performing Arts &amp; Freedom</h2>
+      <p>Songs, chants, and plays were the heartbeat of the Revolution — discover how performing arts moved Filipinos to fight for independence.</p>
+      <span class="competency">📌 Explain how performing arts promoted national identity and freedom during the Revolutionary Period.</span>
+    </div>
+  </div>
+
+  <div class="day-progress">
+    <div class="progress-label"><span>Lesson Progress</span><span id="prog2">0 / 5 sections</span></div>
+    <div class="progress-track"><div class="progress-fill" id="bar2" style="width:0%"></div></div>
+  </div>
+
+  <!-- Objectives -->
+  <div class="accordion" id="acc2-0">
+    <button class="accordion-header open" onclick="toggleAcc('acc2-0')">
+      <span class="acc-left"><span class="acc-icon">🎯</span> Learning Objectives</span>
+      <span class="acc-arrow">▼</span>
+    </button>
+    <div class="accordion-body open">
+      <div class="obj-grid">
+        <div class="obj-item"><div class="obj-type">Knowledge</div><p>Identify examples of performing arts during the Revolutionary Period.</p></div>
+        <div class="obj-item"><div class="obj-type">Skills</div><p>Explain how songs, plays, and performances expressed patriotism and nationalism.</p></div>
+        <div class="obj-item"><div class="obj-type">Attitude</div><p>Appreciate the role of performing arts in inspiring unity and freedom.</p></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ENGAGE -->
+  <div class="accordion" id="acc2-1">
+    <button class="accordion-header" onclick="toggleAcc('acc2-1')">
+      <span class="acc-left"><span class="acc-icon">🔥</span> A. Engage — "Listen and Feel" <span class="acc-badge">10 min</span></span>
+      <span class="acc-arrow">▼</span>
+    </button>
+    <div class="accordion-body">
+      <div class="section-card gold-border">
+        <span class="section-label gold">Featured Patriotic Chant</span>
+        <h2 style="margin-top:8px;font-size:1.1rem;">🎵 "Marangal na Dalit ng Katagalugan" (excerpt inspired)</h2>
+        <p style="font-style:italic;color:var(--muted);margin-top:8px;font-size:0.88rem;">
+          "Isinilang ka sa mundo ng may kalayaan,<br>
+          At ang tanging hangad ay makamtan ang kasarinlan.<br>
+          Sa dugo at luha, ipinaglaban ang bayan —<br>
+          Ang bawat sigaw ay alab ng pag-ibig sa inang lupain."
+        </p>
+        <p style="font-size:0.78rem;color:var(--muted);margin-top:8px;">*(Adapted verse for classroom use — inspired by revolutionary-era poetry)*</p>
+      </div>
+      <div class="section-card mt-14">
+        <span class="section-label">Reflect on the Chant</span>
+        <p style="font-size:0.88rem;margin:10px 0 12px;">Answer the questions by clicking your response:</p>
+        <div style="margin-bottom:14px;">
+          <p style="font-size:0.88rem;font-weight:700;color:var(--indigo);margin-bottom:8px;">What feelings does this chant give you?</p>
+          <div class="values-chips">
+            <span class="value-chip" onclick="toggleChip(this)">Pride</span>
+            <span class="value-chip" onclick="toggleChip(this)">Sadness</span>
+            <span class="value-chip" onclick="toggleChip(this)">Courage</span>
+            <span class="value-chip" onclick="toggleChip(this)">Inspiration</span>
+            <span class="value-chip" onclick="toggleChip(this)">Anger at injustice</span>
+            <span class="value-chip" onclick="toggleChip(this)">Hope</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- EXPLORE -->
+  <div class="accordion" id="acc2-2">
+    <button class="accordion-header" onclick="toggleAcc('acc2-2')">
+      <span class="acc-left"><span class="acc-icon">🔍</span> B. Explore — "Performance Meaning Hunt" <span class="acc-badge">15 min</span></span>
+      <span class="acc-arrow">▼</span>
+    </button>
+    <div class="accordion-body">
+      <p style="font-size:0.88rem;color:var(--muted);margin-bottom:14px;">Each card contains a lyric or script excerpt. Analyze the meaning:</p>
+      <div class="group-cards">
+        <div class="group-card" onclick="toggleCard(this)">
+          <h4>🎵 Song: "Bayan Ko"</h4>
+          <p>Tap to analyze →</p>
+          <div class="card-detail">
+            <strong>Message:</strong> Expresses deep longing for a free Philippines. The song speaks of a beloved homeland under oppression and the yearning to see it free.<br><br>
+            <strong>Emotions:</strong> Longing, sadness, hope, and fierce love for country.<br><br>
+            <strong>How it inspires nationalism:</strong> The personal, emotional tone makes every Filipino feel connected to the cause of independence.
+          </div>
+        </div>
+        <div class="group-card" onclick="toggleCard(this)">
+          <h4>🎭 Play: Komedya / Moro-Moro</h4>
+          <p>Tap to analyze →</p>
+          <div class="card-detail">
+            <strong>Message:</strong> Traditional plays evolved to dramatize Filipino heroism against colonial oppressors. Scripts subtly inserted revolutionary ideas into entertainment.<br><br>
+            <strong>Emotions:</strong> Pride, justice, triumph.<br><br>
+            <strong>How it inspires nationalism:</strong> By showing Filipino characters as victorious heroes, it built collective pride and belief in independence.
+          </div>
+        </div>
+        <div class="group-card" onclick="toggleCard(this)">
+          <h4>📣 Chant: Battle Cry</h4>
+          <p>Tap to analyze →</p>
+          <div class="card-detail">
+            <strong>Message:</strong> Revolutionary chants like those used during the Cry of Pugad Lawin served as battle cries and rallying calls.<br><br>
+            <strong>Emotions:</strong> Defiance, unity, determination.<br><br>
+            <strong>How it inspires nationalism:</strong> Chants create a shared identity and synchronize action, turning individual acts into collective movement.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- EXPLAIN -->
+  <div class="accordion" id="acc2-3">
+    <button class="accordion-header" onclick="toggleAcc('acc2-3')">
+      <span class="acc-left"><span class="acc-icon">📖</span> C. Explain — Performing Arts Overview <span class="acc-badge">10 min</span></span>
+      <span class="acc-arrow">▼</span>
+    </button>
+    <div class="accordion-body">
+      <div class="explain-grid">
+        <div class="explain-item">
+          <h4>🎶 Forms</h4>
+          <ul>
+            <li>Patriotic songs</li>
+            <li>Revolutionary chants</li>
+            <li>Short plays</li>
+            <li>Dramatizations</li>
+          </ul>
+        </div>
+        <div class="explain-item">
+          <h4>🎯 Purpose</h4>
+          <ul>
+            <li>Inspire courage</li>
+            <li>Strengthen unity</li>
+            <li>Express love for country</li>
+            <li>Spread revolutionary ideas</li>
+          </ul>
+        </div>
+        <div class="explain-item" style="grid-column:span 2;">
+          <h4>💡 Key Idea</h4>
+          <p style="font-size:0.88rem;color:rgba(255,255,255,0.85);">Performing arts were powerful tools for communication and motivation during the Revolution. Unlike written text, songs and plays could reach even those who could not read, making them the most democratic form of revolutionary expression.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ELABORATE: Mini Performance -->
+  <div class="accordion" id="acc2-4">
+    <button class="accordion-header" onclick="toggleAcc('acc2-4')">
+      <span class="acc-left"><span class="acc-icon">🎤</span> D. Elaborate — "Mini Performance Creator" <span class="acc-badge">10 min</span></span>
+      <span class="acc-arrow">▼</span>
+    </button>
+    <div class="accordion-body">
+      <p style="font-size:0.88rem;margin-bottom:14px;color:var(--indigo);font-weight:700;">Theme: "Love for Country and Freedom" — Create your own!</p>
+      <div class="elaborate-form">
+        <div class="form-row">
+          <label>Choose your performance type:</label>
+          <div class="performance-options" style="margin-top:8px;">
+            <div class="perf-option" onclick="selectPerf(this,'chant')"><div class="perf-icon">📣</div><p>Chant</p></div>
+            <div class="perf-option" onclick="selectPerf(this,'slogan')"><div class="perf-icon">✊</div><p>Slogan</p></div>
+            <div class="perf-option" onclick="selectPerf(this,'roleplay')"><div class="perf-icon">🎭</div><p>Role Play</p></div>
+          </div>
+        </div>
+        <div class="form-row">
+          <label>Write your chant / slogan / role play script:</label>
+          <textarea id="wed-elaborate" rows="4" placeholder="Write your mini performance here... (e.g., 'Pilipinas, Laban! Para sa kalayaan, hindi tayo susuko!')"></textarea>
+        </div>
+        <button class="btn btn-primary" onclick="submitElaborate('wed','wed-elaborate')">Share My Performance 🎤</button>
+        <div class="share-output" id="wed-share"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- EVALUATE -->
+  <div class="accordion" id="acc2-5">
+    <button class="accordion-header" onclick="toggleAcc('acc2-5')">
+      <span class="acc-left"><span class="acc-icon">📝</span> E. Evaluate — Exit Ticket &amp; Quiz <span class="acc-badge">5 min</span></span>
+      <span class="acc-arrow">▼</span>
+    </button>
+    <div class="accordion-body">
+      <div class="section-card gold-border">
+        <span class="section-label gold">Fill in the Blanks</span>
+        <div class="fill-in-group mt-10">
+          <label>1. One example of performing art is:</label>
+          <input type="text" placeholder="e.g., patriotic song..." id="wed-fill1">
+        </div>
+        <div class="fill-in-group">
+          <label>2. Performing arts during the Revolution showed:</label>
+          <input type="text" placeholder="e.g., love for country..." id="wed-fill2">
+        </div>
+        <div class="fill-in-group">
+          <label>3. These performances helped Filipinos by:</label>
+          <input type="text" placeholder="e.g., inspiring courage and unity..." id="wed-fill3">
+        </div>
+        <button class="btn btn-gold mt-10" onclick="saveFillIn('wed')">Save My Answers ✅</button>
+        <div class="share-output" id="wed-fill-out"></div>
+      </div>
+      <div class="section-card red-border mt-14">
+        <span class="section-label red">Multiple Choice Quiz</span>
+        <div id="quiz-wed"></div>
+        <button class="btn btn-primary mt-10" onclick="submitQuiz('wed')" id="btn-quiz-wed">Submit Quiz</button>
+        <div class="quiz-score" id="score-wed"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-card green-border">
+    <span class="section-label green">📚 Extended Learning</span>
+    <p>At home, ask a family member about any Filipino patriotic song they know. Write its title and explain what it means to them and to you.</p>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════ THURSDAY ═══════════════════════════════ -->
+<div class="day-panel" id="day3">
+  <div class="day-hero">
+    <div class="day-hero-icon">🏛️</div>
+    <div>
+      <h2>Thursday — American Period Influences</h2>
+      <p>How did American colonization transform Philippine arts? Compare the Revolutionary spirit with the modern Western-influenced era.</p>
+      <span class="competency">📌 Explain how American colonization influenced concepts, processes, and practices in Philippine visual and performing arts.</span>
+    </div>
+  </div>
+
+  <div class="day-progress">
+    <div class="progress-label"><span>Lesson Progress</span><span id="prog3">0 / 5 sections</span></div>
+    <div class="progress-track"><div class="progress-fill" id="bar3" style="width:0%"></div></div>
+  </div>
+
+  <!-- Objectives -->
+  <div class="accordion" id="acc3-0">
+    <button class="accordion-header open" onclick="toggleAcc('acc3-0')">
+      <span class="acc-left"><span class="acc-icon">🎯</span> Learning Objectives</span>
+      <span class="acc-arrow">▼</span>
+    </button>
+    <div class="accordion-body open">
+      <div class="obj-grid">
+        <div class="obj-item"><div class="obj-type">Knowledge</div><p>Identify American influences on Philippine arts during the American Period.</p></div>
+        <div class="obj-item"><div class="obj-type">Skills</div><p>Compare artistic practices during the Revolutionary Period and American Period.</p></div>
+        <div class="obj-item"><div class="obj-type">Attitude</div><p>Appreciate how Philippine arts evolved through different historical periods.</p></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ENGAGE -->
+  <div class="accordion" id="acc3-1">
+    <button class="accordion-header" onclick="toggleAcc('acc3-1')">
+      <span class="acc-left"><span class="acc-icon">🔥</span> A. Engage — "Then and Now" <span class="acc-badge">10 min</span></span>
+      <span class="acc-arrow">▼</span>
+    </button>
+    <div class="accordion-body">
+      <p style="font-size:0.88rem;color:var(--muted);margin-bottom:14px;">Click each era to see what changed:</p>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px;">
+        <div class="gallery-item" onclick="showGalleryInfo(this,'thu','rev-art')">
+          <div class="gallery-icon">⚔️</div>
+          <p>Revolutionary Period Art</p>
+          <p class="gallery-caption">1896–1898</p>
+        </div>
+        <div class="gallery-item" onclick="showGalleryInfo(this,'thu','am-art')">
+          <div class="gallery-icon">🗽</div>
+          <p>American Period Art</p>
+          <p class="gallery-caption">1898–1946</p>
+        </div>
+      </div>
+      <div class="response-box" id="thu-gallery-info"></div>
+    </div>
+  </div>
+
+  <!-- EXPLORE: Compare Table -->
+  <div class="accordion" id="acc3-2">
+    <button class="accordion-header" onclick="toggleAcc('acc3-2')">
+      <span class="acc-left"><span class="acc-icon">🔍</span> B. Explore — "Art Comparison Table" <span class="acc-badge">15 min</span></span>
+      <span class="acc-arrow">▼</span>
+    </button>
+    <div class="accordion-body">
+      <p style="font-size:0.88rem;color:var(--muted);margin-bottom:14px;">Study the table and identify similarities and differences:</p>
+      <table class="compare-table">
+        <thead><tr><th>Aspect</th><th>🔥 Revolutionary Period</th><th>🗽 American Period</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Theme</strong></td><td>Patriotism, nationalism, freedom</td><td>Varied — Western themes, realism, everyday life</td></tr>
+          <tr><td><strong>Style</strong></td><td>Emotional, symbolic, propagandistic</td><td>Realistic, academic, formal (Western techniques)</td></tr>
+          <tr><td><strong>Purpose</strong></td><td>Inspire revolution &amp; unity</td><td>Education, entertainment, cultural expression</td></tr>
+          <tr><td><strong>Education</strong></td><td>Informal — spread through community</td><td>Formal art schools established (e.g., UP College of Fine Arts)</td></tr>
+          <tr><td><strong>Performing Arts</strong></td><td>Revolutionary plays, patriotic songs</td><td>Vaudeville, theater, English-language plays</td></tr>
+          <tr><td><strong>Visual Arts</strong></td><td>Paintings of heroes &amp; battles</td><td>Academic portraiture, landscape, Western-style oils</td></tr>
+        </tbody>
+      </table>
+      <div class="section-card gold-border mt-14">
+        <span class="section-label gold">Discussion Questions</span>
+        <ul style="margin-top:8px;">
+          <li>What are the similarities between the two periods?</li>
+          <li>What are the differences?</li>
+          <li>Which period shows more Western influence?</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- EXPLAIN -->
+  <div class="accordion" id="acc3-3">
+    <button class="accordion-header" onclick="toggleAcc('acc3-3')">
+      <span class="acc-left"><span class="acc-icon">📖</span> C. Explain — American Influences <span class="acc-badge">10 min</span></span>
+      <span class="acc-arrow">▼</span>
+    </button>
+    <div class="accordion-body">
+      <div class="explain-grid">
+        <div class="explain-item">
+          <h4>🏫 Education &amp; Institutions</h4>
+          <ul>
+            <li>Formal art education introduced</li>
+            <li>Western techniques in painting</li>
+            <li>Schools for fine arts established</li>
+            <li>English as medium of instruction</li>
+          </ul>
+        </div>
+        <div class="explain-item">
+          <h4>🎭 Performing Arts Changes</h4>
+          <ul>
+            <li>American theater &amp; vaudeville</li>
+            <li>English-language performances</li>
+            <li>Musical revues &amp; variety shows</li>
+            <li>New performance venues built</li>
+          </ul>
+        </div>
+        <div class="explain-item">
+          <h4>🎨 Visual Arts Changes</h4>
+          <ul>
+            <li>More realistic painting styles</li>
+            <li>Shift from purely patriotic themes</li>
+            <li>Academic portrait &amp; landscape art</li>
+            <li>Use of Western art materials</li>
+          </ul>
+        </div>
+        <div class="explain-item">
+          <h4>🌏 Overall Impact</h4>
+          <ul>
+            <li>Arts became more diverse</li>
+            <li>Western &amp; Filipino styles merged</li>
+            <li>Entertainment industry grew</li>
+            <li>Unique Filipino-American art emerged</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ELABORATE -->
+  <div class="accordion" id="acc3-4">
+    <button class="accordion-header" onclick="toggleAcc('acc3-4')">
+      <span class="acc-left"><span class="acc-icon">✏️</span> D. Elaborate — "Art Evolution Reflection" <span class="acc-badge">10 min</span></span>
+      <span class="acc-arrow">▼</span>
+    </button>
+    <div class="accordion-body">
+      <div class="elaborate-form">
+        <div class="form-row">
+          <label>How did Philippine arts change from the Revolutionary to the American Period?</label>
+          <textarea id="thu-ela1" placeholder="Describe the changes you observed..."></textarea>
+        </div>
+        <div class="form-row">
+          <label>Do you think these changes were positive or negative? Why?</label>
+          <div style="display:flex;gap:10px;margin:8px 0 12px;">
+            <button class="btn btn-gold" onclick="setOpinion(this,'positive')" id="opt-pos">👍 Mostly Positive</button>
+            <button class="btn" style="background:var(--parchment);color:var(--indigo);" onclick="setOpinion(this,'negative')" id="opt-neg">👎 Mostly Negative</button>
+            <button class="btn" style="background:var(--parchment);color:var(--indigo);" onclick="setOpinion(this,'mixed')" id="opt-mix">🤔 Mixed</button>
+          </div>
+          <textarea id="thu-ela2" placeholder="Explain your opinion..."></textarea>
+        </div>
+        <button class="btn btn-primary" onclick="submitThuElab()">Share My Reflection 💭</button>
+        <div class="share-output" id="thu-share"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- EVALUATE -->
+  <div class="accordion" id="acc3-5">
+    <button class="accordion-header" onclick="toggleAcc('acc3-5')">
+      <span class="acc-left"><span class="acc-icon">📝</span> E. Evaluate — Exit Ticket &amp; Quiz <span class="acc-badge">5 min</span></span>
+      <span class="acc-arrow">▼</span>
+    </button>
+    <div class="accordion-body">
+      <div class="section-card gold-border">
+        <span class="section-label gold">Fill in the Blanks</span>
+        <div class="fill-in-group mt-10">
+          <label>1. One American influence in Philippine arts is:</label>
+          <input type="text" placeholder="e.g., formal art education..." id="thu-fill1">
+        </div>
+        <div class="fill-in-group">
+          <label>2. Compared to the Revolutionary Period, American Period arts were more:</label>
+          <input type="text" placeholder="e.g., realistic and Western-influenced..." id="thu-fill2">
+        </div>
+        <div class="fill-in-group">
+          <label>3. Arts changed because:</label>
+          <input type="text" placeholder="e.g., American colonization brought new techniques..." id="thu-fill3">
+        </div>
+        <button class="btn btn-gold mt-10" onclick="saveFillIn('thu')">Save My Answers ✅</button>
+        <div class="share-output" id="thu-fill-out"></div>
+      </div>
+      <div class="section-card red-border mt-14">
+        <span class="section-label red">Multiple Choice Quiz</span>
+        <div id="quiz-thu"></div>
+        <button class="btn btn-primary mt-10" onclick="submitQuiz('thu')" id="btn-quiz-thu">Submit Quiz</button>
+        <div class="quiz-score" id="score-thu"></div>
+      </div>
+      <div class="section-card mt-14">
+        <span class="section-label">Values Integration</span>
+        <h2>Valuing Culture While Embracing Change</h2>
+        <p style="font-size:0.88rem;margin:10px 0;">How can we appreciate foreign influences while still valuing our own culture?</p>
+        <div class="values-chips">
+          <span class="value-chip" onclick="toggleChip(this)">Respect cultural diversity</span>
+          <span class="value-chip" onclick="toggleChip(this)">Preserve Filipino identity</span>
+          <span class="value-chip" onclick="toggleChip(this)">Blend traditions with modern ideas</span>
+          <span class="value-chip" onclick="toggleChip(this)">Learn about other cultures</span>
+          <span class="value-chip" onclick="toggleChip(this)">Support local artists</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-card green-border">
+    <span class="section-label green">📚 Extended Learning</span>
+    <p>At home, look for an example of modern Filipino art (painting, theater, or architecture) and identify possible Western influences. Write your findings in your notebook.</p>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════ FRIDAY ═══════════════════════════════ -->
+<div class="day-panel" id="day4">
+  <div class="day-hero">
+    <div class="day-hero-icon">🌟</div>
+    <div>
+      <h2>Friday — Synthesis &amp; Performance Task</h2>
+      <p>Bring the whole week together! Compare both periods and showcase what you've learned through your own creative output.</p>
+      <span class="competency">📌 Synthesize the influences of the Revolutionary and American Periods on Philippine visual and performing arts.</span>
+    </div>
+  </div>
+
+  <div class="day-progress">
+    <div class="progress-label"><span>Lesson Progress</span><span id="prog4">0 / 5 sections</span></div>
+    <div class="progress-track"><div class="progress-fill" id="bar4" style="width:0%"></div></div>
+  </div>
+
+  <!-- Objectives -->
+  <div class="accordion" id="acc4-0">
+    <button class="accordion-header open" onclick="toggleAcc('acc4-0')">
+      <span class="acc-left"><span class="acc-icon">🎯</span> Learning Objectives</span>
+      <span class="acc-arrow">▼</span>
+    </button>
+    <div class="accordion-body open">
+      <div class="obj-grid">
+        <div class="obj-item"><div class="obj-type">Knowledge</div><p>Compare the artistic influences of the Revolutionary and American Periods.</p></div>
+        <div class="obj-item"><div class="obj-type">Skills</div><p>Create a simple output showing historical influences on Philippine arts.</p></div>
+        <div class="obj-item"><div class="obj-type">Attitude</div><p>Appreciate the development of Philippine arts across different historical periods.</p></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ENGAGE: Quick Recall -->
+  <div class="accordion" id="acc4-1">
+    <button class="accordion-header" onclick="toggleAcc('acc4-1')">
+      <span class="acc-left"><span class="acc-icon">⚡</span> A. Engage — "Quick Recall Game" <span class="acc-badge">10 min</span></span>
+      <span class="acc-arrow">▼</span>
+    </button>
+    <div class="accordion-body">
+      <p style="font-size:0.88rem;color:var(--muted);margin-bottom:14px;">Identify which historical period each artwork description belongs to!</p>
+      <div id="recall-game"></div>
+      <div class="section-card gold-border mt-14" id="recall-score" style="display:none;text-align:center;">
+        <span class="section-label gold">Your Score</span>
+        <p id="recall-score-text" style="font-family:'Playfair Display',serif;font-size:1.5rem;color:var(--indigo);margin-top:8px;"></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- EXPLORE: Influence Map -->
+  <div class="accordion" id="acc4-2">
+    <button class="accordion-header" onclick="toggleAcc('acc4-2')">
+      <span class="acc-left"><span class="acc-icon">🗺️</span> B. Explore — "Influence Map" <span class="acc-badge">15 min</span></span>
+      <span class="acc-arrow">▼</span>
+    </button>
+    <div class="accordion-body">
+      <div class="concept-map">
+        <div class="concept-center">🇵🇭 Philippine Arts Today</div>
+        <div class="concept-branches">
+          <div class="concept-branch">
+            <h5>⚔️ Revolutionary Period</h5>
+            <p>Nationalism • Patriotic songs • Heroic paintings • Propaganda posters • Love of freedom</p>
+          </div>
+          <div class="concept-branch">
+            <h5>🗽 American Period</h5>
+            <p>Formal education • Western techniques • Vaudeville theater • Realistic art styles • New institutions</p>
+          </div>
+          <div class="concept-branch">
+            <h5>🤝 Similarities</h5>
+            <p>Both used arts to communicate values • Both influenced identity • Both left lasting cultural marks</p>
+          </div>
+          <div class="concept-branch">
+            <h5>🌟 Today's Arts</h5>
+            <p>OPM music • Filipino film • Contemporary visual art • Street murals • Digital art • Theater</p>
+          </div>
+        </div>
+      </div>
+      <div class="section-card mt-14 gold-border">
+        <span class="section-label gold">Discussion Questions</span>
+        <ul style="margin-top:8px;">
+          <li>What influenced Philippine arts the most?</li>
+          <li>How did each period contribute to today's art?</li>
+          <li>What is uniquely Filipino despite foreign influences?</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- EXPLAIN: Synthesis -->
+  <div class="accordion" id="acc4-3">
+    <button class="accordion-header" onclick="toggleAcc('acc4-3')">
+      <span class="acc-left"><span class="acc-icon">📖</span> C. Explain — Synthesis of Both Periods <span class="acc-badge">10 min</span></span>
+      <span class="acc-arrow">▼</span>
+    </button>
+    <div class="accordion-body">
+      <div class="explain-grid">
+        <div class="explain-item">
+          <h4>⚔️ Revolutionary Period</h4>
+          <ul>
+            <li>Focus on nationalism &amp; freedom</li>
+            <li>Art as a tool for revolution</li>
+            <li>Patriotic songs &amp; posters</li>
+            <li>Heroism as central theme</li>
+          </ul>
+        </div>
+        <div class="explain-item">
+          <h4>🗽 American Period</h4>
+          <ul>
+            <li>Western influence &amp; modernization</li>
+            <li>Formal art education</li>
+            <li>Theater &amp; realistic art</li>
+            <li>Diverse themes emerge</li>
+          </ul>
+        </div>
+        <div class="explain-item" style="grid-column:span 2;background:linear-gradient(135deg,#1a1f5e,#2d3a8c);">
+          <h4 style="color:var(--gold);">🌟 Key Synthesis Idea</h4>
+          <p style="color:rgba(255,255,255,0.9);font-size:0.9rem;">Philippine arts today are a <strong style="color:var(--gold);">unique combination</strong> of national identity and foreign influence, forming a rich cultural expression that is distinctly Filipino. Every painting, song, and performance carries echoes of both the revolutionary spirit and the modernizing force of the American Period.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ELABORATE: Performance Task -->
+  <div class="accordion" id="acc4-4">
+    <button class="accordion-header" onclick="toggleAcc('acc4-4')">
+      <span class="acc-left"><span class="acc-icon">🎨</span> D. Elaborate — Performance Task <span class="acc-badge">10 min</span></span>
+      <span class="acc-arrow">▼</span>
+    </button>
+    <div class="accordion-body">
+      <p style="font-size:0.88rem;font-weight:700;color:var(--indigo);margin-bottom:4px;">Theme: "How Philippine Arts Reflect History"</p>
+      <p style="font-size:0.82rem;color:var(--muted);margin-bottom:14px;">Create ONE of the following outputs that shows how history shaped Philippine arts:</p>
+      <div class="performance-options">
+        <div class="perf-option" onclick="selectPerf(this,'fri-poster')"><div class="perf-icon">📢</div><p>Poster</p></div>
+        <div class="perf-option" onclick="selectPerf(this,'fri-skit')"><div class="perf-icon">🎭</div><p>Short Skit</p></div>
+        <div class="perf-option" onclick="selectPerf(this,'fri-song')"><div class="perf-icon">🎵</div><p>Song/Chant</p></div>
+        <div class="perf-option" onclick="selectPerf(this,'fri-pres')"><div class="perf-icon">🎤</div><p>Presentation</p></div>
+      </div>
+      <div class="elaborate-form" style="margin-top:14px;">
+        <div class="form-row">
+          <label>Your performance output (write your script, poster concept, song lyrics, or key points):</label>
+          <textarea id="fri-elaborate" rows="6" placeholder="Write your performance task output here. Include ideas from both the Revolutionary Period and the American Period..."></textarea>
+        </div>
+        <button class="btn btn-primary" onclick="submitElaborate('fri','fri-elaborate')">Submit Performance Task 🌟</button>
+        <div class="share-output" id="fri-share"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- EVALUATE -->
+  <div class="accordion" id="acc4-5">
+    <button class="accordion-header" onclick="toggleAcc('acc4-5')">
+      <span class="acc-left"><span class="acc-icon">📝</span> E. Evaluate — Week Wrap-Up Quiz <span class="acc-badge">5 min</span></span>
+      <span class="acc-arrow">▼</span>
+    </button>
+    <div class="accordion-body">
+      <div class="section-card gold-border">
+        <span class="section-label gold">Fill in the Blanks</span>
+        <div class="fill-in-group mt-10">
+          <label>1. The Revolutionary Period focused on:</label>
+          <input type="text" placeholder="e.g., nationalism and freedom..." id="fri-fill1">
+        </div>
+        <div class="fill-in-group">
+          <label>2. The American Period introduced:</label>
+          <input type="text" placeholder="e.g., formal art education and Western styles..." id="fri-fill2">
+        </div>
+        <div class="fill-in-group">
+          <label>3. Philippine arts today are a combination of:</label>
+          <input type="text" placeholder="e.g., national identity and..." id="fri-fill3">
+        </div>
+        <button class="btn btn-gold mt-10" onclick="saveFillIn('fri')">Save My Answers ✅</button>
+        <div class="share-output" id="fri-fill-out"></div>
+      </div>
+      <div class="section-card red-border mt-14">
+        <span class="section-label red">Final Quiz — Week 1 Mastery Check</span>
+        <div id="quiz-fri"></div>
+        <button class="btn btn-primary mt-10" onclick="submitQuiz('fri')" id="btn-quiz-fri">Submit Final Quiz</button>
+        <div class="quiz-score" id="score-fri"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-card green-border">
+    <span class="section-label green">📚 Extended Learning</span>
+    <p>At home, create a simple artwork or write a short reflection showing how Philippine history influences modern arts. Bring it to class next week!</p>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════
+// DATA
+// ═══════════════════════════════════════════════
+
+const galleryData = {
+  mon: {
+    rev: "⚔️ The Philippine Revolution (1896–1898) was a turning point in history. Artists captured battle scenes, sacrifices, and the collective spirit of Filipinos who dared to fight for freedom. Paintings and illustrations from this era preserved the memory of this struggle for future generations.",
+    bon: "🦁 Andres Bonifacio, the Supremo of the Katipunan, was a symbol of working-class heroism. Unlike elite ilustrados, he represented the masses. Artists depicted him with strength and determination, making him an inspirational figure in revolutionary artworks and posters.",
+    flag: "🚩 The Katipunan flag, with its sun and K symbol, was a powerful visual identity. It unified revolutionaries under one banner. The very act of displaying it was an act of defiance — which is why visual symbols were so powerful during the Revolution.",
+    paint: "🖼️ Historical paintings served as the 'photographs' of their time. Artists like Juan Luna had already shown that Filipinos could create world-class art. During the Revolution, paintings became tools of propaganda, emotion, and historical memory — keeping the spirit of the movement alive."
+  },
+  tue: {
+    poster: "📜 Revolutionary posters were designed for maximum impact. Bold visuals, patriotic colors, and clear symbols made them instantly recognizable. Posted in public spaces, they reached people who couldn't read — making visual art the most democratic form of mass communication of the era.",
+    sketch: "✏️ Sketches of heroes like Bonifacio, Rizal, and other patriots were distributed widely. These portraits humanized the revolution, giving it faces people could connect with. Even simple charcoal sketches on paper could inspire a person to join the cause.",
+    illus: "🗞️ Propaganda illustrations appeared in underground newspapers and pamphlets. They used imagery of chains, eagles, and rising suns to convey complex ideas about oppression and freedom simply and powerfully — creating a shared visual language for the revolution."
+  },
+  thu: {
+    'rev-art': "⚔️ Revolutionary Period Art (1896–1898): Emotionally charged, propagandistic, and deeply personal. Artworks were tools of revolution — paintings of battle scenes, heroic portraits, and symbolic posters. The central theme was always freedom and national identity. Art was made by and for ordinary Filipinos.",
+    'am-art': "🗽 American Period Art (1898–1946): Formal, academic, and influenced by Western aesthetics. The Americans introduced institutional art education, leading to more technically refined but thematically diverse works. Philippine art became 'modernized' but also risked losing some of its revolutionary spirit. Notable: UP College of Fine Arts was established in 1909."
+  }
+};
+
+const quizData = {
+  mon: [
+    { q: "Which event marked the beginning of the Philippine Revolution?", opts: ["EDSA Revolution","Cry of Pugad Lawin","Battle of Mactan","People Power"], ans: 1 },
+    { q: "Which idea inspired many Filipino artists during the Revolutionary Period?", opts: ["Colonialism","Nationalism","Industrialization","Globalization"], ans: 1 },
+    { q: "Which of the following is an example of visual art?", opts: ["Song","Dance","Painting","Play"], ans: 2 },
+    { q: "Revolutionary songs were used to:", opts: ["Entertain only","Promote foreign culture","Inspire patriotism","Teach mathematics"], ans: 2 },
+    { q: "Arts during the Revolutionary Period reflected:", opts: ["Love of country","Sportsmanship","Technology","Trade"], ans: 0 }
+  ],
+  tue: [
+    { q: "Which of the following is an example of visual art?", opts: ["Song","Painting","Dance","Drama"], ans: 1 },
+    { q: "Revolutionary visual arts mainly showed:", opts: ["Entertainment","Nationalism","Foreign culture","Sports"], ans: 1 },
+    { q: "Posters during the Revolution were used to:", opts: ["Promote fashion","Spread revolutionary ideas","Sell products","Teach science"], ans: 1 },
+    { q: "Which feeling is commonly expressed in revolutionary artworks?", opts: ["Fear of art","Patriotism","Laziness","Indifference"], ans: 1 },
+    { q: "Visual arts helped Filipinos during the Revolution by:", opts: ["Confusing people","Inspiring unity and courage","Stopping communication","Avoiding history"], ans: 1 }
+  ],
+  wed: [
+    { q: "Which of the following is an example of performing art?", opts: ["Painting","Sculpture","Song","Poster"], ans: 2 },
+    { q: "Revolutionary songs mainly express:", opts: ["Entertainment","Patriotism","Fashion","Technology"], ans: 1 },
+    { q: "Performing arts during the Revolution were used to:", opts: ["Confuse people","Inspire courage","Sell products","Reduce communication"], ans: 1 },
+    { q: "Which feeling is common in revolutionary performances?", opts: ["Fear","Nationalism","Laziness","Silence"], ans: 1 },
+    { q: "Performing arts helped Filipinos by:", opts: ["Weakening unity","Encouraging freedom","Stopping ideas","Avoiding history"], ans: 1 }
+  ],
+  thu: [
+    { q: "The American Period introduced __________ in Philippine arts.", opts: ["Isolation","Formal art education","No education system","No performances"], ans: 1 },
+    { q: "American influence made Philippine paintings more:", opts: ["Abstract","Realistic","Invisible","Symbolic only"], ans: 1 },
+    { q: "Which is a change during the American Period?", opts: ["No schools for arts","Growth of theater and performance arts","End of all artworks","No cultural exchange"], ans: 1 },
+    { q: "Philippine arts during the American Period were influenced by:", opts: ["Spanish only","Western culture","African culture","Ancient Egypt"], ans: 1 },
+    { q: "The main effect of American influence on Philippine arts was:", opts: ["No development","Artistic change and modernization","Decline of all arts","Removal of creativity"], ans: 1 }
+  ],
+  fri: [
+    { q: "The Revolutionary Period emphasized __________ in arts.", opts: ["Entertainment","Nationalism","Technology","Foreign culture"], ans: 1 },
+    { q: "The American Period introduced __________ in Philippine arts.", opts: ["Formal education","No art development","Only folk traditions","No performances"], ans: 0 },
+    { q: "Which is a contribution of the Revolutionary Period?", opts: ["Patriotic songs","Hollywood films","Jazz music","Digital art"], ans: 0 },
+    { q: "Philippine arts today are influenced by:", opts: ["Only Spain","Only America","Both local and foreign influences","No influence"], ans: 2 },
+    { q: "The main idea of the lesson is that Philippine arts are:", opts: ["Unchanging","Influenced by history","Not important","Random"], ans: 1 }
+  ]
+};
+
+const recallItems = [
+  { desc: "🎵 A patriotic song urging Filipinos to fight for independence", period: "Revolutionary", hint: "Songs of resistance" },
+  { desc: "🏫 Formal art schools are established with Western curriculum", period: "American", hint: "Education reform" },
+  { desc: "📢 Propaganda posters with KKK symbols spread revolutionary ideas", period: "Revolutionary", hint: "Symbol of the Katipunan" },
+  { desc: "🎭 Vaudeville and variety shows become popular entertainment", period: "American", hint: "New entertainment form" },
+  { desc: "🖼️ Heroic battle scene paintings inspire Filipinos to join the cause", period: "Revolutionary", hint: "Art as a weapon" },
+  { desc: "🎨 Academic portrait painting using Western oil techniques emerges", period: "American", hint: "New art style" }
+];
+
+// ═══════════════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════════════
+let accProgress = {0:new Set(),1:new Set(),2:new Set(),3:new Set(),4:new Set()};
+let currentDay = 0;
+let quizAnswers = {};
+let recallAnswers = [];
+let selectedOpinion = '';
+let selectedPerfs = {};
+
+// ═══════════════════════════════════════════════
+// INITIALIZATION
+// ═══════════════════════════════════════════════
+window.onload = function() {
+  ['mon','tue','wed','thu','fri'].forEach(day => {
+    quizAnswers[day] = new Array(5).fill(null);
+    renderQuiz(day);
+  });
+  renderRecallGame();
+  // Open first accordion on each day
+  document.querySelectorAll('.accordion-header.open').forEach(h => {
+    const body = h.nextElementSibling;
+    if (body) body.classList.add('open');
+  });
+};
+
+// ═══════════════════════════════════════════════
+// TAB SWITCHING
+// ═══════════════════════════════════════════════
+function switchDay(n) {
+  document.querySelectorAll('.day-panel').forEach((p,i) => p.classList.toggle('active', i===n));
+  document.querySelectorAll('.tab-btn').forEach((b,i) => b.classList.toggle('active', i===n));
+  currentDay = n;
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+// ═══════════════════════════════════════════════
+// ACCORDION
+// ═══════════════════════════════════════════════
+function toggleAcc(id) {
+  const wrapper = document.getElementById(id);
+  if (!wrapper) return;
+  const header = wrapper.querySelector('.accordion-header');
+  const body = wrapper.querySelector('.accordion-body');
+  const isOpen = header.classList.contains('open');
+  header.classList.toggle('open', !isOpen);
+  body.classList.toggle('open', !isOpen);
+
+  // Track progress
+  const match = id.match(/acc(\d)-(\d)/);
+  if (match) {
+    const day = parseInt(match[1]);
+    const sec = parseInt(match[2]);
+    if (!isOpen) {
+      accProgress[day].add(sec);
+      updateProgress(day);
+    }
+  }
+}
+
+function updateProgress(day) {
+  const total = 5;
+  const done = accProgress[day].size;
+  const pct = Math.min(100, Math.round((done/total)*100));
+  const bar = document.getElementById('bar'+day);
+  const label = document.getElementById('prog'+day);
+  if (bar) bar.style.width = pct+'%';
+  if (label) label.textContent = done+' / '+total+' sections';
+}
+
+// ═══════════════════════════════════════════════
+// GALLERY
+// ═══════════════════════════════════════════════
+function showGalleryInfo(el, day, key) {
+  document.querySelectorAll('#day' + getDayNum(day) + ' .gallery-item').forEach(i => i.classList.remove('selected'));
+  el.classList.add('selected');
+  const infoId = day+'-gallery-info';
+  const box = document.getElementById(infoId);
+  if (box && galleryData[day] && galleryData[day][key]) {
+    box.textContent = galleryData[day][key];
+    box.classList.add('visible');
+  }
+}
+
+function getDayNum(day) {
+  return {mon:0,tue:1,wed:2,thu:3,fri:4}[day];
+}
+
+// ═══════════════════════════════════════════════
+// CARDS
+// ═══════════════════════════════════════════════
+function toggleCard(el) {
+  el.classList.toggle('expanded');
+}
+
+// ═══════════════════════════════════════════════
+// CHIPS
+// ═══════════════════════════════════════════════
+function toggleChip(el) {
+  el.classList.toggle('selected');
+}
+
+// ═══════════════════════════════════════════════
+// PERFORMANCE SELECTION
+// ═══════════════════════════════════════════════
+function selectPerf(el, type) {
+  const siblings = el.parentElement.querySelectorAll('.perf-option');
+  siblings.forEach(s => s.classList.remove('chosen'));
+  el.classList.add('chosen');
+  selectedPerfs[type] = true;
+}
+
+function setOpinion(el, val) {
+  selectedOpinion = val;
+  ['opt-pos','opt-neg','opt-mix'].forEach(id => {
+    const btn = document.getElementById(id);
+    if (btn) { btn.style.background = 'var(--parchment)'; btn.style.color = 'var(--indigo)'; }
+  });
+  el.style.background = 'var(--gold)';
+  el.style.color = 'var(--indigo)';
+}
+
+// ═══════════════════════════════════════════════
+// ELABORATE SUBMIT
+// ═══════════════════════════════════════════════
+function submitElaborate(day, id) {
+  const val = document.getElementById(id).value.trim();
+  const outId = day+'-share';
+  const out = document.getElementById(outId);
+  if (!out) return;
+  if (!val) {
+    out.style.display = 'block';
+    out.textContent = '⚠️ Please write your idea before sharing!';
+    out.style.borderColor = 'var(--red)';
+    return;
+  }
+  out.style.display = 'block';
+  out.style.borderColor = 'var(--green)';
+  out.innerHTML = '✅ <strong>Your idea has been recorded!</strong><br><em>"' + escHtml(val.substring(0,200)) + (val.length > 200 ? '…' : '') + '"</em><br><small style="color:var(--muted)">Great work! Share this with your classmates.</small>';
+}
+
+function submitDecode() {
+  const artwork = document.getElementById('tue-artwork-select').value;
+  const d1 = document.getElementById('tue-decode1').value.trim();
+  const d2 = document.getElementById('tue-decode2').value.trim();
+  const d3 = document.getElementById('tue-decode3').value.trim();
+  const out = document.getElementById('tue-share');
+  if (!artwork || !d1) {
+    out.style.display = 'block';
+    out.style.borderColor = 'var(--red)';
+    out.textContent = '⚠️ Please select an artwork and fill in at least the first field.';
+    return;
+  }
+  out.style.display = 'block';
+  out.style.borderColor = 'var(--green)';
+  out.innerHTML = `✅ <strong>Analysis submitted for: ${escHtml(artwork)}</strong><br>
+    <strong>Message:</strong> ${escHtml(d1)}<br>
+    ${d2 ? '<strong>Importance:</strong> ' + escHtml(d2) + '<br>' : ''}
+    ${d3 ? '<strong>Redesign idea:</strong> ' + escHtml(d3) : ''}`;
+}
+
+function submitThuElab() {
+  const d1 = document.getElementById('thu-ela1').value.trim();
+  const d2 = document.getElementById('thu-ela2').value.trim();
+  const out = document.getElementById('thu-share');
+  if (!d1) {
+    out.style.display = 'block';
+    out.style.borderColor = 'var(--red)';
+    out.textContent = '⚠️ Please answer the first question before submitting.';
+    return;
+  }
+  out.style.display = 'block';
+  out.style.borderColor = 'var(--green)';
+  out.innerHTML = `✅ <strong>Reflection recorded!</strong><br>
+    <strong>Changes observed:</strong> ${escHtml(d1)}<br>
+    ${selectedOpinion ? '<strong>Opinion:</strong> ' + selectedOpinion.charAt(0).toUpperCase() + selectedOpinion.slice(1) + '<br>' : ''}
+    ${d2 ? '<strong>Explanation:</strong> ' + escHtml(d2) : ''}`;
+}
+
+// ═══════════════════════════════════════════════
+// FILL IN BLANKS
+// ═══════════════════════════════════════════════
+function saveFillIn(day) {
+  const fills = [1,2,3].map(n => {
+    const el = document.getElementById(day+'-fill'+n);
+    return el ? el.value.trim() : '';
+  });
+  const out = document.getElementById(day+'-fill-out');
+  if (!out) return;
+  if (fills.every(f => !f)) {
+    out.style.display = 'block';
+    out.style.borderColor = 'var(--red)';
+    out.textContent = '⚠️ Please fill in at least one blank before saving.';
+    return;
+  }
+  out.style.display = 'block';
+  out.style.borderColor = 'var(--green)';
+  out.innerHTML = '✅ <strong>Answers saved!</strong><br>' + fills.filter(Boolean).map((f,i) => `${i+1}. ${escHtml(f)}`).join('<br>');
+}
+
+// ═══════════════════════════════════════════════
+// QUIZ
+// ═══════════════════════════════════════════════
+function renderQuiz(day) {
+  const container = document.getElementById('quiz-'+day);
+  if (!container) return;
+  const questions = quizData[day];
+  container.innerHTML = questions.map((q, qi) => `
+    <div class="quiz-question" id="qq-${day}-${qi}">
+      <p>${qi+1}. ${escHtml(q.q)}</p>
+      <div class="quiz-options">
+        ${q.opts.map((opt, oi) => `
+          <button class="quiz-option" onclick="selectAnswer('${day}',${qi},${oi},${q.ans})" id="qo-${day}-${qi}-${oi}">
+            ${['a','b','c','d'][oi]}. ${escHtml(opt)}
+          </button>
+        `).join('')}
+      </div>
+      <div class="quiz-feedback" id="qf-${day}-${qi}"></div>
+    </div>
+  `).join('');
+}
+
+function selectAnswer(day, qi, oi, correct) {
+  // Disable all options for this question
+  for (let i = 0; i < 4; i++) {
+    const btn = document.getElementById(`qo-${day}-${qi}-${i}`);
+    if (btn) btn.disabled = true;
+  }
+  const chosen = document.getElementById(`qo-${day}-${qi}-${oi}`);
+  const feedback = document.getElementById(`qf-${day}-${qi}`);
+  quizAnswers[day][qi] = oi;
+
+  if (oi === correct) {
+    chosen.classList.add('correct');
+    feedback.textContent = '✅ Correct! Well done.';
+    feedback.className = 'quiz-feedback show ok';
+  } else {
+    chosen.classList.add('wrong');
+    const correctBtn = document.getElementById(`qo-${day}-${qi}-${correct}`);
+    if (correctBtn) correctBtn.classList.add('correct');
+    feedback.textContent = '❌ Not quite. The correct answer is highlighted above.';
+    feedback.className = 'quiz-feedback show no';
+  }
+}
+
+function submitQuiz(day) {
+  const answers = quizAnswers[day];
+  const questions = quizData[day];
+  let score = 0;
+  answers.forEach((a, i) => { if (a === questions[i].ans) score++; });
+  const total = questions.length;
+  const pct = Math.round((score/total)*100);
+  const scoreEl = document.getElementById('score-'+day);
+  const btnEl = document.getElementById('btn-quiz-'+day);
+  if (scoreEl) {
+    scoreEl.classList.add('visible');
+    let msg = score === total ? '🌟 Perfect score! Excellent work!' :
+              pct >= 80 ? '🎉 Great job! You\'ve mastered this lesson!' :
+              pct >= 60 ? '👍 Good effort! Review the missed items.' :
+              '📚 Keep studying! Let\'s review the lesson together.';
+    scoreEl.innerHTML = `<div class="score-num">${score}/${total}</div><p>${pct}% — ${msg}</p>`;
+  }
+  if (btnEl) btnEl.style.display = 'none';
+}
+
+// ═══════════════════════════════════════════════
+// RECALL GAME (Friday)
+// ═══════════════════════════════════════════════
+function renderRecallGame() {
+  const container = document.getElementById('recall-game');
+  if (!container) return;
+  recallAnswers = new Array(recallItems.length).fill(null);
+  container.innerHTML = recallItems.map((item, i) => `
+    <div style="background:var(--white);border-radius:10px;padding:14px 16px;margin-bottom:10px;box-shadow:var(--shadow);">
+      <p style="font-size:0.88rem;font-weight:700;color:var(--indigo);margin-bottom:10px;">${i+1}. ${item.desc}</p>
+      <p style="font-size:0.75rem;color:var(--muted);margin-bottom:8px;">Hint: ${item.hint}</p>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;">
+        <button class="btn" id="recall-${i}-rev" style="background:var(--parchment);color:var(--indigo);font-size:0.82rem;"
+          onclick="answerRecall(${i},'Revolutionary')">⚔️ Revolutionary Period</button>
+        <button class="btn" id="recall-${i}-am" style="background:var(--parchment);color:var(--indigo);font-size:0.82rem;"
+          onclick="answerRecall(${i},'American')">🗽 American Period</button>
+      </div>
+      <div id="recall-fb-${i}" style="font-size:0.8rem;margin-top:8px;display:none;"></div>
+    </div>
+  `).join('') + `<button class="btn btn-primary mt-10" onclick="checkRecall()">Check My Answers ✅</button>`;
+}
+
+function answerRecall(i, period) {
+  recallAnswers[i] = period;
+  const revBtn = document.getElementById(`recall-${i}-rev`);
+  const amBtn = document.getElementById(`recall-${i}-am`);
+  if (revBtn && amBtn) {
+    revBtn.style.background = period === 'Revolutionary' ? 'var(--gold)' : 'var(--parchment)';
+    amBtn.style.background = period === 'American' ? 'var(--gold)' : 'var(--parchment)';
+  }
+}
+
+function checkRecall() {
+  let score = 0;
+  recallItems.forEach((item, i) => {
+    const fb = document.getElementById(`recall-fb-${i}`);
+    if (!fb) return;
+    fb.style.display = 'block';
+    if (recallAnswers[i] === item.period) {
+      score++;
+      fb.innerHTML = '✅ Correct! This belongs to the <strong>' + item.period + ' Period</strong>.';
+      fb.style.color = 'var(--green)';
+    } else if (recallAnswers[i]) {
+      fb.innerHTML = '❌ Not quite. This belongs to the <strong>' + item.period + ' Period</strong>.';
+      fb.style.color = 'var(--red)';
+    } else {
+      fb.innerHTML = '⚠️ You didn\'t answer this one. It belongs to the <strong>' + item.period + ' Period</strong>.';
+      fb.style.color = 'var(--muted)';
+    }
+  });
+  const scoreEl = document.getElementById('recall-score');
+  const scoreText = document.getElementById('recall-score-text');
+  if (scoreEl && scoreText) {
+    scoreEl.style.display = 'block';
+    const pct = Math.round((score/recallItems.length)*100);
+    scoreText.textContent = score + ' / ' + recallItems.length + ' correct (' + pct + '%)';
+  }
+}
+
+// ═══════════════════════════════════════════════
+// UTILITY
+// ═══════════════════════════════════════════════
+function escHtml(str) {
+  return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+</script>
+</body>
+</html>

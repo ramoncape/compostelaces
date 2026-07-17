@@ -1,0 +1,1520 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fisheries & Aquaculture – Alternative Delivery Mode</title>
+<style>
+  :root {
+    --ocean: #0a6b7c;
+    --ocean-light: #e0f4f7;
+    --ocean-mid: #1d9db8;
+    --teal: #0f8a6e;
+    --teal-light: #d4f0e8;
+    --amber: #c47a0a;
+    --amber-light: #fef3d8;
+    --coral: #d44a2a;
+    --coral-light: #fdeee9;
+    --sand: #f7f3ec;
+    --white: #ffffff;
+    --text: #1a2b2f;
+    --text-muted: #4a6a72;
+    --border: #c8dfe4;
+    --radius: 10px;
+    --success: #0f7a52;
+    --success-bg: #d4f0e6;
+    --error: #b93030;
+    --error-bg: #fce8e8;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: Georgia, 'Times New Roman', serif;
+    background: var(--sand);
+    color: var(--text);
+    font-size: 16px;
+    line-height: 1.7;
+  }
+  /* HEADER / TAB BAR */
+  #sticky-header {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    background: var(--ocean);
+    box-shadow: 0 2px 12px rgba(0,0,0,0.18);
+    transition: transform 0.3s ease;
+  }
+  #sticky-header.hidden { transform: translateY(-100%); }
+  .header-inner {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 0 1rem;
+  }
+  .header-title {
+    font-family: Georgia, serif;
+    color: #fff;
+    font-size: 13px;
+    font-weight: 400;
+    letter-spacing: 0.04em;
+    padding: 8px 0 4px;
+    opacity: 0.85;
+    text-transform: uppercase;
+  }
+  .tab-bar {
+    display: flex;
+    gap: 4px;
+    padding-bottom: 6px;
+  }
+  .tab-btn {
+    background: rgba(255,255,255,0.12);
+    color: rgba(255,255,255,0.75);
+    border: none;
+    border-radius: 6px 6px 0 0;
+    padding: 7px 18px;
+    font-family: Georgia, serif;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background 0.18s, color 0.18s;
+    white-space: nowrap;
+  }
+  .tab-btn:hover { background: rgba(255,255,255,0.22); color: #fff; }
+  .tab-btn.active {
+    background: var(--sand);
+    color: var(--ocean);
+    font-weight: 700;
+  }
+  /* MAIN CONTENT */
+  .page-content { padding-top: 90px; }
+  .day-section { display: none; }
+  .day-section.active { display: block; }
+  /* DAY HERO */
+  .day-hero {
+    background: linear-gradient(135deg, var(--ocean) 0%, var(--teal) 100%);
+    color: #fff;
+    padding: 3rem 1.5rem 2.5rem;
+    text-align: center;
+  }
+  .day-hero .day-label {
+    font-size: 13px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    opacity: 0.75;
+    margin-bottom: 0.5rem;
+  }
+  .day-hero h1 {
+    font-family: Georgia, serif;
+    font-size: clamp(1.5rem, 4vw, 2.1rem);
+    font-weight: 700;
+    line-height: 1.25;
+    margin-bottom: 0.75rem;
+  }
+  .day-hero .subtitle {
+    font-size: 1rem;
+    opacity: 0.85;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+  /* CONTENT WRAPPER */
+  .content-wrap {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 2rem 1.25rem 4rem;
+  }
+  /* OBJECTIVES */
+  .objectives-card {
+    background: var(--ocean-light);
+    border-left: 4px solid var(--ocean);
+    border-radius: 0 var(--radius) var(--radius) 0;
+    padding: 1.25rem 1.5rem;
+    margin-bottom: 2rem;
+  }
+  .objectives-card h2 {
+    font-size: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    color: var(--ocean);
+    margin-bottom: 0.6rem;
+  }
+  .objectives-card ol {
+    padding-left: 1.25rem;
+    color: var(--text);
+  }
+  .objectives-card ol li { margin-bottom: 0.3rem; }
+  /* SECTIONS */
+  .lesson-section { margin-bottom: 2.5rem; }
+  .section-tag {
+    display: inline-block;
+    background: var(--ocean);
+    color: #fff;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 3px 10px;
+    border-radius: 4px;
+    margin-bottom: 0.6rem;
+  }
+  .lesson-section h2 {
+    font-family: Georgia, serif;
+    font-size: 1.35rem;
+    color: var(--ocean);
+    margin-bottom: 0.75rem;
+    border-bottom: 2px solid var(--ocean-light);
+    padding-bottom: 0.4rem;
+  }
+  .lesson-section p { margin-bottom: 0.9rem; color: var(--text); }
+  /* INFO CARDS */
+  .info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin: 1.25rem 0;
+  }
+  .info-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.1rem 1.2rem;
+    border-top: 4px solid var(--ocean-mid);
+  }
+  .info-card.teal { border-top-color: var(--teal); }
+  .info-card.amber { border-top-color: var(--amber); }
+  .info-card.coral { border-top-color: var(--coral); }
+  .info-card h3 {
+    font-size: 0.95rem;
+    font-weight: 700;
+    margin-bottom: 0.4rem;
+    color: var(--ocean);
+  }
+  .info-card.teal h3 { color: var(--teal); }
+  .info-card.amber h3 { color: var(--amber); }
+  .info-card.coral h3 { color: var(--coral); }
+  .info-card p { font-size: 0.9rem; margin: 0; }
+  /* ACTIVITY BLOCKS */
+  .activity-block {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    margin: 1.5rem 0;
+  }
+  .activity-block .act-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+  }
+  .act-icon {
+    width: 38px; height: 38px;
+    background: var(--ocean-light);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+  .act-header h3 {
+    font-size: 1rem;
+    color: var(--ocean);
+    font-weight: 700;
+  }
+  .act-header .act-type {
+    font-size: 12px;
+    color: var(--text-muted);
+    font-family: Arial, sans-serif;
+  }
+  /* MATCHING ACTIVITY */
+  .match-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+  }
+  .match-col { display: flex; flex-direction: column; gap: 0.5rem; }
+  .match-item {
+    background: var(--sand);
+    border: 1.5px solid var(--border);
+    border-radius: 6px;
+    padding: 0.6rem 0.85rem;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: border-color 0.15s, background 0.15s;
+    user-select: none;
+  }
+  .match-item:hover { border-color: var(--ocean-mid); background: var(--ocean-light); }
+  .match-item.selected { border-color: var(--ocean); background: var(--ocean-light); font-weight: 600; }
+  .match-item.matched { border-color: var(--teal); background: var(--teal-light); cursor: default; }
+  .match-item.wrong { border-color: var(--coral); background: var(--coral-light); animation: shake 0.3s; }
+  @keyframes shake {
+    0%,100%{transform:translateX(0)} 25%{transform:translateX(-4px)} 75%{transform:translateX(4px)}
+  }
+  .match-item.label { font-weight: 700; font-size: 0.85rem; color: var(--text-muted); background: transparent; border-color: transparent; cursor: default; padding-left: 0; }
+  /* SORT ACTIVITY */
+  .sort-container { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 0.75rem 0; }
+  .sort-item {
+    background: var(--amber-light);
+    border: 1.5px solid #e8c46a;
+    border-radius: 20px;
+    padding: 0.4rem 0.85rem;
+    font-size: 0.88rem;
+    cursor: pointer;
+    transition: background 0.15s, transform 0.1s;
+  }
+  .sort-item:hover { background: #fde8a0; transform: scale(1.03); }
+  .sort-item.placed { background: var(--teal-light); border-color: var(--teal); }
+  .sort-drop-zones { display: flex; flex-direction: column; gap: 0.75rem; margin-top: 0.75rem; }
+  .sort-zone {
+    background: var(--sand);
+    border: 2px dashed var(--border);
+    border-radius: 8px;
+    padding: 0.7rem 1rem;
+    min-height: 50px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    align-items: center;
+  }
+  .sort-zone-label {
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    min-width: 100%;
+    margin-bottom: 0.25rem;
+  }
+  /* REFLECTION */
+  .reflection-area textarea {
+    width: 100%;
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    font-family: Georgia, serif;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    resize: vertical;
+    min-height: 100px;
+    background: var(--sand);
+    color: var(--text);
+    transition: border-color 0.15s;
+  }
+  .reflection-area textarea:focus { outline: none; border-color: var(--ocean); background: #fff; }
+  .reflection-area .prompt {
+    font-size: 0.92rem;
+    color: var(--text-muted);
+    margin-bottom: 0.5rem;
+    font-style: italic;
+  }
+  .save-btn {
+    margin-top: 0.6rem;
+    background: var(--ocean);
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    padding: 0.5rem 1.2rem;
+    font-family: Georgia, serif;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+  .save-btn:hover { background: var(--ocean-mid); }
+  .saved-note {
+    font-size: 0.82rem;
+    color: var(--success);
+    margin-top: 0.35rem;
+    display: none;
+  }
+  /* SCENARIO / CASE STUDY */
+  .case-box {
+    background: var(--amber-light);
+    border: 1px solid #e8c46a;
+    border-radius: var(--radius);
+    padding: 1.1rem 1.25rem;
+    margin-bottom: 1rem;
+    font-size: 0.95rem;
+  }
+  .case-box .case-title {
+    font-weight: 700;
+    color: var(--amber);
+    margin-bottom: 0.4rem;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+  }
+  /* QUIZ */
+  .quiz-section {
+    background: var(--white);
+    border: 2px solid var(--ocean);
+    border-radius: 12px;
+    padding: 1.75rem;
+    margin-top: 2.5rem;
+  }
+  .quiz-section h2 {
+    font-family: Georgia, serif;
+    font-size: 1.3rem;
+    color: var(--ocean);
+    margin-bottom: 0.4rem;
+  }
+  .quiz-section .quiz-intro {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    margin-bottom: 1.5rem;
+  }
+  .quiz-q {
+    margin-bottom: 1.75rem;
+    padding-bottom: 1.75rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .quiz-q:last-of-type { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+  .q-num {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--ocean-mid);
+    margin-bottom: 0.35rem;
+    font-family: Arial, sans-serif;
+  }
+  .q-text {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 0.85rem;
+    line-height: 1.5;
+  }
+  .options { display: flex; flex-direction: column; gap: 0.45rem; }
+  .option-btn {
+    background: var(--sand);
+    border: 1.5px solid var(--border);
+    border-radius: 7px;
+    padding: 0.65rem 1rem;
+    text-align: left;
+    font-family: Georgia, serif;
+    font-size: 0.92rem;
+    cursor: pointer;
+    transition: border-color 0.15s, background 0.15s;
+    color: var(--text);
+  }
+  .option-btn:hover:not(:disabled) { border-color: var(--ocean-mid); background: var(--ocean-light); }
+  .option-btn.correct { background: var(--success-bg); border-color: var(--success); color: var(--success); font-weight: 600; }
+  .option-btn.wrong { background: var(--error-bg); border-color: var(--error); color: var(--error); }
+  .option-btn:disabled { cursor: default; }
+  .q-feedback {
+    margin-top: 0.6rem;
+    font-size: 0.88rem;
+    line-height: 1.5;
+    padding: 0.6rem 0.9rem;
+    border-radius: 6px;
+    display: none;
+  }
+  .q-feedback.show { display: block; }
+  .q-feedback.correct { background: var(--success-bg); color: var(--success); }
+  .q-feedback.wrong { background: var(--error-bg); color: var(--error); }
+  /* Essay / short answer in quiz */
+  .essay-area {
+    width: 100%;
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    padding: 0.7rem 0.9rem;
+    font-family: Georgia, serif;
+    font-size: 0.92rem;
+    min-height: 80px;
+    resize: vertical;
+    background: var(--sand);
+    color: var(--text);
+  }
+  .essay-area:focus { outline: none; border-color: var(--ocean); background: #fff; }
+  .essay-submit {
+    margin-top: 0.5rem;
+    background: var(--ocean);
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    padding: 0.45rem 1.1rem;
+    font-family: Georgia, serif;
+    font-size: 0.88rem;
+    cursor: pointer;
+  }
+  .essay-submit:hover { background: var(--ocean-mid); }
+  .model-answer {
+    margin-top: 0.6rem;
+    font-size: 0.88rem;
+    background: var(--ocean-light);
+    border: 1px solid var(--ocean-mid);
+    border-radius: 6px;
+    padding: 0.65rem 0.9rem;
+    display: none;
+    color: var(--text);
+  }
+  .model-answer.show { display: block; }
+  .model-answer strong { color: var(--ocean); }
+  /* SCORE BAR */
+  .quiz-footer {
+    margin-top: 1.5rem;
+    text-align: center;
+    display: none;
+  }
+  .quiz-footer.show { display: block; }
+  .score-display {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--ocean);
+  }
+  .score-label { font-size: 0.9rem; color: var(--text-muted); margin-bottom: 0.5rem; }
+  .score-bar-wrap {
+    background: var(--border);
+    border-radius: 8px;
+    height: 12px;
+    overflow: hidden;
+    margin: 0.5rem auto;
+    max-width: 320px;
+  }
+  .score-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--teal), var(--ocean-mid));
+    border-radius: 8px;
+    transition: width 0.8s ease;
+  }
+  .score-message { font-size: 0.92rem; color: var(--text-muted); margin-top: 0.4rem; }
+  /* VOCAB TABLE */
+  .vocab-table { width: 100%; border-collapse: collapse; margin: 1rem 0; }
+  .vocab-table th {
+    background: var(--ocean);
+    color: #fff;
+    padding: 0.6rem 1rem;
+    text-align: left;
+    font-size: 0.88rem;
+    letter-spacing: 0.05em;
+  }
+  .vocab-table td {
+    padding: 0.55rem 1rem;
+    border-bottom: 1px solid var(--border);
+    font-size: 0.9rem;
+  }
+  .vocab-table tr:last-child td { border-bottom: none; }
+  .vocab-table tr:nth-child(even) td { background: var(--sand); }
+  /* DIVIDER */
+  .section-divider { border: none; border-top: 2px solid var(--border); margin: 2rem 0; }
+  /* RESPONSIVE */
+  @media (max-width: 560px) {
+    .match-grid { grid-template-columns: 1fr; }
+    .tab-btn { padding: 7px 10px; font-size: 13px; }
+    .info-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- STICKY HEADER -->
+<div id="sticky-header">
+  <div class="header-inner">
+    <div class="header-title">🐟 Fisheries & Aquaculture — Alternative Delivery Mode</div>
+    <div class="tab-bar">
+      <button class="tab-btn active" onclick="showDay(1)">Day 1</button>
+      <button class="tab-btn" onclick="showDay(2)">Day 2</button>
+      <button class="tab-btn" onclick="showDay(3)">Day 3</button>
+      <button class="tab-btn" onclick="showDay(4)">Day 4</button>
+    </div>
+  </div>
+</div>
+
+<div class="page-content">
+
+<!-- =========== DAY 1 =========== -->
+<div class="day-section active" id="day-1">
+  <div class="day-hero">
+    <div class="day-label">Day 1 of 4</div>
+    <h1>Government Agencies in Fisheries and Aquaculture</h1>
+    <div class="subtitle">Understanding how the government supports fish raisers and promotes sustainable fishing in the Philippines.</div>
+  </div>
+  <div class="content-wrap">
+    <div class="objectives-card">
+      <h2>Learning Objectives</h2>
+      <ol>
+        <li>Identify at least three government agencies that support fisheries and aquaculture.</li>
+        <li>Describe the specific forms of assistance each agency provides to fish raisers.</li>
+        <li>Explain why government support is important for sustainable fishing practices.</li>
+      </ol>
+    </div>
+
+    <div class="lesson-section">
+      <div class="section-tag">Key Concept</div>
+      <h2>Why Government Agencies Matter</h2>
+      <p>In the Philippines, millions of Filipinos depend on fisheries and aquaculture for their livelihood and food security. Government agencies exist to make sure that fish raisers — from small backyard fish pond operators to large aquaculture businesses — have the support they need to succeed and to practice responsible stewardship of our aquatic resources.</p>
+      <p>Government agencies do not just regulate fishing — they actively help communities grow. From providing fingerlings (baby fish) for stocking, to training farmers on modern techniques, to protecting the environment from overfishing, these agencies play a vital role in building a thriving and sustainable fish-raising industry.</p>
+    </div>
+
+    <div class="lesson-section">
+      <div class="section-tag">Core Agencies</div>
+      <h2>Key Government Agencies and Their Roles</h2>
+      <div class="info-grid">
+        <div class="info-card">
+          <h3>BFAR</h3>
+          <p><strong>Bureau of Fisheries and Aquatic Resources</strong> — provides technical training, fingerlings, fishing equipment, and enforces fisheries laws to promote sustainable practices.</p>
+        </div>
+        <div class="info-card teal">
+          <h3>DA</h3>
+          <p><strong>Department of Agriculture</strong> — oversees agriculture-related fishery programs and provides financial and technical assistance to farming communities.</p>
+        </div>
+        <div class="info-card amber">
+          <h3>DENR</h3>
+          <p><strong>Department of Environment and Natural Resources</strong> — protects aquatic ecosystems, enforces environmental laws, and manages coastal and marine areas.</p>
+        </div>
+        <div class="info-card coral">
+          <h3>LGU</h3>
+          <p><strong>Local Government Units</strong> — implement local fisheries ordinances, manage municipal waters, and deliver livelihood programs to local fish raisers.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="lesson-section">
+      <div class="section-tag">Forms of Assistance</div>
+      <h2>How the Government Helps Fish Raisers</h2>
+      <p>Government support comes in many forms. Understanding these can help you, as a fish raiser or future fish raiser, take full advantage of what is available to you:</p>
+      <ul style="padding-left:1.4rem; margin-bottom:1rem;">
+        <li><strong>Technical Assistance:</strong> Experts visit fish farms to advise on better methods of fish care and disease prevention.</li>
+        <li><strong>Training Programs:</strong> Seminars and workshops on modern fish farming techniques, water quality management, and post-harvest handling.</li>
+        <li><strong>Loans and Financial Support:</strong> Low-interest loans through agencies like LandBank and DBP help fish raisers buy equipment and expand their operations.</li>
+        <li><strong>Fingerlings and Feeds:</strong> Government hatcheries distribute fingerlings — baby fish — to stock fish ponds, often at low or no cost to qualified farmers.</li>
+        <li><strong>Livelihood Programs:</strong> Community-based programs that help displaced or marginalized fisherfolk start or improve their fish-raising projects.</li>
+        <li><strong>Research and Development:</strong> BFAR and state universities conduct research on new fish species, feeding techniques, and disease treatments, then share results with farmers.</li>
+        <li><strong>Environmental Protection:</strong> Enforcement of laws against illegal fishing, coral reef protection, and mangrove reforestation to ensure a healthy environment for aquatic life.</li>
+        <li><strong>Marketing Assistance:</strong> Trade fairs, market linkages, and promotion of fish products to help farmers sell their harvest at fair prices.</li>
+      </ul>
+    </div>
+
+    <hr class="section-divider">
+
+    <!-- ACTIVITY 1: MATCHING -->
+    <div class="activity-block" id="d1-match">
+      <div class="act-header">
+        <div class="act-icon">🔗</div>
+        <div>
+          <div class="act-type">Learning Activity 1</div>
+          <h3>Match the Agency to Its Role</h3>
+        </div>
+      </div>
+      <p style="font-size:0.92rem;color:var(--text-muted);margin-bottom:0.8rem;">Click an agency on the left, then click its matching role on the right. Try to match all four!</p>
+      <div class="match-grid">
+        <div class="match-col" id="d1-agencies">
+          <div class="match-item label">Agency</div>
+          <div class="match-item" data-key="bfar" data-side="left" onclick="matchClick(this,'d1')">BFAR</div>
+          <div class="match-item" data-key="da" data-side="left" onclick="matchClick(this,'d1')">DA</div>
+          <div class="match-item" data-key="denr" data-side="left" onclick="matchClick(this,'d1')">DENR</div>
+          <div class="match-item" data-key="lgu" data-side="left" onclick="matchClick(this,'d1')">LGU</div>
+        </div>
+        <div class="match-col" id="d1-roles">
+          <div class="match-item label">Role</div>
+          <div class="match-item" data-key="lgu" data-side="right" onclick="matchClick(this,'d1')">Manages municipal waters and delivers local livelihood programs</div>
+          <div class="match-item" data-key="denr" data-side="right" onclick="matchClick(this,'d1')">Protects aquatic ecosystems and enforces environmental laws</div>
+          <div class="match-item" data-key="bfar" data-side="right" onclick="matchClick(this,'d1')">Provides fingerlings, training, and enforces fisheries laws</div>
+          <div class="match-item" data-key="da" data-side="right" onclick="matchClick(this,'d1')">Provides financial and technical assistance to farming communities</div>
+        </div>
+      </div>
+      <div id="d1-match-msg" style="font-size:0.9rem;color:var(--teal);font-weight:600;margin-top:0.5rem;display:none;">✅ Excellent! All agencies matched correctly!</div>
+    </div>
+
+    <!-- ACTIVITY 2: REFLECTION -->
+    <div class="activity-block">
+      <div class="act-header">
+        <div class="act-icon">✍️</div>
+        <div>
+          <div class="act-type">Learning Activity 2</div>
+          <h3>Think and Write</h3>
+        </div>
+      </div>
+      <div class="case-box">
+        <div class="case-title">Scenario</div>
+        Mang Andoy is a fish raiser from Pampanga who wants to expand his tilapia fish pond but does not have enough money for new fingerlings and feed. His pond water has also become murky and he is unsure why.
+      </div>
+      <div class="reflection-area">
+        <div class="prompt">Which government agency or agencies could help Mang Andoy, and what specific assistance could they provide? Explain your answer in 3–5 sentences.</div>
+        <textarea id="ref-d1" placeholder="Write your answer here..."></textarea>
+        <button class="save-btn" onclick="saveReflection('ref-d1','ref-d1-saved')">Save My Answer</button>
+        <div class="saved-note" id="ref-d1-saved">✅ Answer saved for your review.</div>
+      </div>
+      <div class="model-answer show" style="margin-top:0.75rem;">
+        <strong>Guide Answer:</strong> Mang Andoy can approach <em>BFAR</em> for free or subsidized fingerlings and technical training on water quality management. The <em>DA</em> can connect him to loan programs through LandBank for additional capital. The <em>DENR</em> may also assist if the water quality problem is linked to pollution from outside sources. His <em>LGU</em> can help link him to local livelihood programs and inform him of local ordinances affecting his fish pond. Using multiple agencies increases Mang Andoy's chances of solving both his financial and environmental problems.
+      </div>
+    </div>
+
+    <!-- QUIZ DAY 1 -->
+    <div class="quiz-section" id="quiz-day1">
+      <h2>📝 Day 1 Assessment</h2>
+      <div class="quiz-intro">Answer all five questions. You will see feedback after each choice. Questions requiring written answers will show a model answer after you submit.</div>
+      <div id="quiz1-items"></div>
+      <div class="quiz-footer" id="q1-footer">
+        <div class="score-label">Your score on multiple-choice questions:</div>
+        <div class="score-display" id="q1-score">0 / 3</div>
+        <div class="score-bar-wrap"><div class="score-bar-fill" id="q1-bar" style="width:0%"></div></div>
+        <div class="score-message" id="q1-msg"></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- =========== DAY 2 =========== -->
+<div class="day-section" id="day-2">
+  <div class="day-hero" style="background: linear-gradient(135deg, #0f6e56 0%, #0a6b7c 100%);">
+    <div class="day-label">Day 2 of 4</div>
+    <h1>Non-Government Organizations (NGOs) in Fisheries</h1>
+    <div class="subtitle">Discovering how private organizations partner with communities and government to protect and develop aquatic resources.</div>
+  </div>
+  <div class="content-wrap">
+    <div class="objectives-card" style="background:#d4f0e8;border-color:var(--teal);">
+      <h2 style="color:var(--teal);">Learning Objectives</h2>
+      <ol>
+        <li>Define what an NGO is and how it differs from a government agency.</li>
+        <li>Identify the types of assistance NGOs provide to fishing communities.</li>
+        <li>Analyze why cooperation between government, NGOs, and communities is essential for sustainable fisheries.</li>
+      </ol>
+    </div>
+
+    <div class="lesson-section">
+      <div class="section-tag">Key Concept</div>
+      <h2>What Is an NGO?</h2>
+      <p>A <strong>Non-Government Organization (NGO)</strong> is a private, non-profit group that works to help people and protect the environment — not to earn money for owners or shareholders. Unlike government agencies, NGOs are not run by the government. They are usually funded by donations, grants, and membership fees.</p>
+      <p>In the Philippines, many NGOs focus on helping fishing communities, protecting marine ecosystems, promoting sustainable livelihoods, and educating fisherfolk and fish raisers about better practices. Some well-known NGOs in the fisheries sector include <em>Haribon Foundation</em>, <em>Coastal Conservation and Education Foundation (CCEF)</em>, and <em>WWF-Philippines</em>.</p>
+    </div>
+
+    <div class="lesson-section">
+      <div class="section-tag">Forms of Support</div>
+      <h2>How NGOs Help Fishing Communities</h2>
+      <div class="info-grid">
+        <div class="info-card">
+          <h3>Education</h3>
+          <p>NGOs conduct community workshops, produce learning materials, and train fisherfolk on sustainable fishing methods and environmental care.</p>
+        </div>
+        <div class="info-card teal">
+          <h3>Livelihood Support</h3>
+          <p>They help communities develop alternative livelihoods such as seaweed farming, eco-tourism, and fish processing to reduce pressure on fish stocks.</p>
+        </div>
+        <div class="info-card amber">
+          <h3>Environmental Conservation</h3>
+          <p>NGOs lead mangrove reforestation, coral reef rehabilitation, and marine protected area (MPA) management in partnership with communities.</p>
+        </div>
+        <div class="info-card coral">
+          <h3>Technical Assistance</h3>
+          <p>They provide expert advice on water quality, fish health, eco-friendly fish raising methods, and sustainable aquaculture technologies.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="lesson-section">
+      <div class="section-tag">Cooperation</div>
+      <h2>Why Cooperation Is Key</h2>
+      <p>No single organization — whether government or NGO — can solve all the challenges facing Philippine fisheries alone. Sustainable fisheries are built on <strong>cooperation</strong> among three key groups:</p>
+      <ul style="padding-left:1.4rem;margin-bottom:0.9rem;">
+        <li><strong>Government Agencies</strong> — provide laws, funding, and technical support</li>
+        <li><strong>NGOs</strong> — bring grassroots engagement, environmental expertise, and community organizing</li>
+        <li><strong>Community Members</strong> — implement practices, report illegal activities, and sustain local traditions</li>
+      </ul>
+      <p>When all three work together, the result is stronger: fish stocks recover, communities prosper, and aquatic ecosystems are preserved for future generations.</p>
+    </div>
+
+    <hr class="section-divider">
+
+    <!-- ACTIVITY: SORT -->
+    <div class="activity-block" id="d2-sort-block">
+      <div class="act-header">
+        <div class="act-icon">📂</div>
+        <div>
+          <div class="act-type">Learning Activity 1</div>
+          <h3>Sort the Type of Support</h3>
+        </div>
+      </div>
+      <p style="font-size:0.92rem;color:var(--text-muted);margin-bottom:0.8rem;">Click each support type below to assign it to either <em>Government</em> or <em>NGO</em>. Some may fit both — choose the <em>primary</em> provider.</p>
+      <div class="sort-container" id="d2-pool"></div>
+      <div class="sort-drop-zones">
+        <div>
+          <div class="sort-zone-label">🏛️ Government Agency</div>
+          <div class="sort-zone" id="zone-gov"></div>
+        </div>
+        <div>
+          <div class="sort-zone-label">🤝 NGO</div>
+          <div class="sort-zone" id="zone-ngo"></div>
+        </div>
+      </div>
+      <button onclick="checkSort2()" style="margin-top:1rem;background:var(--teal);color:#fff;border:none;border-radius:6px;padding:0.5rem 1.2rem;font-family:Georgia,serif;font-size:0.9rem;cursor:pointer;">Check Answers</button>
+      <div id="d2-sort-result" style="margin-top:0.7rem;font-size:0.9rem;display:none;"></div>
+    </div>
+
+    <!-- ACTIVITY: REFLECTION -->
+    <div class="activity-block">
+      <div class="act-header">
+        <div class="act-icon">💬</div>
+        <div>
+          <div class="act-type">Learning Activity 2</div>
+          <h3>Community Analysis</h3>
+        </div>
+      </div>
+      <div class="case-box">
+        <div class="case-title">Scenario</div>
+        A coastal barangay in Quezon Province has been experiencing declining fish catch for the past three years. The fisherfolk believe illegal fishing by outsiders is destroying their livelihood. No government agency has visited the barangay in two years.
+      </div>
+      <div class="reflection-area">
+        <div class="prompt">How could an NGO help this barangay, and how should it coordinate with the government and community to solve the problem? Discuss at least two specific strategies.</div>
+        <textarea id="ref-d2" placeholder="Write your answer here..."></textarea>
+        <button class="save-btn" onclick="saveReflection('ref-d2','ref-d2-saved')">Save My Answer</button>
+        <div class="saved-note" id="ref-d2-saved">✅ Answer saved for your review.</div>
+      </div>
+      <div class="model-answer show" style="margin-top:0.75rem;">
+        <strong>Guide Answer:</strong> An NGO could first conduct a community needs assessment by interviewing fisherfolk to document the extent of the problem. They could then organize the community to establish a <em>Marine Protected Area (MPA)</em> and train bantay-dagat (sea wardens) to monitor illegal fishing. Simultaneously, the NGO should coordinate with BFAR and the LGU to restore government services and ensure legal enforcement against illegal fishers. The NGO can also introduce alternative livelihoods such as seaweed farming or eco-tourism to reduce pressure on fish stocks while stocks recover.
+      </div>
+    </div>
+
+    <!-- QUIZ DAY 2 -->
+    <div class="quiz-section" id="quiz-day2">
+      <h2>📝 Day 2 Assessment</h2>
+      <div class="quiz-intro">Answer all five questions. Feedback is provided after each response.</div>
+      <div id="quiz2-items"></div>
+      <div class="quiz-footer" id="q2-footer">
+        <div class="score-label">Your score on multiple-choice questions:</div>
+        <div class="score-display" id="q2-score">0 / 3</div>
+        <div class="score-bar-wrap"><div class="score-bar-fill" id="q2-bar" style="width:0%"></div></div>
+        <div class="score-message" id="q2-msg"></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- =========== DAY 3 =========== -->
+<div class="day-section" id="day-3">
+  <div class="day-hero" style="background: linear-gradient(135deg, #8a5a0a 0%, #ba7517 100%);">
+    <div class="day-label">Day 3 of 4</div>
+    <h1>Personal and Entrepreneurial Characteristics of Successful Fish Raisers</h1>
+    <div class="subtitle">Exploring the values, habits, and mindset that drive success in fish raising.</div>
+  </div>
+  <div class="content-wrap">
+    <div class="objectives-card" style="background:var(--amber-light);border-color:var(--amber);">
+      <h2 style="color:var(--amber);">Learning Objectives</h2>
+      <ol>
+        <li>Identify at least five personal and entrepreneurial characteristics of successful fish raisers.</li>
+        <li>Evaluate how each characteristic contributes to overcoming challenges in fish raising.</li>
+        <li>Reflect on which characteristics you already have and which you can develop further.</li>
+      </ol>
+    </div>
+
+    <div class="lesson-section">
+      <div class="section-tag">Character Matters</div>
+      <h2>Why Character Drives Success</h2>
+      <p>Fish raising is more than just filling a pond with fish and waiting to harvest them. It requires daily attention, wise decisions, the ability to handle setbacks, and the discipline to follow through on plans. Knowledge alone is not enough — a successful fish raiser must also possess strong <strong>personal and entrepreneurial characteristics</strong>.</p>
+      <p>These characteristics are not things people are simply born with. They are habits and values that can be learned, practiced, and developed over time — starting right now, in school and in the community.</p>
+    </div>
+
+    <div class="lesson-section">
+      <div class="section-tag">Key Traits</div>
+      <h2>Essential Characteristics</h2>
+      <div class="info-grid">
+        <div class="info-card">
+          <h3>🌅 Diligence</h3>
+          <p>Working hard and consistently every day — monitoring water quality, feeding fish on schedule, and maintaining equipment — even when results are slow.</p>
+        </div>
+        <div class="info-card teal">
+          <h3>⏳ Patience</h3>
+          <p>Fish raising takes time. A successful fish raiser waits for fish to grow to market size without rushing the harvest and losing profit.</p>
+        </div>
+        <div class="info-card amber">
+          <h3>📋 Responsibility</h3>
+          <p>Taking ownership of both successes and failures. A responsible fish raiser does not blame others when things go wrong but instead looks for solutions.</p>
+        </div>
+        <div class="info-card coral">
+          <h3>📚 Willingness to Learn</h3>
+          <p>Attending seminars, reading extension bulletins, and asking experts for advice to continuously improve fish raising methods.</p>
+        </div>
+        <div class="info-card">
+          <h3>📊 Proper Planning</h3>
+          <p>Setting production goals, scheduling feeding and harvesting, managing cash flow, and preparing for risks such as floods and disease outbreaks.</p>
+        </div>
+        <div class="info-card teal">
+          <h3>🌿 Environmental Stewardship</h3>
+          <p>Caring for the water, soil, and surrounding ecosystem as an investment in long-term productivity, not just a regulation to follow.</p>
+        </div>
+        <div class="info-card amber">
+          <h3>💰 Financial Management</h3>
+          <p>Keeping records of income and expenses, avoiding unnecessary debt, and reinvesting profits wisely to grow the fish-raising enterprise.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="lesson-section">
+      <div class="section-tag">Success Formula</div>
+      <h2>What Brings Lasting Success</h2>
+      <p>Success in fish raising is not a lucky accident. It results from three things working together:</p>
+      <ol style="padding-left:1.4rem;margin-bottom:1rem;">
+        <li><strong>Continuous Learning</strong> — Always updating knowledge about new techniques, market trends, and environmental changes.</li>
+        <li><strong>Responsible Practices</strong> — Using resources wisely, following laws, and treating workers and the environment with respect.</li>
+        <li><strong>Community and Organizational Support</strong> — Building relationships with neighbors, government agencies, and NGOs to get help and share knowledge.</li>
+      </ol>
+    </div>
+
+    <hr class="section-divider">
+
+    <!-- ACTIVITY: SELF-ASSESSMENT -->
+    <div class="activity-block">
+      <div class="act-header">
+        <div class="act-icon">🪞</div>
+        <div>
+          <div class="act-type">Learning Activity 1</div>
+          <h3>Self-Reflection: My Strengths as a Future Fish Raiser</h3>
+        </div>
+      </div>
+      <p style="font-size:0.92rem;color:var(--text-muted);margin-bottom:1rem;">Rate yourself on each characteristic. Be honest — there are no wrong answers here.</p>
+      <div id="self-assess-grid" style="display:flex;flex-direction:column;gap:0.75rem;"></div>
+      <div id="self-assess-result" style="margin-top:1rem;font-size:0.92rem;display:none;"></div>
+      <button onclick="showSelfResult()" style="margin-top:1rem;background:var(--amber);color:#fff;border:none;border-radius:6px;padding:0.5rem 1.2rem;font-family:Georgia,serif;font-size:0.9rem;cursor:pointer;">See My Profile</button>
+    </div>
+
+    <!-- ACTIVITY: CASE STUDY -->
+    <div class="activity-block">
+      <div class="act-header">
+        <div class="act-icon">🐠</div>
+        <div>
+          <div class="act-type">Learning Activity 2</div>
+          <h3>Case Study: Aling Rosa's Fish Farm</h3>
+        </div>
+      </div>
+      <div class="case-box">
+        <div class="case-title">Read and Analyze</div>
+        Aling Rosa is a fish raiser in Laguna. She started with a small pond stocked with bangus fingerlings she received from BFAR. Every morning, she checks her water quality, records the amount of feed used, and photographs any unusual fish behavior to show to the BFAR technician. When a flood damaged half her pond last year, she did not give up. Instead, she borrowed from a cooperative and attended a training on flood-resistant aquaculture. This year, her harvest doubled.
+      </div>
+      <div class="reflection-area">
+        <div class="prompt">Identify at least four characteristics Aling Rosa displayed. For each, give a specific example from the story and explain how it contributed to her success.</div>
+        <textarea id="ref-d3" placeholder="Write your answer here..."></textarea>
+        <button class="save-btn" onclick="saveReflection('ref-d3','ref-d3-saved')">Save My Answer</button>
+        <div class="saved-note" id="ref-d3-saved">✅ Answer saved for your review.</div>
+      </div>
+      <div class="model-answer show" style="margin-top:0.75rem;">
+        <strong>Guide Answer:</strong> (1) <em>Diligence</em> — She checks water quality and records feeding daily, ensuring fish stay healthy. (2) <em>Responsibility</em> — She documents unusual fish behavior and consults an expert, taking ownership of her farm's health. (3) <em>Willingness to Learn</em> — After the flood, she attended training on flood-resistant aquaculture instead of giving up. (4) <em>Proper Planning / Financial Management</em> — She accessed cooperative loans strategically, avoiding despair and enabling recovery. (5) <em>Patience and Perseverance</em> — Despite losing half her pond, she continued and doubled her harvest the following year.
+      </div>
+    </div>
+
+    <!-- QUIZ DAY 3 -->
+    <div class="quiz-section" id="quiz-day3">
+      <h2>📝 Day 3 Assessment</h2>
+      <div class="quiz-intro">Answer all five questions thoughtfully. Higher-order questions require written responses.</div>
+      <div id="quiz3-items"></div>
+      <div class="quiz-footer" id="q3-footer">
+        <div class="score-label">Your score on multiple-choice questions:</div>
+        <div class="score-display" id="q3-score">0 / 3</div>
+        <div class="score-bar-wrap"><div class="score-bar-fill" id="q3-bar" style="width:0%"></div></div>
+        <div class="score-message" id="q3-msg"></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- =========== DAY 4 =========== -->
+<div class="day-section" id="day-4">
+  <div class="day-hero" style="background: linear-gradient(135deg, #3b3b8a 0%, #5a3ab0 100%);">
+    <div class="day-label">Day 4 of 4</div>
+    <h1>Sustainable Fish Raising Through Cooperation and Problem-Solving</h1>
+    <div class="subtitle">Putting it all together: how fish raisers, government, NGOs, and communities build a thriving, responsible industry.</div>
+  </div>
+  <div class="content-wrap">
+    <div class="objectives-card" style="background:#eeecfe;border-color:#534ab7;">
+      <h2 style="color:#534ab7;">Learning Objectives</h2>
+      <ol>
+        <li>Explain what sustainable fish raising means and why it matters for future generations.</li>
+        <li>Analyze how different stakeholders cooperate to solve problems in fish raising.</li>
+        <li>Create a simple action plan to address a specific challenge in fish raising using available resources.</li>
+      </ol>
+    </div>
+
+    <div class="lesson-section">
+      <div class="section-tag">Big Picture</div>
+      <h2>What Is Sustainable Fish Raising?</h2>
+      <p><strong>Sustainable fish raising</strong> means producing fish in a way that meets the needs of today without destroying the resources that future generations will need. It balances three things:</p>
+      <ul style="padding-left:1.4rem;margin-bottom:1rem;">
+        <li><strong>Economic Sustainability:</strong> Fish raising must be profitable so farmers can continue their livelihood.</li>
+        <li><strong>Environmental Sustainability:</strong> Aquatic resources — water, fish, coral, mangroves — must be protected and replenished.</li>
+        <li><strong>Social Sustainability:</strong> Benefits must reach communities fairly, and practices must respect local culture and traditions.</li>
+      </ul>
+      <p>No single person, organization, or agency can achieve all three alone. That is why <strong>cooperation</strong> is the foundation of sustainable fish raising.</p>
+    </div>
+
+    <div class="lesson-section">
+      <div class="section-tag">Stakeholders</div>
+      <h2>Everyone Has a Role</h2>
+      <div class="info-grid">
+        <div class="info-card">
+          <h3>Fish Raisers</h3>
+          <p>Apply sustainable methods, keep records, report problems early, and participate actively in community organizations and cooperative programs.</p>
+        </div>
+        <div class="info-card teal">
+          <h3>Government Agencies</h3>
+          <p>Enforce laws, fund research, distribute resources, and coordinate large-scale programs that no individual farmer or NGO can do alone.</p>
+        </div>
+        <div class="info-card amber">
+          <h3>NGOs</h3>
+          <p>Bridge the gap between government policies and community realities, provide hands-on training, and advocate for sustainable practices at all levels.</p>
+        </div>
+        <div class="info-card coral">
+          <h3>Community</h3>
+          <p>Monitor local resources, practice bantay-dagat, support cooperative buying and selling, and pass down environmental values to younger generations.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="lesson-section">
+      <div class="section-tag">Problem-Solving</div>
+      <h2>How Successful Fish Raisers Solve Problems</h2>
+      <p>Problems in fish raising are unavoidable — floods, disease, falling fish prices, water pollution. What separates successful fish raisers from those who give up is <em>how</em> they respond. Here is a five-step approach used by the best fish raisers in the Philippines:</p>
+      <ol style="padding-left:1.4rem;margin-bottom:1rem;">
+        <li><strong>Planning:</strong> Anticipate risks before they happen. Set contingency budgets and maintain backup supplies.</li>
+        <li><strong>Perseverance:</strong> Stay committed during hard times. View failures as lessons, not defeats.</li>
+        <li><strong>Continuous Learning:</strong> Seek new information from BFAR, NGOs, and fellow fish raisers after every challenge.</li>
+        <li><strong>Responsible Resource Management:</strong> Never overstock ponds, never use banned chemicals, and always maintain water quality standards.</li>
+        <li><strong>Collaboration:</strong> Reach out to neighbors, cooperatives, government technicians, and NGO workers. No fish raiser succeeds alone.</li>
+      </ol>
+    </div>
+
+    <hr class="section-divider">
+
+    <!-- ACTIVITY: ACTION PLAN -->
+    <div class="activity-block">
+      <div class="act-header">
+        <div class="act-icon">📣</div>
+        <div>
+          <div class="act-type">Learning Activity 1</div>
+          <h3>Build a Simple Action Plan</h3>
+        </div>
+      </div>
+      <div class="case-box">
+        <div class="case-title">Challenge</div>
+        A group of fish raisers in your barangay has noticed that their tilapia is dying in large numbers every summer when water temperatures rise. They have no idea what to do, and they cannot afford to lose another harvest.
+      </div>
+      <div id="action-plan-form" style="display:flex;flex-direction:column;gap:0.85rem;margin-top:0.75rem;">
+        <div>
+          <label style="font-size:0.88rem;color:var(--text-muted);display:block;margin-bottom:0.3rem;">1. What is the most likely cause of the problem?</label>
+          <textarea class="essay-area" id="ap1" placeholder="Identify the root cause..."></textarea>
+        </div>
+        <div>
+          <label style="font-size:0.88rem;color:var(--text-muted);display:block;margin-bottom:0.3rem;">2. Which government agency or NGO can help, and what assistance would you request?</label>
+          <textarea class="essay-area" id="ap2" placeholder="Name specific organizations and what to ask for..."></textarea>
+        </div>
+        <div>
+          <label style="font-size:0.88rem;color:var(--text-muted);display:block;margin-bottom:0.3rem;">3. What actions can the fish raisers take immediately with their own resources?</label>
+          <textarea class="essay-area" id="ap3" placeholder="List practical steps the community can take now..."></textarea>
+        </div>
+        <div>
+          <label style="font-size:0.88rem;color:var(--text-muted);display:block;margin-bottom:0.3rem;">4. How will you prevent this problem in the future?</label>
+          <textarea class="essay-area" id="ap4" placeholder="Describe your long-term prevention strategy..."></textarea>
+        </div>
+        <button onclick="showActionPlan()" class="save-btn" style="width:fit-content;">Submit My Action Plan</button>
+        <div id="ap-saved" class="saved-note">✅ Action plan saved!</div>
+      </div>
+      <div class="model-answer" id="ap-model" style="margin-top:0.75rem;">
+        <strong>Guide Answer:</strong><br>
+        <em>Cause:</em> High summer temperatures reduce dissolved oxygen in the water, causing fish to suffocate — a condition called thermal stratification.<br>
+        <em>Assistance:</em> BFAR technicians can test water quality and recommend aeration systems; LGU may provide emergency fingerlings after the loss; an NGO like CCEF might offer training on heat-resilient farming methods.<br>
+        <em>Immediate actions:</em> Install paddlewheels or air pumps to aerate the water; reduce stocking density; feed fish early morning and late afternoon when temperatures are cooler; shade part of the pond with nets.<br>
+        <em>Prevention:</em> Monitor water temperature daily during summer; join a cooperative to share the cost of aeration equipment; plant trees around pond edges for natural shade; participate in BFAR climate-resilient aquaculture training.
+      </div>
+    </div>
+
+    <!-- QUIZ DAY 4 -->
+    <div class="quiz-section" id="quiz-day4">
+      <h2>📝 Day 4 Assessment — Final Review</h2>
+      <div class="quiz-intro">This final assessment covers the full four-day module. Show what you have learned!</div>
+      <div id="quiz4-items"></div>
+      <div class="quiz-footer" id="q4-footer">
+        <div class="score-label">Your score on multiple-choice questions:</div>
+        <div class="score-display" id="q4-score">0 / 3</div>
+        <div class="score-bar-wrap"><div class="score-bar-fill" id="q4-bar" style="width:0%"></div></div>
+        <div class="score-message" id="q4-msg"></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+</div><!-- end page-content -->
+
+<script>
+// ---- HEADER HIDE ON SCROLL ----
+let lastScroll = 0;
+const header = document.getElementById('sticky-header');
+window.addEventListener('scroll', () => {
+  const cur = window.scrollY;
+  if (cur > lastScroll && cur > 80) header.classList.add('hidden');
+  else header.classList.remove('hidden');
+  lastScroll = cur;
+}, {passive:true});
+
+// ---- TAB SWITCHING ----
+function showDay(n) {
+  document.querySelectorAll('.day-section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('day-'+n).classList.add('active');
+  document.querySelectorAll('.tab-btn')[n-1].classList.add('active');
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+// ---- SAVE REFLECTION ----
+function saveReflection(id, savedId) {
+  document.getElementById(savedId).style.display = 'block';
+  setTimeout(() => { document.getElementById(savedId).style.display = 'none'; }, 3000);
+}
+
+// ---- MATCHING ACTIVITY ----
+let matchState = {};
+function matchClick(el, gameId) {
+  if (el.classList.contains('matched')) return;
+  const side = el.dataset.side;
+  if (!matchState[gameId]) matchState[gameId] = {left:null, right:null};
+  const ms = matchState[gameId];
+  // deselect same side
+  document.querySelectorAll(`#${gameId}-agencies .match-item, #${gameId}-roles .match-item`).forEach(i => {
+    if (i.dataset.side === side && i !== el) i.classList.remove('selected');
+  });
+  el.classList.toggle('selected');
+  if (el.classList.contains('selected')) ms[side] = el;
+  else { ms[side] = null; return; }
+  if (ms.left && ms.right) {
+    if (ms.left.dataset.key === ms.right.dataset.key) {
+      ms.left.classList.remove('selected'); ms.left.classList.add('matched');
+      ms.right.classList.remove('selected'); ms.right.classList.add('matched');
+      ms.left = null; ms.right = null;
+      const all = document.querySelectorAll(`#${gameId}-agencies .match-item:not(.label), #${gameId}-roles .match-item:not(.label)`);
+      if ([...all].every(i => i.classList.contains('matched'))) {
+        document.getElementById(`${gameId}-match-msg`).style.display = 'block';
+      }
+    } else {
+      ms.left.classList.add('wrong'); ms.right.classList.add('wrong');
+      setTimeout(() => {
+        ms.left.classList.remove('wrong','selected');
+        ms.right.classList.remove('wrong','selected');
+        ms.left = null; ms.right = null;
+      }, 700);
+    }
+  }
+}
+
+// ---- DAY 2 SORT ACTIVITY ----
+const sortItems2 = [
+  {text:'Distribute fingerlings to farmers', zone:'gov'},
+  {text:'Lead coral reef rehabilitation', zone:'ngo'},
+  {text:'Enforce fisheries laws', zone:'gov'},
+  {text:'Organize community sea wardens', zone:'ngo'},
+  {text:'Provide low-interest loans', zone:'gov'},
+  {text:'Run mangrove planting drives', zone:'ngo'},
+  {text:'Conduct scientific fish research', zone:'gov'},
+  {text:'Train fisherfolk on eco-tourism', zone:'ngo'},
+];
+let sort2State = {};
+function initSort2() {
+  const pool = document.getElementById('d2-pool');
+  pool.innerHTML = '';
+  sort2State = {};
+  sortItems2.forEach((item,i) => {
+    sort2State[i] = null;
+    const el = document.createElement('div');
+    el.className = 'sort-item';
+    el.textContent = item.text;
+    el.dataset.idx = i;
+    el.onclick = function() { cycleSort2(this); };
+    pool.appendChild(el);
+  });
+  document.getElementById('zone-gov').innerHTML = '';
+  document.getElementById('zone-ngo').innerHTML = '';
+  document.getElementById('d2-sort-result').style.display = 'none';
+}
+function cycleSort2(el) {
+  const idx = parseInt(el.dataset.idx);
+  const cur = sort2State[idx];
+  if (!cur) {
+    sort2State[idx] = 'gov';
+    el.classList.add('placed');
+    document.getElementById('zone-gov').appendChild(el);
+  } else if (cur === 'gov') {
+    sort2State[idx] = 'ngo';
+    document.getElementById('zone-ngo').appendChild(el);
+  } else {
+    sort2State[idx] = null;
+    el.classList.remove('placed');
+    document.getElementById('d2-pool').appendChild(el);
+  }
+}
+function checkSort2() {
+  let correct = 0;
+  sortItems2.forEach((item,i) => {
+    if (sort2State[i] === item.zone) correct++;
+  });
+  const res = document.getElementById('d2-sort-result');
+  res.style.display = 'block';
+  const pct = Math.round(correct/sortItems2.length*100);
+  if (correct === sortItems2.length) {
+    res.style.color = 'var(--success)';
+    res.textContent = '✅ Perfect! All '+sortItems2.length+' items correctly sorted!';
+  } else {
+    res.style.color = 'var(--error)';
+    res.textContent = `You got ${correct} of ${sortItems2.length} correct (${pct}%). Review the lesson and try again!`;
+  }
+}
+
+// ---- DAY 3 SELF-ASSESSMENT ----
+const traits = ['Diligence','Patience','Responsibility','Willingness to Learn','Proper Planning','Environmental Stewardship','Financial Management'];
+function initSelfAssess() {
+  const grid = document.getElementById('self-assess-grid');
+  traits.forEach((t,i) => {
+    const row = document.createElement('div');
+    row.style.cssText = 'display:flex;align-items:center;gap:0.75rem;flex-wrap:wrap;';
+    row.innerHTML = `<span style="min-width:200px;font-size:0.92rem;font-weight:600;">${t}</span>
+      <div style="display:flex;gap:0.4rem;">
+        ${[1,2,3,4,5].map(v=>`<label style="display:flex;flex-direction:column;align-items:center;gap:2px;font-size:0.78rem;color:var(--text-muted);cursor:pointer;">
+          <input type="radio" name="trait${i}" value="${v}" style="accent-color:var(--amber);">
+          ${v===1?'Low':v===3?'OK':v===5?'High':''}
+        </label>`).join('')}
+      </div>`;
+    grid.appendChild(row);
+  });
+}
+function showSelfResult() {
+  let total = 0, count = 0;
+  const weak = [], strong = [];
+  traits.forEach((t,i) => {
+    const sel = document.querySelector(`input[name="trait${i}"]:checked`);
+    if (sel) { const v = parseInt(sel.value); total+=v; count++; if(v<=2) weak.push(t); if(v>=4) strong.push(t); }
+  });
+  const res = document.getElementById('self-assess-result');
+  res.style.display = 'block';
+  const avg = count ? (total/count).toFixed(1) : '?';
+  res.style.background = 'var(--amber-light)';
+  res.style.borderRadius = '8px';
+  res.style.padding = '1rem';
+  res.style.borderLeft = '4px solid var(--amber)';
+  res.innerHTML = `<strong>Your Profile:</strong><br>Average Rating: <strong>${avg} / 5</strong><br>
+    ${strong.length ? `<span style="color:var(--teal);">Strengths: ${strong.join(', ')}</span><br>` : ''}
+    ${weak.length ? `<span style="color:var(--coral);">Areas to develop: ${weak.join(', ')}</span><br>` : ''}
+    <em style="font-size:0.88rem;color:var(--text-muted);">Remember: all of these characteristics can be developed with practice and commitment!</em>`;
+}
+
+// ---- ACTION PLAN ----
+function showActionPlan() {
+  document.getElementById('ap-saved').style.display = 'block';
+  document.getElementById('ap-model').style.display = 'block';
+  setTimeout(() => { document.getElementById('ap-saved').style.display = 'none'; }, 3000);
+}
+
+// ---- QUIZ ENGINE ----
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length-1; i > 0; i--) {
+    const j = Math.floor(Math.random()*(i+1));
+    [a[i],a[j]] = [a[j],a[i]];
+  }
+  return a;
+}
+
+const quizData = {
+  1: [
+    {
+      type:'mc',
+      q:'Mang Ramon received free fingerlings and technical training on water quality from a government office. Which agency most likely provided this assistance?',
+      opts:['DENR','BFAR','DepEd','DTI'],
+      ans:'BFAR',
+      feedback:'Correct! BFAR (Bureau of Fisheries and Aquatic Resources) is the primary government agency that distributes fingerlings and provides technical training to fish raisers.',
+      wrong:'Not quite. While DENR focuses on environmental protection, it is BFAR that specifically distributes fingerlings and conducts technical training for fish raisers.'
+    },
+    {
+      type:'mc',
+      q:'A fish raiser\'s pond is polluted by chemical runoff from a nearby factory. Which government agency has the primary mandate to investigate and enforce action against this environmental violation?',
+      opts:['BFAR','DA','LGU','DENR'],
+      ans:'DENR',
+      feedback:'Correct! DENR (Department of Environment and Natural Resources) has the mandate to enforce environmental laws and investigate pollution cases affecting aquatic resources.',
+      wrong:'Remember that while all agencies play a role, DENR specifically handles environmental law enforcement including pollution violations.'
+    },
+    {
+      type:'mc',
+      q:'Which of the following BEST explains why government marketing assistance is important for small-scale fish raisers?',
+      opts:[
+        'It allows the government to control fish prices nationwide',
+        'It helps fish raisers sell their harvest at fair prices by connecting them to bigger markets',
+        'It replaces the need for fish raisers to learn entrepreneurship skills',
+        'It ensures that fish raisers always earn a profit regardless of production'
+      ],
+      ans:'It helps fish raisers sell their harvest at fair prices by connecting them to bigger markets',
+      feedback:'Excellent! Marketing assistance addresses one of the biggest challenges small-scale fish raisers face: accessing fair and stable markets for their harvest.',
+      wrong:'Think about the practical purpose of marketing assistance. It is about market access and fair pricing, not price control or guaranteed profits.'
+    },
+    {
+      type:'essay',
+      q:'A new national policy eliminates all government subsidies for fingerlings. Predict TWO specific effects this change would have on small-scale fish raisers in poor communities, and explain your reasoning.',
+      model:'Without fingerling subsidies, small-scale fish raisers with limited capital would face higher production costs, making it harder to start or expand their operations. This could reduce the number of active fish raisers, decrease local fish supply, and push prices higher for consumers. Additionally, poorer fish-raising families might fall deeper into poverty or abandon aquaculture entirely, losing a key livelihood source. The economic gap between large commercial fish farms and small community fish ponds would widen.'
+    },
+    {
+      type:'essay',
+      q:'Do you think government support alone is enough to ensure sustainable fisheries in the Philippines? Defend your answer with at least two specific reasons.',
+      model:'Government support alone is not sufficient. First, government resources are limited and cannot reach every fishing community — other actors like NGOs and cooperatives are needed to fill gaps in service delivery. Second, sustainability requires changes in the daily practices of individual fish raisers and communities, which require community ownership and motivation beyond what government programs alone can provide. Lasting change comes when fish raisers themselves understand and value sustainable practices, not just when they are told to follow rules.'
+    }
+  ],
+  2: [
+    {
+      type:'mc',
+      q:'What is the most accurate definition of a Non-Government Organization (NGO)?',
+      opts:[
+        'A company that earns profit by selling fish to communities',
+        'A private, non-profit organization that helps communities without being run by the government',
+        'A government unit that works outside the official agency structure',
+        'An international company that funds government fisheries programs'
+      ],
+      ans:'A private, non-profit organization that helps communities without being run by the government',
+      feedback:'Correct! NGOs are private (not government-run) and non-profit (not primarily motivated by earning money). They serve communities through various forms of assistance.',
+      wrong:'An NGO is specifically non-profit and independent from government. Review the definition in the lesson.'
+    },
+    {
+      type:'mc',
+      q:'An NGO helps a fishing community establish a Marine Protected Area (MPA) and trains sea wardens. Which PRIMARY form of NGO assistance does this best represent?',
+      opts:['Financial aid','Technical assistance and environmental conservation','Marketing support','Loan facilitation'],
+      ans:'Technical assistance and environmental conservation',
+      feedback:'Excellent! Establishing MPAs and training sea wardens combines technical expertise with environmental conservation — two of the key roles NGOs play in fisheries communities.',
+      wrong:'Think about what skills and knowledge are being transferred to the community in this scenario, and what environmental outcome is being achieved.'
+    },
+    {
+      type:'mc',
+      q:'Why is cooperation between government agencies, NGOs, and community members described as ESSENTIAL for sustainable fisheries?',
+      opts:[
+        'Because NGOs can replace the government if agencies fail to deliver services',
+        'Because each group brings different resources, expertise, and reach that the others cannot fully provide alone',
+        'Because the law requires all three to work together before any program can begin',
+        'Because communities distrust government agencies and need NGOs to interpret their programs'
+      ],
+      ans:'Because each group brings different resources, expertise, and reach that the others cannot fully provide alone',
+      feedback:'Perfect! Cooperation is essential because government, NGOs, and communities each have unique strengths — policy and funding, community engagement and expertise, and local knowledge and implementation — that complement each other.',
+      wrong:'The key reason is complementarity — each group contributes what the others cannot. Cooperation multiplies the impact of all three.'
+    },
+    {
+      type:'essay',
+      q:'Compare and contrast the roles of a government agency (like BFAR) and an NGO (like CCEF) in supporting a fishing community that has experienced declining fish catch. Be specific about what each can and cannot do.',
+      model:'BFAR can provide legal enforcement against illegal fishing, distribute fingerlings, and fund scientific research — resources backed by government authority and budget. However, it may have limited manpower to reach all communities and may be slow due to bureaucratic processes. An NGO like CCEF can mobilize quickly, build community trust through grassroots engagement, and provide specialized training on sustainable practices. However, NGOs lack legal enforcement powers and sustainable government funding. Together, BFAR provides the regulatory framework and resources while the NGO provides community organizing and specialized expertise — making their cooperation more effective than either acting alone.'
+    },
+    {
+      type:'essay',
+      q:'Imagine you are the leader of a community with no NGO presence and limited LGU support. What steps would you take to attract NGO help to your barangay? What would you need to prepare and demonstrate?',
+      model:'To attract NGO support, I would first document our community\'s needs and fish stock status with data and photographs to present a clear, evidence-based case. I would then write a formal request letter or proposal to relevant NGOs explaining our situation and what we are asking for. I would demonstrate community readiness by showing that local fish raisers are organized (e.g., through a cooperative or fisher association), willing to participate, and committed to sustainable practices. NGOs are more likely to invest in communities that show ownership and capacity to sustain programs after NGO support ends.'
+    }
+  ],
+  3: [
+    {
+      type:'mc',
+      q:'Pedro harvested his bangus too early because he needed cash urgently. The fish were underweight and sold at a very low price. Which characteristic did Pedro most clearly LACK in this situation?',
+      opts:['Diligence','Patience and proper planning','Environmental stewardship','Willingness to learn'],
+      ans:'Patience and proper planning',
+      feedback:'Correct! Pedro lacked patience (harvesting before optimal size) and proper planning (he had no financial safety net to avoid premature harvest). Both work together to protect long-term income.',
+      wrong:'Think about what drove Pedro\'s decision — the need for immediate cash and the inability to wait — and which characteristics would have prevented this outcome.'
+    },
+    {
+      type:'mc',
+      q:'Which of the following actions BEST demonstrates the characteristic of "environmental stewardship" in fish raising?',
+      opts:[
+        'Maximizing fish density in ponds to increase profit per square meter',
+        'Disposing of unused feed bags in the river behind the farm to save on garbage fees',
+        'Voluntarily participating in mangrove planting drives organized by the local NGO',
+        'Applying extra fertilizer to the pond to speed up algae growth for faster fish growth'
+      ],
+      ans:'Voluntarily participating in mangrove planting drives organized by the local NGO',
+      feedback:'Excellent! Environmental stewardship means actively caring for the natural environment — and volunteering for mangrove planting is a clear, responsible contribution to ecosystem health.',
+      wrong:'Environmental stewardship means caring for the environment beyond what is required. Consider which option shows a fish raiser actively protecting the ecosystem.'
+    },
+    {
+      type:'mc',
+      q:'A fish raiser keeps detailed records of feed costs, fish growth rates, and weekly income. Which TWO characteristics does this practice MOST directly demonstrate?',
+      opts:[
+        'Diligence and financial management',
+        'Patience and environmental stewardship',
+        'Willingness to learn and responsibility',
+        'Proper planning and courage'
+      ],
+      ans:'Diligence and financial management',
+      feedback:'Correct! Keeping detailed records requires consistent effort every day (diligence) and supports informed financial decisions (financial management). Both are essential to a profitable, well-run fish farm.',
+      wrong:'Focus on what keeping detailed records involves: daily consistent effort and tracking money and resources. Which characteristics does this represent?'
+    },
+    {
+      type:'essay',
+      q:'A fish raiser says: "I\'ve been doing this for 20 years. I don\'t need to learn anything new." Evaluate this statement critically. What risks does this attitude pose, and which characteristic is this fish raiser lacking?',
+      model:'This attitude reflects a lack of "willingness to learn" — a critical characteristic for long-term success. Fish raising exists in a changing environment: new fish diseases emerge, market prices shift, climate patterns alter water temperature, and better technologies become available. A fish raiser who refuses to update their knowledge risks using outdated methods, missing opportunities to improve efficiency, failing to manage new diseases, and losing market competitiveness to more adaptive farmers. Continuous learning is not a sign of weakness but of professional growth and resilience. Even experienced farmers benefit from exposure to new research, methods, and practices shared by BFAR, NGOs, and fellow fish raisers.'
+    },
+    {
+      type:'essay',
+      q:'Of all the personal and entrepreneurial characteristics discussed, which do you think is the MOST important for a first-year fish raiser in a low-income community? Justify your choice with specific reasons, and explain how this characteristic connects to at least one other trait.',
+      model:'(Answers will vary, but should be well-justified.) Example: Responsibility is the most important characteristic for a first-year fish raiser because it is the foundation upon which all other characteristics depend. A fish raiser who takes ownership of their decisions — whether successes or failures — is more likely to correct mistakes, seek help appropriately, and persist through hardships. Without responsibility, even a technically knowledgeable farmer will ignore signs of fish disease, blame external factors for poor harvests, and fail to manage resources wisely. Responsibility is closely linked to diligence: a responsible farmer recognizes that daily attention to the fish pond is their duty, not optional — and this drives consistent, careful action.'
+    }
+  ],
+  4: [
+    {
+      type:'mc',
+      q:'Which of the following BEST describes the concept of "sustainable fish raising"?',
+      opts:[
+        'Producing as much fish as possible every year regardless of environmental impact',
+        'Meeting the needs of today\'s fish raisers without destroying the resources future generations will need',
+        'Relying entirely on government subsidies to reduce the cost of fish production',
+        'Stopping all fishing activities to allow fish stocks to fully recover'
+      ],
+      ans:'Meeting the needs of today\'s fish raisers without destroying the resources future generations will need',
+      feedback:'Correct! Sustainability balances current productivity with long-term resource protection — ensuring that the next generation of Filipinos will also be able to raise fish and depend on aquatic resources.',
+      wrong:'Sustainability is about balance — not maximum production and not stopping production, but producing responsibly so resources last into the future.'
+    },
+    {
+      type:'mc',
+      q:'A community of fish raisers, their LGU, and a local NGO join forces to manage a fish sanctuary. Which principle of sustainable fish raising does this BEST illustrate?',
+      opts:[
+        'Financial sustainability through shared costs',
+        'Cooperation among different stakeholders for shared resource management',
+        'Government control over all marine resources',
+        'NGO replacement of government services in remote areas'
+      ],
+      ans:'Cooperation among different stakeholders for shared resource management',
+      feedback:'Perfect! Multi-stakeholder cooperation — where fish raisers, government, and NGOs work toward a shared goal — is the cornerstone of sustainable fisheries management.',
+      wrong:'Focus on the fact that THREE different groups are working together here. Which principle does this best represent?'
+    },
+    {
+      type:'mc',
+      q:'After a severe typhoon destroys half of a fish raiser\'s pond, she immediately contacts BFAR for emergency fingerlings, attends a flood-resilient farming workshop, and forms a mutual support group with neighboring fish raisers. Which combination of problem-solving approaches does she demonstrate?',
+      opts:[
+        'Patience, diligence, and financial management only',
+        'Collaboration, continuous learning, and perseverance',
+        'Responsible resource management and environmental stewardship only',
+        'Planning and reliance on NGO support'
+      ],
+      ans:'Collaboration, continuous learning, and perseverance',
+      feedback:'Excellent! She contacts BFAR (collaboration), attends training (continuous learning), and continues despite the disaster (perseverance) — demonstrating three key problem-solving approaches at once.',
+      wrong:'Look at each action she takes: reaching out to others, seeking new knowledge, and continuing despite hardship. Match each to the five problem-solving approaches in the lesson.'
+    },
+    {
+      type:'essay',
+      q:'Design a cooperation plan involving a fish raiser, BFAR, and a local NGO to address the problem of declining water quality in a community fish pond due to nearby agricultural runoff. Describe specifically what each stakeholder should do and how they should coordinate.',
+      model:'The fish raiser should document the water quality problem with daily pH and dissolved oxygen readings, then formally report the issue to both BFAR and the NGO with evidence. BFAR should send water quality specialists to assess the situation, identify the source of pollution, and coordinate with the DA and DENR to hold the responsible agricultural businesses accountable. BFAR can also provide emergency aeration equipment and disease-resistant fingerlings. The NGO can mobilize community members to establish buffer zones (vegetation strips that filter runoff) around the fish pond and organize community monitoring teams. Regular coordination meetings — monthly at minimum — should ensure that all three groups share data, update each other on progress, and adapt their strategies together. The fish raiser leads the on-site monitoring, BFAR provides technical expertise and regulatory authority, and the NGO builds community capacity for long-term management.'
+    },
+    {
+      type:'essay',
+      q:'Looking back at all four days of this module, which single idea do you think is the MOST important lesson for a Filipino fish raiser to carry into their daily practice? Explain your reasoning using examples from at least two different days of this module.',
+      model:'(Answers will vary.) Example: The most important lesson is that sustainable success in fish raising requires both internal qualities and external support — you cannot achieve one without the other. From Day 3, we learned that characteristics like diligence, patience, and continuous learning are essential personal foundations. From Day 1 and Day 2, we learned that government agencies and NGOs provide critical technical, financial, and environmental support that individual fish raisers cannot access alone. A hardworking fish raiser without any support may still struggle after a typhoon or disease outbreak. A fish raiser supported by government and NGOs but who lacks responsibility or perseverance will waste that assistance. The integration of personal character with community cooperation — as discussed throughout Day 4 — is what makes fish raising truly sustainable and resilient.'
+    }
+  ]
+};
+
+// ---- RENDER QUIZZES ----
+const mcCount = {1:3, 2:3, 3:3, 4:3};
+const scores = {1:0, 2:0, 3:0, 4:0};
+const answered = {1:{}, 2:{}, 3:{}, 4:{}};
+
+function renderQuiz(day) {
+  const qs = quizData[day];
+  const container = document.getElementById('quiz'+day+'-items');
+  container.innerHTML = '';
+  let mcIdx = 0;
+  qs.forEach((q, qi) => {
+    const div = document.createElement('div');
+    div.className = 'quiz-q';
+    div.id = `q${day}-${qi}`;
+    const numEl = document.createElement('div');
+    numEl.className = 'q-num';
+    numEl.textContent = `Question ${qi+1} of ${qs.length}`;
+    const textEl = document.createElement('div');
+    textEl.className = 'q-text';
+    textEl.textContent = q.q;
+    div.appendChild(numEl);
+    div.appendChild(textEl);
+    if (q.type === 'mc') {
+      const thisIdx = mcIdx++;
+      const optsDiv = document.createElement('div');
+      optsDiv.className = 'options';
+      const shuffled = shuffle(q.opts);
+      shuffled.forEach(opt => {
+        const btn = document.createElement('button');
+        btn.className = 'option-btn';
+        btn.textContent = opt;
+        btn.onclick = function() { answerMC(day, qi, thisIdx, opt, q.ans, q.feedback, q.wrong, this); };
+        optsDiv.appendChild(btn);
+      });
+      div.appendChild(optsDiv);
+      const fb = document.createElement('div');
+      fb.className = 'q-feedback';
+      fb.id = `fb-${day}-${qi}`;
+      div.appendChild(fb);
+    } else {
+      const ta = document.createElement('textarea');
+      ta.className = 'essay-area';
+      ta.id = `ess-${day}-${qi}`;
+      ta.placeholder = 'Write your answer here (3–6 sentences recommended)...';
+      const sub = document.createElement('button');
+      sub.className = 'essay-submit';
+      sub.textContent = 'View Model Answer';
+      sub.onclick = function() { showEssay(day, qi, q.model, sub); };
+      const ma = document.createElement('div');
+      ma.className = 'model-answer';
+      ma.id = `ma-${day}-${qi}`;
+      ma.innerHTML = `<strong>Model Answer:</strong> ${q.model}`;
+      div.appendChild(ta);
+      div.appendChild(sub);
+      div.appendChild(ma);
+    }
+    container.appendChild(div);
+  });
+}
+
+function answerMC(day, qi, mcIdx, chosen, correct, feedbackCorrect, feedbackWrong, btn) {
+  if (answered[day][qi]) return;
+  answered[day][qi] = true;
+  const allBtns = btn.parentElement.querySelectorAll('.option-btn');
+  allBtns.forEach(b => {
+    b.disabled = true;
+    if (b.textContent === correct) b.classList.add('correct');
+  });
+  const fb = document.getElementById(`fb-${day}-${qi}`);
+  if (chosen === correct) {
+    btn.classList.add('correct');
+    fb.className = 'q-feedback show correct';
+    fb.textContent = '✅ ' + feedbackCorrect;
+    scores[day]++;
+  } else {
+    btn.classList.add('wrong');
+    fb.className = 'q-feedback show wrong';
+    fb.textContent = '❌ ' + feedbackWrong;
+  }
+  checkShowScore(day);
+}
+
+function showEssay(day, qi, model, btn) {
+  const ma = document.getElementById(`ma-${day}-${qi}`);
+  ma.classList.add('show');
+  btn.disabled = true;
+  btn.textContent = 'Model answer shown';
+}
+
+function checkShowScore(day) {
+  const total = mcCount[day];
+  const answeredCount = Object.keys(answered[day]).filter(k => {
+    const q = quizData[day][parseInt(k)];
+    return q.type === 'mc';
+  }).length;
+  if (answeredCount >= total) {
+    const footer = document.getElementById(`q${day}-footer`);
+    footer.classList.add('show');
+    const sc = scores[day];
+    document.getElementById(`q${day}-score`).textContent = `${sc} / ${total}`;
+    const pct = Math.round(sc/total*100);
+    document.getElementById(`q${day}-bar`).style.width = pct+'%';
+    const msgs = ['Keep reviewing the lesson and try again! You can do it! 💪','Good effort! Review the concepts and you\'ll do even better.','Good work! A little more review and you\'ll be an expert.','Great job! You clearly understand the key concepts.','Outstanding! You have mastered the lesson for today! 🌟'];
+    const msgEl = document.getElementById(`q${day}-msg`);
+    if (sc === 0) msgEl.textContent = msgs[0];
+    else if (sc === 1) msgEl.textContent = msgs[1];
+    else if (sc === 2) msgEl.textContent = msgs[2];
+    else if (sc === 3 && total === 3) msgEl.textContent = msgs[4];
+    else msgEl.textContent = msgs[3];
+  }
+}
+
+// ---- INIT ----
+window.addEventListener('DOMContentLoaded', () => {
+  renderQuiz(1);
+  renderQuiz(2);
+  renderQuiz(3);
+  renderQuiz(4);
+  initSort2();
+  initSelfAssess();
+});
+</script>
+</body>
+</html>

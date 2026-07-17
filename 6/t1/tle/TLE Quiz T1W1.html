@@ -1,0 +1,983 @@
+html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fishery Arts Quiz – Grade 6</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Baloo+2:wght@500;700;800&display=swap');
+
+  :root {
+    --ocean-deep: #0a3d62;
+    --ocean-mid: #1a6fa0;
+    --ocean-light: #5bb8d4;
+    --wave: #a8e6f0;
+    --sand: #f9ecc2;
+    --coral: #ff6b6b;
+    --seaweed: #2ecc71;
+    --gold: #f4c430;
+    --white: #ffffff;
+    --text-dark: #1a2e44;
+    --card-bg: rgba(255,255,255,0.96);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Nunito', sans-serif;
+    background: linear-gradient(180deg, #0a3d62 0%, #1a6fa0 40%, #5bb8d4 75%, #a8e6f0 100%);
+    min-height: 100vh;
+    color: var(--text-dark);
+    overflow-x: hidden;
+  }
+
+  /* === BUBBLES BG === */
+  .bubbles { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; overflow: hidden; }
+  .bubble {
+    position: absolute;
+    bottom: -60px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.08);
+    animation: rise linear infinite;
+  }
+  @keyframes rise {
+    0% { transform: translateY(0) scale(1); opacity: 0.7; }
+    100% { transform: translateY(-110vh) scale(1.3); opacity: 0; }
+  }
+
+  /* === HEADER === */
+  header {
+    position: relative; z-index: 10;
+    text-align: center;
+    padding: 2rem 1rem 1rem;
+  }
+  .fish-icon { font-size: 3.5rem; animation: swim 3s ease-in-out infinite; display: inline-block; }
+  @keyframes swim { 0%,100%{transform:translateX(0);} 50%{transform:translateX(12px);} }
+  header h1 {
+    font-family: 'Baloo 2', cursive;
+    font-size: clamp(1.6rem, 5vw, 2.8rem);
+    font-weight: 800;
+    color: var(--white);
+    text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+    line-height: 1.1;
+  }
+  header p {
+    color: var(--wave);
+    font-size: 1rem;
+    font-weight: 600;
+    margin-top: 0.3rem;
+    letter-spacing: 0.05em;
+  }
+
+  /* === PROGRESS === */
+  .progress-bar-wrap {
+    position: relative; z-index: 10;
+    max-width: 680px; margin: 1rem auto 0;
+    padding: 0 1.2rem;
+  }
+  .progress-info { display: flex; justify-content: space-between; color: var(--wave); font-size: 0.85rem; font-weight: 700; margin-bottom: 6px; }
+  .progress-track { height: 12px; background: rgba(255,255,255,0.15); border-radius: 99px; overflow: hidden; }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--seaweed), var(--gold));
+    border-radius: 99px;
+    transition: width 0.4s ease;
+  }
+
+  /* === MAIN CONTAINER === */
+  main {
+    position: relative; z-index: 10;
+    max-width: 680px;
+    margin: 1.5rem auto 3rem;
+    padding: 0 1rem;
+  }
+
+  /* === QUESTION CARD === */
+  .card {
+    background: var(--card-bg);
+    border-radius: 20px;
+    box-shadow: 0 8px 40px rgba(10,61,98,0.25);
+    padding: 1.8rem 2rem 2rem;
+    animation: fadeUp 0.35s ease;
+  }
+  @keyframes fadeUp { from{opacity:0;transform:translateY(18px);} to{opacity:1;transform:translateY(0);} }
+
+  .q-number {
+    display: inline-block;
+    background: var(--ocean-deep);
+    color: var(--gold);
+    font-family: 'Baloo 2', cursive;
+    font-weight: 800;
+    font-size: 0.8rem;
+    letter-spacing: 0.1em;
+    padding: 3px 12px;
+    border-radius: 99px;
+    margin-bottom: 0.8rem;
+    text-transform: uppercase;
+  }
+
+  .q-stem {
+    font-size: 1.15rem;
+    font-weight: 700;
+    line-height: 1.5;
+    color: var(--text-dark);
+    margin-bottom: 1.2rem;
+  }
+
+  /* === VISUAL ELEMENTS (graphs/pictures) === */
+  .q-visual {
+    background: #eaf6fb;
+    border: 2px dashed var(--ocean-light);
+    border-radius: 14px;
+    padding: 1rem;
+    margin-bottom: 1.2rem;
+    text-align: center;
+  }
+  .q-visual svg { max-width: 100%; overflow: visible; }
+
+  /* === CHOICES === */
+  .choices { display: flex; flex-direction: column; gap: 0.65rem; }
+  .choice-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    background: #f0f8ff;
+    border: 2.5px solid #c8e6f5;
+    border-radius: 12px;
+    padding: 0.75rem 1rem;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 600;
+    font-family: 'Nunito', sans-serif;
+    color: var(--text-dark);
+    transition: all 0.18s;
+    text-align: left;
+  }
+  .choice-btn:hover:not(:disabled) {
+    background: #d4eeff;
+    border-color: var(--ocean-light);
+    transform: translateX(4px);
+  }
+  .choice-btn .letter {
+    min-width: 28px; height: 28px;
+    display: flex; align-items: center; justify-content: center;
+    background: var(--ocean-deep);
+    color: var(--white);
+    border-radius: 8px;
+    font-size: 0.85rem;
+    font-weight: 800;
+    flex-shrink: 0;
+  }
+  .choice-btn.correct {
+    background: #d4f5e4; border-color: #27ae60;
+    animation: pop 0.3s ease;
+  }
+  .choice-btn.correct .letter { background: #27ae60; }
+  .choice-btn.wrong {
+    background: #ffe0e0; border-color: var(--coral);
+  }
+  .choice-btn.wrong .letter { background: var(--coral); }
+  .choice-btn.reveal-correct {
+    background: #d4f5e4; border-color: #27ae60;
+  }
+  .choice-btn.reveal-correct .letter { background: #27ae60; }
+  .choice-btn:disabled { cursor: default; transform: none !important; }
+  @keyframes pop { 0%{transform:scale(1);} 50%{transform:scale(1.03);} 100%{transform:scale(1);} }
+
+  /* === FEEDBACK === */
+  .feedback {
+    margin-top: 1rem;
+    padding: 0.8rem 1rem;
+    border-radius: 10px;
+    font-size: 0.95rem;
+    font-weight: 700;
+    display: none;
+  }
+  .feedback.show { display: block; }
+  .feedback.correct-fb { background: #d4f5e4; color: #1a6b40; }
+  .feedback.wrong-fb { background: #ffe0e0; color: #c0392b; }
+
+  /* === NAV BUTTON === */
+  .nav-row { display: flex; justify-content: flex-end; margin-top: 1.3rem; }
+  .btn-next {
+    background: linear-gradient(135deg, var(--ocean-deep), var(--ocean-mid));
+    color: var(--white);
+    border: none;
+    padding: 0.75rem 2rem;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-weight: 800;
+    font-family: 'Nunito', sans-serif;
+    cursor: pointer;
+    display: flex; align-items: center; gap: 0.5rem;
+    transition: transform 0.18s, box-shadow 0.18s;
+    box-shadow: 0 4px 14px rgba(10,61,98,0.3);
+    display: none;
+  }
+  .btn-next:hover { transform: translateY(-2px); box-shadow: 0 7px 20px rgba(10,61,98,0.4); }
+
+  /* === RESULTS === */
+  #results-screen {
+    background: var(--card-bg);
+    border-radius: 20px;
+    box-shadow: 0 8px 40px rgba(10,61,98,0.25);
+    padding: 2.5rem 2rem;
+    text-align: center;
+    display: none;
+    animation: fadeUp 0.4s ease;
+  }
+  .trophy { font-size: 4rem; }
+  #results-screen h2 {
+    font-family: 'Baloo 2', cursive;
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--ocean-deep);
+    margin: 0.5rem 0;
+  }
+  .score-display {
+    font-size: 3.5rem;
+    font-weight: 900;
+    color: var(--ocean-mid);
+    font-family: 'Baloo 2', cursive;
+    line-height: 1;
+    margin: 0.5rem 0;
+  }
+  .score-label { color: #555; font-size: 1rem; font-weight: 600; }
+  .grade-badge {
+    display: inline-block;
+    padding: 0.4rem 1.4rem;
+    border-radius: 99px;
+    font-weight: 800;
+    font-size: 1.1rem;
+    margin: 0.8rem 0 1.2rem;
+  }
+  .grade-S { background: #ffd700; color: #5a3e00; }
+  .grade-A { background: #d4f5e4; color: #1a6b40; }
+  .grade-B { background: #d4eeff; color: #1a4a6b; }
+  .grade-C { background: #fff3cd; color: #856404; }
+  .grade-D { background: #ffe0e0; color: #c0392b; }
+
+  .result-breakdown {
+    text-align: left;
+    margin-top: 1.5rem;
+    border-top: 2px dashed #ddd;
+    padding-top: 1.2rem;
+  }
+  .result-breakdown h3 { font-size: 1rem; color: var(--ocean-deep); margin-bottom: 0.8rem; }
+  .result-item {
+    display: flex; align-items: flex-start; gap: 0.5rem;
+    font-size: 0.88rem; margin-bottom: 0.5rem; line-height: 1.4;
+  }
+  .ri-icon { font-size: 1rem; flex-shrink: 0; }
+
+  .btn-retry {
+    margin-top: 1.5rem;
+    background: linear-gradient(135deg, var(--ocean-deep), var(--ocean-mid));
+    color: var(--white);
+    border: none;
+    padding: 0.85rem 2.5rem;
+    border-radius: 12px;
+    font-size: 1.05rem;
+    font-weight: 800;
+    font-family: 'Nunito', sans-serif;
+    cursor: pointer;
+    transition: transform 0.18s;
+    box-shadow: 0 4px 14px rgba(10,61,98,0.3);
+  }
+  .btn-retry:hover { transform: translateY(-2px); }
+
+  /* === WAVE DIVIDER === */
+  .wave-bottom {
+    position: fixed; bottom: 0; left: 0; width: 100%; z-index: 1; pointer-events: none;
+  }
+
+  @media (max-width: 500px) {
+    .card { padding: 1.3rem 1.1rem 1.5rem; }
+    .q-stem { font-size: 1rem; }
+    .choice-btn { font-size: 0.92rem; padding: 0.65rem 0.8rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Bubbles -->
+<div class="bubbles" id="bubbles"></div>
+
+<!-- Header -->
+<header>
+  <div class="fish-icon">🐟</div>
+  <h1>Fishery Arts Quiz</h1>
+  <p>Grade 6 &nbsp;·&nbsp; 20 Questions</p>
+</header>
+
+<!-- Progress -->
+<div class="progress-bar-wrap">
+  <div class="progress-info">
+    <span id="prog-label">Question 1 of 20</span>
+    <span id="prog-score">Score: 0</span>
+  </div>
+  <div class="progress-track">
+    <div class="progress-fill" id="prog-fill" style="width:5%"></div>
+  </div>
+</div>
+
+<!-- Main -->
+<main>
+  <div class="card" id="quiz-card">
+    <div class="q-number" id="q-number">Question 1</div>
+    <div class="q-stem" id="q-stem"></div>
+    <div class="q-visual" id="q-visual" style="display:none"></div>
+    <div class="choices" id="choices"></div>
+    <div class="feedback" id="feedback"></div>
+    <div class="nav-row">
+      <button class="btn-next" id="btn-next" onclick="nextQuestion()">Next ➜</button>
+    </div>
+  </div>
+
+  <!-- Results -->
+  <div id="results-screen">
+    <div class="trophy" id="trophy">🏆</div>
+    <h2 id="result-title">Quiz Complete!</h2>
+    <div class="score-display" id="score-display">0/20</div>
+    <div class="score-label">Total Score</div>
+    <div class="grade-badge" id="grade-badge">—</div>
+    <p id="result-message" style="color:#555;font-size:0.98rem;font-weight:600;"></p>
+    <div class="result-breakdown">
+      <h3>📋 Review</h3>
+      <div id="breakdown-list"></div>
+    </div>
+    <button class="btn-retry" onclick="startQuiz()">🔄 Try Again</button>
+  </div>
+</main>
+
+<!-- Wave -->
+<svg class="wave-bottom" viewBox="0 0 1440 60" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M0,30 C360,60 1080,0 1440,30 L1440,60 L0,60 Z" fill="rgba(255,255,255,0.07)"/>
+</svg>
+
+<script>
+// ============================================================
+// QUESTION BANK – 20 PISA-style items
+// ============================================================
+const QUESTION_BANK = [
+  // ---- CONCEPTUAL / TEXT ----
+  {
+    id: 1,
+    stem: "Fishery Arts is a subject that teaches students about the fishing industry. Which of the following BEST describes what Fishery Arts covers?",
+    choices: [
+      "Raising, catching, and processing fish as a source of food and income",
+      "Cooking different types of seafood dishes for restaurants",
+      "Studying the anatomy and biology of ocean animals",
+      "Learning how to build boats and navigate the sea"
+    ],
+    answer: 0,
+    feedback: "Fishery Arts covers the full cycle — from raising fish (fish culture), catching them (fish capture), to turning them into products (fish processing)."
+  },
+  {
+    id: 2,
+    stem: "Maria wants to raise tilapia in a pond so she can sell them in the market. Which branch of Fishery Arts is she practicing?",
+    choices: [
+      "Fish Processing",
+      "Fish Capture",
+      "Fish Culture",
+      "Fish Marketing"
+    ],
+    answer: 2,
+    feedback: "Fish Culture is the branch that deals with raising and growing fish in a controlled environment like ponds or tanks."
+  },
+  {
+    id: 3,
+    stem: "A fisherman goes out to sea every morning and uses nets to catch fish. Which branch of Fishery Arts best describes his activity?",
+    choices: [
+      "Fish Culture",
+      "Fish Capture",
+      "Fish Processing",
+      "Aquaculture"
+    ],
+    answer: 1,
+    feedback: "Fish Capture involves catching fish from their natural habitats using tools like nets, hooks, and traps."
+  },
+  {
+    id: 4,
+    stem: "After harvesting bangus (milkfish), a family turns them into dried fish and fish sauce. Which branch of Fishery Arts are they practicing?",
+    choices: [
+      "Fish Capture",
+      "Fish Culture",
+      "Fish Processing",
+      "Fish Distribution"
+    ],
+    answer: 2,
+    feedback: "Fish Processing means preserving or converting harvested fish into products like dried fish, bagoong, and fish sauce."
+  },
+  // ---- GRAPH / DATA ----
+  {
+    id: 5,
+    stem: "Look at the bar graph below showing the NUMBER OF FAMILIES benefiting from fish raising in a barangay. Which benefit has the MOST families?",
+    visual: `
+      <svg viewBox="0 0 320 190" font-family="Nunito, sans-serif">
+        <!-- axes -->
+        <line x1="50" y1="10" x2="50" y2="155" stroke="#1a6fa0" stroke-width="2"/>
+        <line x1="50" y1="155" x2="310" y2="155" stroke="#1a6fa0" stroke-width="2"/>
+        <!-- y labels -->
+        <text x="44" y="155" text-anchor="end" font-size="10" fill="#555">0</text>
+        <text x="44" y="115" text-anchor="end" font-size="10" fill="#555">20</text>
+        <text x="44" y="75" text-anchor="end" font-size="10" fill="#555">40</text>
+        <text x="44" y="35" text-anchor="end" font-size="10" fill="#555">60</text>
+        <!-- gridlines -->
+        <line x1="50" y1="115" x2="310" y2="115" stroke="#ddd" stroke-dasharray="4"/>
+        <line x1="50" y1="75" x2="310" y2="75" stroke="#ddd" stroke-dasharray="4"/>
+        <line x1="50" y1="35" x2="310" y2="35" stroke="#ddd" stroke-dasharray="4"/>
+        <!-- bars: Food=50, Income=60, Employment=30, Health=45 -->
+        <!-- Food -->
+        <rect x="65" y="55" width="40" height="100" fill="#5bb8d4" rx="4"/>
+        <text x="85" y="50" text-anchor="middle" font-size="10" fill="#1a6fa0" font-weight="700">50</text>
+        <text x="85" y="172" text-anchor="middle" font-size="9" fill="#555">Food</text>
+        <!-- Income -->
+        <rect x="125" y="35" width="40" height="120" fill="#f4c430" rx="4"/>
+        <text x="145" y="30" text-anchor="middle" font-size="10" fill="#856404" font-weight="700">60</text>
+        <text x="145" y="172" text-anchor="middle" font-size="9" fill="#555">Income</text>
+        <!-- Employment -->
+        <rect x="185" y="95" width="40" height="60" fill="#2ecc71" rx="4"/>
+        <text x="205" y="90" text-anchor="middle" font-size="10" fill="#1a6b40" font-weight="700">30</text>
+        <text x="205" y="172" text-anchor="middle" font-size="9" fill="#555">Employment</text>
+        <!-- Health -->
+        <rect x="245" y="65" width="40" height="90" fill="#ff6b6b" rx="4"/>
+        <text x="265" y="60" text-anchor="middle" font-size="10" fill="#c0392b" font-weight="700">45</text>
+        <text x="265" y="172" text-anchor="middle" font-size="9" fill="#555">Health</text>
+        <!-- title -->
+        <text x="180" y="188" text-anchor="middle" font-size="9" fill="#888">Number of Families per Benefit</text>
+      </svg>
+    `,
+    choices: [
+      "Food source",
+      "Income generation",
+      "Employment",
+      "Health benefits"
+    ],
+    answer: 1,
+    feedback: "The bar for 'Income' is the tallest at 60 families, making income generation the most widely felt benefit in this barangay."
+  },
+  {
+    id: 6,
+    stem: "Study the diagram below showing the FISH RAISING CYCLE. Which step comes IMMEDIATELY after 'Harvesting'?",
+    visual: `
+      <svg viewBox="0 0 320 140" font-family="Nunito, sans-serif">
+        <defs>
+          <marker id="arr" markerWidth="8" markerHeight="6" refX="6" refY="3" orient="auto">
+            <polygon points="0 0, 8 3, 0 6" fill="#1a6fa0"/>
+          </marker>
+        </defs>
+        <!-- Steps -->
+        <!-- 1 Planning -->
+        <rect x="5" y="50" width="65" height="36" rx="8" fill="#5bb8d4" stroke="#1a6fa0" stroke-width="1.5"/>
+        <text x="37" y="65" text-anchor="middle" font-size="9" fill="white" font-weight="700">1. Planning</text>
+        <text x="37" y="78" text-anchor="middle" font-size="8" fill="white">the pond</text>
+        <!-- arrow -->
+        <line x1="70" y1="68" x2="83" y2="68" stroke="#1a6fa0" stroke-width="1.5" marker-end="url(#arr)"/>
+        <!-- 2 Stocking -->
+        <rect x="83" y="50" width="65" height="36" rx="8" fill="#2ecc71" stroke="#1a6b40" stroke-width="1.5"/>
+        <text x="115" y="65" text-anchor="middle" font-size="9" fill="white" font-weight="700">2. Stocking</text>
+        <text x="115" y="78" text-anchor="middle" font-size="8" fill="white">fingerlings</text>
+        <!-- arrow -->
+        <line x1="148" y1="68" x2="161" y2="68" stroke="#1a6fa0" stroke-width="1.5" marker-end="url(#arr)"/>
+        <!-- 3 Growing -->
+        <rect x="161" y="50" width="65" height="36" rx="8" fill="#f4c430" stroke="#856404" stroke-width="1.5"/>
+        <text x="193" y="65" text-anchor="middle" font-size="9" fill="#5a3e00" font-weight="700">3. Growing</text>
+        <text x="193" y="78" text-anchor="middle" font-size="8" fill="#5a3e00">/ Feeding</text>
+        <!-- arrow -->
+        <line x1="226" y1="68" x2="239" y2="68" stroke="#1a6fa0" stroke-width="1.5" marker-end="url(#arr)"/>
+        <!-- 4 Harvesting -->
+        <rect x="239" y="50" width="76" height="36" rx="8" fill="#ff6b6b" stroke="#c0392b" stroke-width="1.5"/>
+        <text x="277" y="65" text-anchor="middle" font-size="9" fill="white" font-weight="700">4. Harvesting</text>
+        <!-- arrow down -->
+        <line x1="277" y1="86" x2="277" y2="108" stroke="#1a6fa0" stroke-width="1.5" marker-end="url(#arr)"/>
+        <!-- 5 Selling -->
+        <rect x="239" y="108" width="76" height="28" rx="8" fill="#9b59b6" stroke="#6c3483" stroke-width="1.5"/>
+        <text x="277" y="126" text-anchor="middle" font-size="9" fill="white" font-weight="700">5. Selling / Processing</text>
+        <!-- label -->
+        <text x="160" y="18" text-anchor="middle" font-size="10" fill="#1a6fa0" font-weight="800">Fish Raising Cycle</text>
+      </svg>
+    `,
+    choices: [
+      "Planning the pond",
+      "Stocking fingerlings",
+      "Growing and Feeding",
+      "Selling or Processing"
+    ],
+    answer: 3,
+    feedback: "According to the diagram, Step 5 'Selling / Processing' comes immediately after Step 4 'Harvesting'."
+  },
+  // ---- SCENARIO / APPLICATION ----
+  {
+    id: 7,
+    stem: "Lolo Bert earns money by selling fresh bangus every week at the local market. This shows that fish raising is a source of:",
+    choices: [
+      "Entertainment and recreation",
+      "Income and livelihood",
+      "Education and learning",
+      "Sport and competition"
+    ],
+    answer: 1,
+    feedback: "Selling fish earns money, making fish raising an important source of income and livelihood for Filipino families."
+  },
+  {
+    id: 8,
+    stem: "A family pond project in their backyard provides jobs for three family members who feed, care for, and harvest the fish. This demonstrates which importance of fish raising?",
+    choices: [
+      "It provides a source of food only.",
+      "It creates employment opportunities.",
+      "It teaches swimming skills.",
+      "It reduces water pollution."
+    ],
+    answer: 1,
+    feedback: "Fish raising creates employment — family members and community workers are needed to manage the fish pond."
+  },
+  {
+    id: 9,
+    stem: "Ana's class is given a small fishpond project. Ana learns to be patient while waiting for the fish to grow, and responsible in feeding them daily. These are examples of which benefit of fish raising?",
+    choices: [
+      "Economic benefits",
+      "Health benefits",
+      "Values inculcation",
+      "Food production"
+    ],
+    answer: 2,
+    feedback: "Taking care of fish teaches values like patience, responsibility, and diligence — this is called 'values inculcation'."
+  },
+  {
+    id: 10,
+    stem: "Fish is known as a healthy food. It provides protein that helps children grow strong muscles and develop sharp minds. This represents which benefit of fish raising?",
+    choices: [
+      "Economic benefit",
+      "Health benefit",
+      "Environmental benefit",
+      "Social benefit"
+    ],
+    answer: 1,
+    feedback: "Fish is rich in protein, omega-3 fatty acids, and other nutrients — making it excellent for growth and brain development."
+  },
+  // ---- TABLE / DATA READING ----
+  {
+    id: 11,
+    stem: "The table below shows how much a family earns from fish raising each month. In which month did they earn the MOST?",
+    visual: `
+      <svg viewBox="0 0 300 130" font-family="Nunito, sans-serif">
+        <rect x="5" y="5" width="290" height="120" rx="8" fill="white" stroke="#5bb8d4" stroke-width="2"/>
+        <!-- header -->
+        <rect x="5" y="5" width="290" height="28" rx="8" fill="#0a3d62"/>
+        <text x="80" y="23" text-anchor="middle" font-size="11" fill="white" font-weight="800">Month</text>
+        <text x="210" y="23" text-anchor="middle" font-size="11" fill="white" font-weight="800">Earnings (₱)</text>
+        <!-- rows -->
+        <line x1="5" y1="33" x2="295" y2="33" stroke="#c8e6f5"/>
+        <rect x="5" y="33" width="290" height="22" fill="#eaf6fb"/>
+        <text x="80" y="48" text-anchor="middle" font-size="11" fill="#333">January</text>
+        <text x="210" y="48" text-anchor="middle" font-size="11" fill="#333">₱ 1,200</text>
+        <line x1="5" y1="55" x2="295" y2="55" stroke="#c8e6f5"/>
+        <text x="80" y="70" text-anchor="middle" font-size="11" fill="#333">February</text>
+        <text x="210" y="70" text-anchor="middle" font-size="11" fill="#333">₱ 1,800</text>
+        <line x1="5" y1="77" x2="295" y2="77" stroke="#c8e6f5"/>
+        <rect x="5" y="77" width="290" height="22" fill="#eaf6fb"/>
+        <text x="80" y="92" text-anchor="middle" font-size="11" fill="#333">March</text>
+        <text x="210" y="92" text-anchor="middle" font-size="11" fill="#333" font-weight="800">₱ 2,500</text>
+        <line x1="5" y1="99" x2="295" y2="99" stroke="#c8e6f5"/>
+        <text x="80" y="114" text-anchor="middle" font-size="11" fill="#333">April</text>
+        <text x="210" y="114" text-anchor="middle" font-size="11" fill="#333">₱ 2,100</text>
+        <!-- col divider -->
+        <line x1="150" y1="5" x2="150" y2="125" stroke="#c8e6f5" stroke-width="1"/>
+      </svg>
+    `,
+    choices: [
+      "January",
+      "February",
+      "March",
+      "April"
+    ],
+    answer: 2,
+    feedback: "March shows the highest earnings at ₱2,500, which is the largest amount in the table."
+  },
+  {
+    id: 12,
+    stem: "Using the same table (Q11), what is the TOTAL earnings for January and February combined?",
+    visual: `
+      <svg viewBox="0 0 300 130" font-family="Nunito, sans-serif">
+        <rect x="5" y="5" width="290" height="120" rx="8" fill="white" stroke="#5bb8d4" stroke-width="2"/>
+        <rect x="5" y="5" width="290" height="28" rx="8" fill="#0a3d62"/>
+        <text x="80" y="23" text-anchor="middle" font-size="11" fill="white" font-weight="800">Month</text>
+        <text x="210" y="23" text-anchor="middle" font-size="11" fill="white" font-weight="800">Earnings (₱)</text>
+        <line x1="5" y1="33" x2="295" y2="33" stroke="#c8e6f5"/>
+        <rect x="5" y="33" width="290" height="22" fill="#fff3cd"/>
+        <text x="80" y="48" text-anchor="middle" font-size="11" fill="#333" font-weight="700">January ⭐</text>
+        <text x="210" y="48" text-anchor="middle" font-size="11" fill="#333" font-weight="700">₱ 1,200</text>
+        <line x1="5" y1="55" x2="295" y2="55" stroke="#c8e6f5"/>
+        <rect x="5" y="55" width="290" height="22" fill="#fff3cd"/>
+        <text x="80" y="70" text-anchor="middle" font-size="11" fill="#333" font-weight="700">February ⭐</text>
+        <text x="210" y="70" text-anchor="middle" font-size="11" fill="#333" font-weight="700">₱ 1,800</text>
+        <line x1="5" y1="77" x2="295" y2="77" stroke="#c8e6f5"/>
+        <rect x="5" y="77" width="290" height="22" fill="#eaf6fb"/>
+        <text x="80" y="92" text-anchor="middle" font-size="11" fill="#333">March</text>
+        <text x="210" y="92" text-anchor="middle" font-size="11" fill="#333">₱ 2,500</text>
+        <line x1="5" y1="99" x2="295" y2="99" stroke="#c8e6f5"/>
+        <text x="80" y="114" text-anchor="middle" font-size="11" fill="#333">April</text>
+        <text x="210" y="114" text-anchor="middle" font-size="11" fill="#333">₱ 2,100</text>
+        <line x1="150" y1="5" x2="150" y2="125" stroke="#c8e6f5" stroke-width="1"/>
+      </svg>
+    `,
+    choices: [
+      "₱ 2,000",
+      "₱ 2,500",
+      "₱ 3,000",
+      "₱ 3,600"
+    ],
+    answer: 2,
+    feedback: "₱1,200 + ₱1,800 = ₱3,000. Adding January and February earnings gives a total of ₱3,000."
+  },
+  // ---- ILLUSTRATION / CONCEPT ----
+  {
+    id: 13,
+    stem: "Look at the picture below. It shows a fish diagram with labels. Which part of the fish is MOST important for swimming?",
+    visual: `
+      <svg viewBox="0 0 300 150" font-family="Nunito, sans-serif">
+        <!-- Fish body -->
+        <ellipse cx="145" cy="80" rx="90" ry="40" fill="#5bb8d4" stroke="#1a6fa0" stroke-width="2"/>
+        <!-- Tail -->
+        <polygon points="55,80 30,50 30,110" fill="#1a6fa0"/>
+        <!-- Eye -->
+        <circle cx="210" cy="72" r="8" fill="white" stroke="#1a6fa0" stroke-width="1.5"/>
+        <circle cx="212" cy="72" r="4" fill="#1a2e44"/>
+        <!-- Mouth -->
+        <path d="M230,82 Q240,90 230,94" stroke="#1a6fa0" stroke-width="2" fill="none"/>
+        <!-- Dorsal fin -->
+        <polygon points="145,40 120,60 170,60" fill="#2980b9" opacity="0.8"/>
+        <!-- Pectoral fin -->
+        <ellipse cx="170" cy="100" rx="20" ry="10" fill="#2980b9" opacity="0.7" transform="rotate(-20,170,100)"/>
+        <!-- Labels -->
+        <line x1="40" y1="80" x2="40" y2="130" stroke="#666" stroke-dasharray="3"/>
+        <text x="40" y="142" text-anchor="middle" font-size="9" fill="#1a6fa0" font-weight="700">Tail fin</text>
+        <line x1="145" y1="42" x2="145" y2="12" stroke="#666" stroke-dasharray="3"/>
+        <text x="145" y="9" text-anchor="middle" font-size="9" fill="#1a6fa0" font-weight="700">Dorsal fin</text>
+        <line x1="210" y1="72" x2="260" y2="40" stroke="#666" stroke-dasharray="3"/>
+        <text x="265" y="36" font-size="9" fill="#1a6fa0" font-weight="700">Eye</text>
+        <line x1="170" y1="106" x2="200" y2="130" stroke="#666" stroke-dasharray="3"/>
+        <text x="202" y="138" font-size="9" fill="#1a6fa0" font-weight="700">Pectoral fin</text>
+      </svg>
+    `,
+    choices: [
+      "Eye",
+      "Dorsal fin",
+      "Tail fin",
+      "Pectoral fin"
+    ],
+    answer: 2,
+    feedback: "The tail fin (caudal fin) is the main structure fish use to propel themselves through the water. It acts like a propeller!"
+  },
+  {
+    id: 14,
+    stem: "A barangay plans to set up a fish pond project. Which sequence correctly shows the NATURAL WAY of raising fish?",
+    choices: [
+      "Harvest → Stock fingerlings → Feed → Sell",
+      "Plan → Stock fingerlings → Grow and feed → Harvest → Sell",
+      "Sell → Harvest → Feed → Stock fingerlings → Plan",
+      "Feed → Plan → Harvest → Stock fingerlings → Sell"
+    ],
+    answer: 1,
+    feedback: "The correct natural sequence is: Plan the pond → Stock fingerlings → Grow and feed them → Harvest → Sell or process."
+  },
+  {
+    id: 15,
+    stem: "Mang Romy raises fish and earns enough money to send his children to school and buy food. This BEST shows that fish raising provides:",
+    choices: [
+      "Only health benefits",
+      "Only environmental benefits",
+      "Economic benefits for the family",
+      "Only recreational activities"
+    ],
+    answer: 2,
+    feedback: "Earning from fish to support family expenses (education, food) demonstrates the economic benefits of fish raising."
+  },
+  // ---- COMPARISON / ANALYSIS ----
+  {
+    id: 16,
+    stem: "Which statement CORRECTLY distinguishes Fish Culture from Fish Capture?",
+    choices: [
+      "Fish Culture uses nets while Fish Capture uses ponds.",
+      "Fish Culture raises fish in controlled environments; Fish Capture catches fish from natural habitats.",
+      "Fish Culture sells fish while Fish Capture preserves fish.",
+      "Fish Culture is done in the sea while Fish Capture is done in ponds."
+    ],
+    answer: 1,
+    feedback: "Fish Culture = controlled raising (ponds, tanks). Fish Capture = catching from rivers, lakes, or the sea."
+  },
+  {
+    id: 17,
+    stem: "Why is it important to plan carefully BEFORE starting a fish pond?",
+    choices: [
+      "So that the fish will not escape during the night.",
+      "To make sure the pond, budget, and materials are ready for successful fish raising.",
+      "Planning is not necessary because fish can grow anywhere.",
+      "To make the pond look beautiful for visitors."
+    ],
+    answer: 1,
+    feedback: "Planning ensures you have the right pond size, sufficient budget, proper materials, and a good location — all key to successful fish raising."
+  },
+  {
+    id: 18,
+    stem: "Study the pie chart below. It shows the TIME spent on each branch of Fishery Arts in a school project. Which branch takes the MOST time?",
+    visual: `
+      <svg viewBox="0 0 260 160" font-family="Nunito, sans-serif">
+        <!-- Pie chart: Culture 50%, Capture 25%, Processing 25% -->
+        <!-- Full circle: cx=90, cy=80, r=65 -->
+        <!-- Culture: 0° to 180° = 50% -->
+        <path d="M90,80 L90,15 A65,65 0 0,1 90,145 Z" fill="#5bb8d4"/>
+        <!-- Capture: 180° to 270° = 25% -->
+        <path d="M90,80 L90,145 A65,65 0 0,1 25,80 Z" fill="#f4c430"/>
+        <!-- Processing: 270° to 360° = 25% -->
+        <path d="M90,80 L25,80 A65,65 0 0,1 90,15 Z" fill="#ff6b6b"/>
+        <!-- Center -->
+        <circle cx="90" cy="80" r="22" fill="white"/>
+        <text x="90" y="84" text-anchor="middle" font-size="9" fill="#1a6fa0" font-weight="800">Project</text>
+        <!-- Legend -->
+        <rect x="168" y="45" width="12" height="12" fill="#5bb8d4" rx="2"/>
+        <text x="184" y="56" font-size="10" fill="#333">Fish Culture (50%)</text>
+        <rect x="168" y="65" width="12" height="12" fill="#f4c430" rx="2"/>
+        <text x="184" y="76" font-size="10" fill="#333">Fish Capture (25%)</text>
+        <rect x="168" y="85" width="12" height="12" fill="#ff6b6b" rx="2"/>
+        <text x="184" y="96" font-size="10" fill="#333">Fish Processing (25%)</text>
+        <text x="90" y="152" text-anchor="middle" font-size="9" fill="#888">Time Allocation in Project</text>
+      </svg>
+    `,
+    choices: [
+      "Fish Capture",
+      "Fish Processing",
+      "Fish Culture",
+      "All branches take equal time"
+    ],
+    answer: 2,
+    feedback: "Fish Culture takes 50% of the project time — the largest slice in the pie chart — because growing fish takes the most time."
+  },
+  {
+    id: 19,
+    stem: "Eating fish regularly can prevent certain diseases and make the body healthier. This is an example of which benefit of fish raising?",
+    choices: [
+      "Economic benefit — it saves money on medicine.",
+      "Health benefit — fish provides nutrients needed by the body.",
+      "Values inculcation — eating fish teaches discipline.",
+      "Environmental benefit — fish cleans the water."
+    ],
+    answer: 1,
+    feedback: "Fish is a nutritious food rich in protein and omega-3 fatty acids. Eating it regularly improves health — this is a health benefit."
+  },
+  {
+    id: 20,
+    stem: "A Grade 6 class decided to sell their harvested fish to raise funds for their classroom. This activity shows ALL of the following EXCEPT:",
+    choices: [
+      "Fish as a source of income",
+      "Economic benefits of fish raising",
+      "Fish raising creates employment",
+      "Fish raising causes water pollution"
+    ],
+    answer: 3,
+    feedback: "The activity demonstrates income, economic benefits, and even mild employment — but there is nothing that suggests fish raising causes water pollution. That is a false claim."
+  }
+];
+
+// ============================================================
+// QUIZ STATE
+// ============================================================
+let questions = [];
+let current = 0;
+let score = 0;
+let answered = false;
+let userAnswers = [];
+
+const LETTERS = ['A','B','C','D'];
+
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function prepareQuestions() {
+  questions = QUESTION_BANK.map(q => {
+    // Build index-mapped choices
+    const indexed = q.choices.map((c, i) => ({ text: c, origIndex: i }));
+    const shuffled = shuffle(indexed);
+    const newAnswer = shuffled.findIndex(c => c.origIndex === q.answer);
+    return { ...q, shuffledChoices: shuffled, shuffledAnswer: newAnswer };
+  });
+  // Shuffle question order
+  questions = shuffle(questions);
+}
+
+function startQuiz() {
+  prepareQuestions();
+  current = 0;
+  score = 0;
+  answered = false;
+  userAnswers = [];
+  document.getElementById('results-screen').style.display = 'none';
+  document.getElementById('quiz-card').style.display = 'block';
+  renderQuestion();
+}
+
+function renderQuestion() {
+  const q = questions[current];
+  answered = false;
+
+  document.getElementById('q-number').textContent = `Question ${current + 1}`;
+  document.getElementById('q-stem').textContent = q.stem;
+
+  const visual = document.getElementById('q-visual');
+  if (q.visual) {
+    visual.innerHTML = q.visual;
+    visual.style.display = 'block';
+  } else {
+    visual.style.display = 'none';
+    visual.innerHTML = '';
+  }
+
+  const choicesDiv = document.getElementById('choices');
+  choicesDiv.innerHTML = '';
+  q.shuffledChoices.forEach((c, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'choice-btn';
+    btn.innerHTML = `<span class="letter">${LETTERS[i]}</span><span>${c.text}</span>`;
+    btn.onclick = () => selectAnswer(i, btn);
+    choicesDiv.appendChild(btn);
+  });
+
+  const fb = document.getElementById('feedback');
+  fb.textContent = '';
+  fb.className = 'feedback';
+
+  document.getElementById('btn-next').style.display = 'none';
+
+  // Progress
+  document.getElementById('prog-label').textContent = `Question ${current + 1} of 20`;
+  document.getElementById('prog-score').textContent = `Score: ${score}`;
+  document.getElementById('prog-fill').style.width = `${((current) / 20) * 100}%`;
+
+  // Re-animate card
+  const card = document.getElementById('quiz-card');
+  card.style.animation = 'none';
+  void card.offsetWidth;
+  card.style.animation = 'fadeUp 0.35s ease';
+}
+
+function selectAnswer(choiceIndex, btn) {
+  if (answered) return;
+  answered = true;
+  const q = questions[current];
+  const correct = q.shuffledAnswer;
+
+  const allBtns = document.querySelectorAll('.choice-btn');
+  allBtns.forEach(b => b.disabled = true);
+
+  const fb = document.getElementById('feedback');
+
+  if (choiceIndex === correct) {
+    btn.classList.add('correct');
+    score++;
+    fb.textContent = '✅ Correct! ' + q.feedback;
+    fb.className = 'feedback correct-fb show';
+  } else {
+    btn.classList.add('wrong');
+    allBtns[correct].classList.add('reveal-correct');
+    fb.textContent = '❌ Oops! ' + q.feedback;
+    fb.className = 'feedback wrong-fb show';
+  }
+
+  userAnswers.push({ q, choiceIndex, correct });
+  document.getElementById('prog-score').textContent = `Score: ${score}`;
+
+  const nextBtn = document.getElementById('btn-next');
+  nextBtn.style.display = 'flex';
+  nextBtn.textContent = current === 19 ? '📊 See Results' : 'Next ➜';
+}
+
+function nextQuestion() {
+  current++;
+  if (current >= 20) {
+    showResults();
+  } else {
+    renderQuestion();
+  }
+}
+
+function showResults() {
+  document.getElementById('quiz-card').style.display = 'none';
+  const rs = document.getElementById('results-screen');
+  rs.style.display = 'block';
+
+  document.getElementById('score-display').textContent = `${score}/20`;
+
+  let trophy = '🐟', title = '', gradeCls = '', gradeText = '', msg = '';
+  const pct = (score / 20) * 100;
+  if (pct === 100) {
+    trophy='🏆'; title='Perfect Score!'; gradeCls='grade-S'; gradeText='Outstanding ⭐'; msg='Amazing! You are a Fishery Arts superstar!';
+  } else if (pct >= 85) {
+    trophy='🥇'; title='Excellent Work!'; gradeCls='grade-A'; gradeText='Excellent 🌟'; msg='Great job! You really know your Fishery Arts!';
+  } else if (pct >= 75) {
+    trophy='🥈'; title='Good Job!'; gradeCls='grade-B'; gradeText='Good Job 👍'; msg='Nice work! Review a few topics to reach the top!';
+  } else if (pct >= 60) {
+    trophy='🥉'; title='Keep Trying!'; gradeCls='grade-C'; gradeText='Developing 📖'; msg='You\'re getting there! Study more and try again.';
+  } else {
+    trophy='📚'; title='Study More!'; gradeCls='grade-D'; gradeText='Needs Practice 💪'; msg='Don\'t give up! Review your lessons and try again!';
+  }
+
+  document.getElementById('trophy').textContent = trophy;
+  document.getElementById('result-title').textContent = title;
+  const badge = document.getElementById('grade-badge');
+  badge.textContent = gradeText;
+  badge.className = `grade-badge ${gradeCls}`;
+  document.getElementById('result-message').textContent = msg;
+
+  const list = document.getElementById('breakdown-list');
+  list.innerHTML = '';
+  userAnswers.forEach((ua, idx) => {
+    const isRight = ua.choiceIndex === ua.correct;
+    const item = document.createElement('div');
+    item.className = 'result-item';
+    const chosen = ua.q.shuffledChoices[ua.choiceIndex].text;
+    const correctAns = ua.q.shuffledChoices[ua.correct].text;
+    item.innerHTML = `
+      <span class="ri-icon">${isRight ? '✅' : '❌'}</span>
+      <span><strong>Q${idx+1}:</strong> ${isRight ? 'Correct' : `Wrong — Correct answer: <em>${correctAns}</em>`}</span>
+    `;
+    list.appendChild(item);
+  });
+
+  // Progress
+  document.getElementById('prog-label').textContent = 'Quiz Complete!';
+  document.getElementById('prog-score').textContent = `Final Score: ${score}/20`;
+  document.getElementById('prog-fill').style.width = '100%';
+}
+
+// ============================================================
+// BUBBLES
+// ============================================================
+function makeBubbles() {
+  const container = document.getElementById('bubbles');
+  for (let i = 0; i < 18; i++) {
+    const b = document.createElement('div');
+    b.className = 'bubble';
+    const size = 10 + Math.random() * 30;
+    b.style.cssText = `
+      width:${size}px; height:${size}px;
+      left:${Math.random()*100}%;
+      animation-duration:${6 + Math.random()*10}s;
+      animation-delay:${Math.random()*8}s;
+    `;
+    container.appendChild(b);
+  }
+}
+
+makeBubbles();
+startQuiz();
+</script>
+</body>
+</html>

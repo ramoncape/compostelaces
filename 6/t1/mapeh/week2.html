@@ -1,0 +1,2159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PE & Health Grade 6 — Holistic Wellness</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --teal: #0E9F8E;
+    --teal-light: #E8F7F5;
+    --amber: #F5A623;
+    --amber-light: #FFF8EC;
+    --coral: #FF6B6B;
+    --coral-light: #FFF0F0;
+    --navy: #1A2B4A;
+    --purple: #7C5CBF;
+    --purple-light: #F2EEFF;
+    --green: #27AE60;
+    --green-light: #EDFBF4;
+    --sky: #3AAFDA;
+    --sky-light: #E8F6FD;
+    --gray: #6B7280;
+    --gray-light: #F3F4F6;
+    --white: #FFFFFF;
+    --radius: 16px;
+    --shadow: 0 4px 20px rgba(0,0,0,0.08);
+
+    --day1: #0E9F8E;
+    --day2: #F5A623;
+    --day3: #7C5CBF;
+    --day4: #FF6B6B;
+    --day5: #27AE60;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Nunito', sans-serif;
+    background: #F0F4F8;
+    color: var(--navy);
+    min-height: 100vh;
+  }
+
+  /* ===== HEADER ===== */
+  #site-header {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 1000;
+    background: var(--navy);
+    box-shadow: 0 2px 16px rgba(0,0,0,0.18);
+    transition: transform 0.32s cubic-bezier(.4,0,.2,1);
+  }
+  #site-header.hidden { transform: translateY(-100%); }
+
+  .header-top {
+    padding: 10px 20px 6px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .header-logo {
+    font-family: 'Fredoka One', cursive;
+    color: white;
+    font-size: 1.05rem;
+    line-height: 1.1;
+  }
+  .header-logo span { color: var(--amber); }
+  .header-badge {
+    background: var(--teal);
+    color: white;
+    font-size: 0.65rem;
+    font-weight: 800;
+    padding: 2px 8px;
+    border-radius: 20px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  /* Tab Bar */
+  #tab-bar {
+    display: flex;
+    overflow-x: auto;
+    scrollbar-width: none;
+    padding: 0 10px 8px;
+    gap: 6px;
+  }
+  #tab-bar::-webkit-scrollbar { display: none; }
+
+  .tab-btn {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 7px 14px;
+    border-radius: 30px;
+    border: none;
+    cursor: pointer;
+    font-family: 'Nunito', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 700;
+    background: rgba(255,255,255,0.1);
+    color: rgba(255,255,255,0.65);
+    transition: all 0.2s;
+  }
+  .tab-btn:hover { background: rgba(255,255,255,0.18); color: white; }
+  .tab-btn.active {
+    color: var(--navy);
+    font-weight: 800;
+  }
+  .tab-btn[data-day="1"].active { background: var(--day1); color: white; }
+  .tab-btn[data-day="2"].active { background: var(--day2); color: var(--navy); }
+  .tab-btn[data-day="3"].active { background: var(--day3); color: white; }
+  .tab-btn[data-day="4"].active { background: var(--day4); color: white; }
+  .tab-btn[data-day="5"].active { background: var(--day5); color: white; }
+
+  .tab-icon { font-size: 1rem; }
+
+  /* ===== PAGE SPACER ===== */
+  #page-top { height: 100px; }
+
+  /* ===== DAY PAGES ===== */
+  .day-page { display: none; padding: 20px 16px 60px; max-width: 860px; margin: 0 auto; }
+  .day-page.active { display: block; }
+
+  /* Day Hero */
+  .day-hero {
+    border-radius: var(--radius);
+    padding: 32px 28px;
+    margin-bottom: 24px;
+    color: white;
+    position: relative;
+    overflow: hidden;
+  }
+  .day-hero::before {
+    content: attr(data-emoji);
+    position: absolute;
+    right: 20px; top: 50%; transform: translateY(-50%);
+    font-size: 5rem;
+    opacity: 0.18;
+    pointer-events: none;
+  }
+  .day-hero .day-label {
+    font-size: 0.75rem;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    opacity: 0.8;
+    margin-bottom: 6px;
+  }
+  .day-hero h1 {
+    font-family: 'Fredoka One', cursive;
+    font-size: clamp(1.4rem, 4vw, 2rem);
+    line-height: 1.15;
+    margin-bottom: 10px;
+  }
+  .day-hero p {
+    font-size: 0.9rem;
+    opacity: 0.88;
+    max-width: 520px;
+    line-height: 1.6;
+  }
+  .day-hero .method-tag {
+    display: inline-block;
+    margin-top: 14px;
+    background: rgba(255,255,255,0.22);
+    border-radius: 20px;
+    padding: 4px 14px;
+    font-size: 0.75rem;
+    font-weight: 700;
+  }
+
+  [data-color="d1"] .day-hero { background: linear-gradient(135deg, #0E9F8E 0%, #06756a 100%); }
+  [data-color="d2"] .day-hero { background: linear-gradient(135deg, #F5A623 0%, #d4880a 100%); }
+  [data-color="d3"] .day-hero { background: linear-gradient(135deg, #7C5CBF 0%, #5a3d9b 100%); }
+  [data-color="d4"] .day-hero { background: linear-gradient(135deg, #FF6B6B 0%, #d94040 100%); }
+  [data-color="d5"] .day-hero { background: linear-gradient(135deg, #27AE60 0%, #1a7d42 100%); }
+
+  /* ===== SECTION CARDS ===== */
+  .section-card {
+    background: white;
+    border-radius: var(--radius);
+    padding: 24px;
+    margin-bottom: 18px;
+    box-shadow: var(--shadow);
+  }
+  .section-card h2 {
+    font-family: 'Fredoka One', cursive;
+    font-size: 1.25rem;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .section-card h3 {
+    font-size: 1rem;
+    font-weight: 800;
+    margin: 16px 0 8px;
+    color: var(--navy);
+  }
+  .section-card p, .section-card li {
+    font-size: 0.92rem;
+    line-height: 1.7;
+    color: #374151;
+  }
+  .section-card ul, .section-card ol {
+    padding-left: 20px;
+    margin-top: 6px;
+  }
+  .section-card li { margin-bottom: 5px; }
+
+  /* Colored headings per day */
+  [data-color="d1"] .section-card h2 { color: var(--day1); }
+  [data-color="d2"] .section-card h2 { color: #b87800; }
+  [data-color="d3"] .section-card h2 { color: var(--day3); }
+  [data-color="d4"] .section-card h2 { color: var(--day4); }
+  [data-color="d5"] .section-card h2 { color: var(--day5); }
+
+  /* Info Box */
+  .info-box {
+    border-radius: 12px;
+    padding: 16px 18px;
+    margin: 14px 0;
+    font-size: 0.88rem;
+    line-height: 1.65;
+  }
+  .info-box.teal { background: var(--teal-light); border-left: 4px solid var(--teal); }
+  .info-box.amber { background: var(--amber-light); border-left: 4px solid var(--amber); }
+  .info-box.purple { background: var(--purple-light); border-left: 4px solid var(--purple); }
+  .info-box.coral { background: var(--coral-light); border-left: 4px solid var(--coral); }
+  .info-box.green { background: var(--green-light); border-left: 4px solid var(--green); }
+  .info-box strong { font-weight: 800; }
+
+  /* Dimension Grid */
+  .dim-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 12px;
+    margin: 14px 0;
+  }
+  .dim-card {
+    border-radius: 12px;
+    padding: 14px 12px;
+    text-align: center;
+    font-size: 0.82rem;
+    font-weight: 700;
+    line-height: 1.4;
+  }
+  .dim-card .dim-icon { font-size: 1.6rem; display: block; margin-bottom: 6px; }
+
+  /* Activity Box */
+  .activity-box {
+    border-radius: 12px;
+    border: 2px dashed;
+    padding: 18px;
+    margin: 14px 0;
+    font-size: 0.88rem;
+    line-height: 1.65;
+  }
+  .activity-box h4 {
+    font-weight: 800;
+    font-size: 0.95rem;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  [data-color="d1"] .activity-box { border-color: var(--day1); background: var(--teal-light); }
+  [data-color="d1"] .activity-box h4 { color: var(--day1); }
+  [data-color="d2"] .activity-box { border-color: var(--amber); background: var(--amber-light); }
+  [data-color="d2"] .activity-box h4 { color: #b87800; }
+  [data-color="d3"] .activity-box { border-color: var(--purple); background: var(--purple-light); }
+  [data-color="d3"] .activity-box h4 { color: var(--purple); }
+  [data-color="d4"] .activity-box { border-color: var(--coral); background: var(--coral-light); }
+  [data-color="d4"] .activity-box h4 { color: var(--coral); }
+  [data-color="d5"] .activity-box { border-color: var(--green); background: var(--green-light); }
+  [data-color="d5"] .activity-box h4 { color: var(--green); }
+
+  /* Reflection Textarea */
+  .reflect-area {
+    width: 100%;
+    padding: 12px 14px;
+    border-radius: 10px;
+    border: 1.5px solid #D1D5DB;
+    font-family: 'Nunito', sans-serif;
+    font-size: 0.88rem;
+    line-height: 1.6;
+    resize: vertical;
+    min-height: 90px;
+    color: var(--navy);
+    transition: border-color 0.2s;
+    margin-top: 8px;
+  }
+  .reflect-area:focus { outline: none; border-color: var(--teal); }
+
+  .reflect-btn {
+    margin-top: 8px;
+    padding: 8px 18px;
+    border: none;
+    border-radius: 20px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform 0.15s, box-shadow 0.15s;
+    background: var(--teal);
+    color: white;
+  }
+  .reflect-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(14,159,142,0.3); }
+  .reflect-feedback {
+    margin-top: 8px;
+    font-size: 0.83rem;
+    color: var(--green);
+    font-weight: 700;
+    display: none;
+  }
+
+  /* ===== QUIZ ===== */
+  .quiz-section {
+    background: var(--navy);
+    border-radius: var(--radius);
+    padding: 28px 24px;
+    margin-bottom: 18px;
+    color: white;
+  }
+  .quiz-section h2 {
+    font-family: 'Fredoka One', cursive;
+    font-size: 1.35rem;
+    margin-bottom: 6px;
+    color: white;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .quiz-section .quiz-subtitle {
+    font-size: 0.82rem;
+    opacity: 0.65;
+    margin-bottom: 22px;
+  }
+
+  .quiz-question {
+    background: rgba(255,255,255,0.07);
+    border-radius: 12px;
+    padding: 18px;
+    margin-bottom: 16px;
+  }
+  .quiz-question .q-label {
+    font-size: 0.7rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    opacity: 0.5;
+    margin-bottom: 8px;
+  }
+  .quiz-question .q-text {
+    font-size: 0.93rem;
+    font-weight: 700;
+    line-height: 1.55;
+    margin-bottom: 14px;
+  }
+
+  /* MC Options */
+  .mc-options { display: flex; flex-direction: column; gap: 8px; }
+  .mc-option {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 10px 14px;
+    border-radius: 10px;
+    background: rgba(255,255,255,0.08);
+    cursor: pointer;
+    border: 1.5px solid transparent;
+    transition: all 0.18s;
+    font-size: 0.87rem;
+    line-height: 1.5;
+  }
+  .mc-option:hover:not(.locked) { background: rgba(255,255,255,0.14); border-color: rgba(255,255,255,0.3); }
+  .mc-option.selected { background: rgba(245,166,35,0.2); border-color: var(--amber); }
+  .mc-option.correct { background: rgba(39,174,96,0.25); border-color: var(--green); }
+  .mc-option.wrong { background: rgba(255,107,107,0.2); border-color: var(--coral); }
+  .mc-option.locked { cursor: default; }
+  .mc-option .opt-letter {
+    flex-shrink: 0;
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.12);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.72rem;
+    font-weight: 800;
+    text-transform: uppercase;
+  }
+  .mc-option.correct .opt-letter { background: var(--green); }
+  .mc-option.wrong .opt-letter { background: var(--coral); }
+  .mc-option.correct.selected .opt-letter { background: var(--green); }
+
+  /* Written answer */
+  .written-answer {
+    width: 100%;
+    padding: 11px 14px;
+    border-radius: 10px;
+    border: 1.5px solid rgba(255,255,255,0.2);
+    background: rgba(255,255,255,0.07);
+    font-family: 'Nunito', sans-serif;
+    font-size: 0.88rem;
+    color: white;
+    resize: vertical;
+    min-height: 80px;
+    transition: border-color 0.2s;
+  }
+  .written-answer::placeholder { color: rgba(255,255,255,0.35); }
+  .written-answer:focus { outline: none; border-color: var(--amber); }
+
+  /* Feedback */
+  .q-feedback {
+    margin-top: 10px;
+    font-size: 0.83rem;
+    border-radius: 8px;
+    padding: 10px 13px;
+    display: none;
+    line-height: 1.55;
+  }
+  .q-feedback.correct { background: rgba(39,174,96,0.2); color: #6BFFAD; }
+  .q-feedback.wrong { background: rgba(255,107,107,0.18); color: #FFB3B3; }
+  .q-feedback.info { background: rgba(245,166,35,0.18); color: #FFD67A; }
+
+  /* Submit quiz */
+  .quiz-submit-area { margin-top: 20px; display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+  .quiz-submit-btn {
+    padding: 11px 26px;
+    border: none;
+    border-radius: 30px;
+    font-family: 'Fredoka One', cursive;
+    font-size: 1rem;
+    cursor: pointer;
+    background: var(--amber);
+    color: var(--navy);
+    transition: transform 0.15s, box-shadow 0.15s;
+  }
+  .quiz-submit-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(245,166,35,0.4); }
+  .quiz-submit-btn:disabled { opacity: 0.5; cursor: default; transform: none; }
+
+  .quiz-score {
+    font-family: 'Fredoka One', cursive;
+    font-size: 1rem;
+    display: none;
+  }
+  .quiz-score.good { color: #6BFFAD; }
+  .quiz-score.ok { color: var(--amber); }
+  .quiz-score.low { color: #FFB3B3; }
+
+  .quiz-retry-btn {
+    padding: 8px 18px;
+    border: 1.5px solid rgba(255,255,255,0.3);
+    border-radius: 20px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 700;
+    cursor: pointer;
+    background: transparent;
+    color: white;
+    transition: all 0.18s;
+    display: none;
+  }
+  .quiz-retry-btn:hover { background: rgba(255,255,255,0.1); }
+
+  /* Progress tracker */
+  .progress-bar-wrap {
+    height: 6px;
+    background: rgba(255,255,255,0.12);
+    border-radius: 3px;
+    margin-bottom: 20px;
+    overflow: hidden;
+  }
+  .progress-bar-fill {
+    height: 100%;
+    border-radius: 3px;
+    background: var(--amber);
+    transition: width 0.4s;
+  }
+
+  /* ===== TABLE ===== */
+  .content-table { width: 100%; border-collapse: collapse; margin: 14px 0; font-size: 0.86rem; }
+  .content-table th {
+    text-align: left;
+    padding: 10px 12px;
+    font-weight: 800;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  .content-table td { padding: 9px 12px; border-bottom: 1px solid #E5E7EB; line-height: 1.55; }
+  .content-table tr:last-child td { border-bottom: none; }
+  [data-color="d1"] .content-table th { background: var(--teal-light); color: var(--teal); }
+  [data-color="d2"] .content-table th { background: var(--amber-light); color: #b87800; }
+  [data-color="d3"] .content-table th { background: var(--purple-light); color: var(--purple); }
+  [data-color="d4"] .content-table th { background: var(--coral-light); color: var(--coral); }
+  [data-color="d5"] .content-table th { background: var(--green-light); color: var(--green); }
+  .content-table tr:nth-child(even) td { background: #FAFAFA; }
+
+  /* ===== CASE STUDY ===== */
+  .case-box {
+    border-radius: 12px;
+    padding: 18px;
+    border: 2px solid;
+    margin: 14px 0;
+    font-size: 0.88rem;
+    line-height: 1.7;
+  }
+  .case-box h4 { font-weight: 800; font-size: 0.92rem; margin-bottom: 8px; }
+
+  /* ===== ACCORDION ===== */
+  .accordion { margin: 10px 0; }
+  .acc-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 16px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 0.9rem;
+    transition: background 0.18s;
+    user-select: none;
+  }
+  .acc-header:hover { opacity: 0.85; }
+  [data-color="d1"] .acc-header { background: var(--teal-light); color: var(--teal); }
+  [data-color="d2"] .acc-header { background: var(--amber-light); color: #b87800; }
+  [data-color="d3"] .acc-header { background: var(--purple-light); color: var(--purple); }
+  [data-color="d4"] .acc-header { background: var(--coral-light); color: var(--coral); }
+  [data-color="d5"] .acc-header { background: var(--green-light); color: var(--green); }
+  .acc-arrow { transition: transform 0.2s; font-size: 0.75rem; }
+  .acc-header.open .acc-arrow { transform: rotate(180deg); }
+  .acc-body {
+    display: none;
+    padding: 14px 16px;
+    border-radius: 0 0 10px 10px;
+    background: white;
+    border: 1px solid #E5E7EB;
+    border-top: none;
+    font-size: 0.88rem;
+    line-height: 1.7;
+  }
+  .acc-body.open { display: block; }
+
+  /* Performance Task */
+  .perf-task {
+    background: linear-gradient(135deg, #1A2B4A 0%, #0f1d33 100%);
+    border-radius: var(--radius);
+    padding: 26px 24px;
+    margin-bottom: 18px;
+    color: white;
+  }
+  .perf-task h2 {
+    font-family: 'Fredoka One', cursive;
+    font-size: 1.3rem;
+    color: var(--amber);
+    margin-bottom: 6px;
+  }
+  .perf-task p { font-size: 0.88rem; line-height: 1.65; opacity: 0.9; }
+  .perf-task ul { padding-left: 18px; margin-top: 8px; }
+  .perf-task li { font-size: 0.88rem; line-height: 1.65; opacity: 0.9; margin-bottom: 4px; }
+  .rubric-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+    gap: 10px;
+    margin-top: 14px;
+  }
+  .rubric-item {
+    background: rgba(255,255,255,0.08);
+    border-radius: 10px;
+    padding: 14px;
+    font-size: 0.83rem;
+  }
+  .rubric-item strong { display: block; color: var(--amber); font-size: 0.9rem; margin-bottom: 4px; }
+
+  /* Game Board */
+  .game-board {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    margin: 14px 0;
+  }
+  .game-card {
+    border-radius: 12px;
+    padding: 16px;
+    cursor: pointer;
+    text-align: center;
+    font-size: 0.85rem;
+    font-weight: 700;
+    transition: transform 0.18s, box-shadow 0.18s;
+    border: 2px solid transparent;
+  }
+  .game-card:hover { transform: translateY(-2px); }
+  .game-card .gc-icon { font-size: 1.8rem; display: block; margin-bottom: 8px; }
+  .game-card .gc-label { font-size: 0.78rem; opacity: 0.75; font-weight: 600; margin-top: 2px; }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 500px) {
+    .day-hero { padding: 22px 18px; }
+    .section-card { padding: 18px 16px; }
+    .quiz-section { padding: 20px 16px; }
+    .dim-grid { grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); }
+    .game-board { grid-template-columns: 1fr 1fr; }
+  }
+
+  /* Scroll-triggered animation */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(18px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .animate-in { animation: fadeUp 0.4s ease both; }
+
+  /* Badge */
+  .hots-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background: var(--coral);
+    color: white;
+    font-size: 0.65rem;
+    font-weight: 800;
+    padding: 2px 7px;
+    border-radius: 20px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    vertical-align: middle;
+    margin-left: 4px;
+  }
+  .lots-badge {
+    display: inline-flex;
+    align-items: center;
+    background: var(--sky);
+    color: white;
+    font-size: 0.65rem;
+    font-weight: 800;
+    padding: 2px 7px;
+    border-radius: 20px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    vertical-align: middle;
+    margin-left: 4px;
+  }
+
+  /* Two-col layout */
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 14px 0; }
+  @media (max-width: 480px) { .two-col { grid-template-columns: 1fr; } }
+
+  .mini-card {
+    border-radius: 10px;
+    padding: 14px;
+    font-size: 0.84rem;
+    line-height: 1.6;
+  }
+  .mini-card strong { display: block; font-weight: 800; margin-bottom: 4px; font-size: 0.88rem; }
+
+  /* Drag-drop area (Day 5) */
+  .drop-zone {
+    min-height: 60px;
+    border-radius: 10px;
+    border: 2px dashed rgba(255,255,255,0.3);
+    padding: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 8px;
+    background: rgba(255,255,255,0.05);
+    transition: border-color 0.2s;
+  }
+  .drop-zone.over { border-color: var(--amber); }
+  .drag-chip {
+    padding: 6px 12px;
+    border-radius: 20px;
+    background: rgba(255,255,255,0.12);
+    font-size: 0.8rem;
+    font-weight: 700;
+    cursor: grab;
+    user-select: none;
+    transition: background 0.15s;
+  }
+  .drag-chip:active { cursor: grabbing; }
+  .drag-chip:hover { background: rgba(255,255,255,0.2); }
+
+  hr.section-divider {
+    border: none;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, rgba(0,0,0,0.07), transparent);
+    margin: 22px 0;
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header id="site-header">
+  <div class="header-top">
+    <div class="header-logo">🏃 <span>PE & Health</span> Grade 6</div>
+    <span class="header-badge">ADM</span>
+  </div>
+  <nav id="tab-bar">
+    <button class="tab-btn active" data-day="1" onclick="showDay(1)">
+      <span class="tab-icon">🌱</span> Day 1: Intro
+    </button>
+    <button class="tab-btn" data-day="2" onclick="showDay(2)">
+      <span class="tab-icon">💪</span> Day 2: Physical & Mental
+    </button>
+    <button class="tab-btn" data-day="3" onclick="showDay(3)">
+      <span class="tab-icon">🌍</span> Day 3: Social & Spiritual
+    </button>
+    <button class="tab-btn" data-day="4" onclick="showDay(4)">
+      <span class="tab-icon">🎮</span> Day 4: Work & Finance
+    </button>
+    <button class="tab-btn" data-day="5" onclick="showDay(5)">
+      <span class="tab-icon">🌟</span> Day 5: Synthesis
+    </button>
+  </nav>
+</header>
+
+<div id="page-top"></div>
+
+<!-- ==================== DAY 1 ==================== -->
+<div id="day-1" class="day-page active" data-color="d1">
+  <div class="day-hero" data-emoji="🌱">
+    <div class="day-label">Day 1 — Introduction</div>
+    <h1>Holistic Wellness &amp; the Nine Dimensions</h1>
+    <p>Discover what it means to be truly well — not just in body, but in mind, spirit, and everything in between.</p>
+    <span class="method-tag">🗣️ Think–Pair–Share</span>
+  </div>
+
+  <!-- Learning Objectives -->
+  <div class="section-card">
+    <h2>🎯 Learning Objectives</h2>
+    <p>After today's lesson, you will be able to:</p>
+    <ul>
+      <li>Define <strong>holistic wellness</strong> and explain why it goes beyond physical health.</li>
+      <li>Identify and describe the <strong>nine dimensions of wellness</strong>.</li>
+      <li>Reflect on which dimensions are strong or need improvement in your own life.</li>
+      <li>Analyze how the nine dimensions are interconnected with each other.</li>
+    </ul>
+  </div>
+
+  <!-- Key Concept -->
+  <div class="section-card">
+    <h2>📖 What Is Holistic Wellness?</h2>
+    <div class="info-box teal">
+      <strong>Holistic Wellness</strong> means taking care of <em>every part</em> of yourself — your body, mind, emotions, relationships, spirit, and more. The word "holistic" comes from the Greek word <em>holos</em>, meaning "whole."
+    </div>
+    <p>Imagine a wheel with nine spokes. If one spoke is broken, the wheel wobbles and can't roll smoothly. That's how your wellness works — when one part is struggling, it affects all the others.</p>
+    <h3>🧠 Think About It</h3>
+    <p>Have you ever noticed that when you're stressed about school (mental wellness), you might also feel sick to your stomach (physical wellness)? Or when you fight with a friend (social wellness), you feel sad (emotional wellness)? This is holistic wellness in action!</p>
+  </div>
+
+  <!-- Nine Dimensions -->
+  <div class="section-card">
+    <h2>🔷 The Nine Dimensions of Wellness</h2>
+    <div class="dim-grid">
+      <div class="dim-card" style="background:#E8F7F5;color:#065f52;">
+        <span class="dim-icon">💪</span>
+        <div><strong>Physical</strong></div>
+        <div style="font-weight:400;font-size:0.77rem;margin-top:3px;">Exercise, sleep, nutrition</div>
+      </div>
+      <div class="dim-card" style="background:#FFF8EC;color:#854d0e;">
+        <span class="dim-icon">🧠</span>
+        <div><strong>Mental / Intellectual</strong></div>
+        <div style="font-weight:400;font-size:0.77rem;margin-top:3px;">Learning &amp; critical thinking</div>
+      </div>
+      <div class="dim-card" style="background:#FFF0F0;color:#991b1b;">
+        <span class="dim-icon">❤️</span>
+        <div><strong>Emotional</strong></div>
+        <div style="font-weight:400;font-size:0.77rem;margin-top:3px;">Managing feelings &amp; coping</div>
+      </div>
+      <div class="dim-card" style="background:#EFF6FF;color:#1e40af;">
+        <span class="dim-icon">👥</span>
+        <div><strong>Social</strong></div>
+        <div style="font-weight:400;font-size:0.77rem;margin-top:3px;">Relationships &amp; community</div>
+      </div>
+      <div class="dim-card" style="background:#F5F3FF;color:#5b21b6;">
+        <span class="dim-icon">🙏</span>
+        <div><strong>Spiritual</strong></div>
+        <div style="font-weight:400;font-size:0.77rem;margin-top:3px;">Purpose, values &amp; meaning</div>
+      </div>
+      <div class="dim-card" style="background:#ECFDF5;color:#065f46;">
+        <span class="dim-icon">🌍</span>
+        <div><strong>Environmental</strong></div>
+        <div style="font-weight:400;font-size:0.77rem;margin-top:3px;">Surroundings &amp; nature</div>
+      </div>
+      <div class="dim-card" style="background:#FFF7ED;color:#9a3412;">
+        <span class="dim-icon">🎨</span>
+        <div><strong>Cultural / Creative</strong></div>
+        <div style="font-weight:400;font-size:0.77rem;margin-top:3px;">Arts, heritage &amp; expression</div>
+      </div>
+      <div class="dim-card" style="background:#F0FDF4;color:#14532d;">
+        <span class="dim-icon">🛠️</span>
+        <div><strong>Occupational / Vocational</strong></div>
+        <div style="font-weight:400;font-size:0.77rem;margin-top:3px;">Work, purpose &amp; skills</div>
+      </div>
+      <div class="dim-card" style="background:#FFFBEB;color:#78350f;">
+        <span class="dim-icon">💰</span>
+        <div><strong>Financial</strong></div>
+        <div style="font-weight:400;font-size:0.77rem;margin-top:3px;">Money management &amp; security</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Think-Pair-Share Activity -->
+  <div class="section-card">
+    <h2>🗣️ Think–Pair–Share Activity</h2>
+    <div class="activity-box">
+      <h4>🤔 Step 1: THINK (3 minutes)</h4>
+      <p>Read the question below carefully. Write your personal answer in the box before discussing with anyone.</p>
+      <p style="margin-top:10px;font-weight:700;font-size:0.92rem;">"Think of a time when you felt completely healthy and happy. Which dimensions of wellness do you think were working well for you at that time? Which were you neglecting? What was the effect?"</p>
+      <textarea class="reflect-area" placeholder="Write your personal reflection here..."></textarea>
+      <button class="reflect-btn" onclick="saveDraft(this)">✅ Save My Reflection</button>
+      <div class="reflect-feedback">✨ Great reflection! Now share your ideas with a classmate.</div>
+    </div>
+    <div class="activity-box" style="margin-top:12px;">
+      <h4>👫 Step 2: PAIR</h4>
+      <p>Share your answer with a classmate, family member, or guardian. Listen carefully to their answer too. What is <em>similar</em>? What is <em>different</em>?</p>
+      <textarea class="reflect-area" placeholder="What did your partner share? What similarities or differences did you notice?"></textarea>
+      <button class="reflect-btn" onclick="saveDraft(this)">✅ Save Notes</button>
+      <div class="reflect-feedback">✨ Saved! Now get ready to share with the group.</div>
+    </div>
+    <div class="activity-box" style="margin-top:12px;">
+      <h4>🎤 Step 3: SHARE</h4>
+      <p>Imagine you are about to present to the class. Answer this in your own words:</p>
+      <p style="margin-top:8px;font-weight:700;">"Based on your pair discussion, what is ONE insight about wellness you learned that you didn't know before?"</p>
+      <textarea class="reflect-area" placeholder="Write your key insight here..."></textarea>
+      <button class="reflect-btn" onclick="saveDraft(this)">✅ Save Insight</button>
+      <div class="reflect-feedback">✨ Excellent thinking!</div>
+    </div>
+  </div>
+
+  <!-- Wellness Wheel Self-Check -->
+  <div class="section-card">
+    <h2>🎡 My Wellness Wheel Self-Check</h2>
+    <p>Rate yourself in each dimension from 1 (needs a lot of work) to 5 (doing great). Be honest!</p>
+    <div id="wellness-wheel" style="margin-top:14px;"></div>
+    <button class="reflect-btn" onclick="calcWheelScore()" style="margin-top:14px;">🔍 See My Wellness Balance</button>
+    <div id="wheel-result" style="display:none;margin-top:14px;" class="info-box teal"></div>
+  </div>
+
+  <!-- Quiz Day 1 -->
+  <div class="quiz-section" id="quiz-1">
+    <h2>📝 Day 1 Test</h2>
+    <p class="quiz-subtitle">5 items · Mix of LOTS and HOTS questions · Answer all before submitting</p>
+    <div class="progress-bar-wrap"><div class="progress-bar-fill" id="q1-prog" style="width:0%"></div></div>
+    <div id="q1-container"></div>
+    <div class="quiz-submit-area">
+      <button class="quiz-submit-btn" onclick="submitQuiz(1)" id="q1-submit">Submit Answers</button>
+      <div class="quiz-score" id="q1-score"></div>
+      <button class="quiz-retry-btn" onclick="retryQuiz(1)" id="q1-retry">↺ Try Again</button>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== DAY 2 ==================== -->
+<div id="day-2" class="day-page" data-color="d2">
+  <div class="day-hero" data-emoji="💪">
+    <div class="day-label">Day 2 — Inquiry-Based Learning</div>
+    <h1>Physical, Mental/Intellectual &amp; Emotional Wellness</h1>
+    <p>Explore the three dimensions that form the foundation of personal health through questions, investigation, and discovery.</p>
+    <span class="method-tag">🔬 Inquiry-Based Learning</span>
+  </div>
+
+  <div class="section-card">
+    <h2>🎯 Learning Objectives</h2>
+    <ul>
+      <li>Explain what physical, mental/intellectual, and emotional wellness mean.</li>
+      <li>Identify behaviors and habits that support or harm each dimension.</li>
+      <li>Evaluate personal habits using evidence-based criteria.</li>
+      <li>Design one concrete action plan for improving a chosen dimension.</li>
+    </ul>
+  </div>
+
+  <!-- Inquiry Driving Question -->
+  <div class="section-card">
+    <h2>🔍 Our Driving Question</h2>
+    <div class="info-box amber">
+      <strong>"How do our daily habits shape our physical, mental, and emotional health — and how do these three dimensions affect each other?"</strong>
+    </div>
+    <p>In Inquiry-Based Learning, we start with a big question and investigate to find the answer. As you read and do the activities, keep coming back to this question!</p>
+  </div>
+
+  <!-- Physical Wellness -->
+  <div class="section-card">
+    <h2>💪 Physical Wellness</h2>
+    <p><strong>Physical wellness</strong> is about taking care of your body so it can function at its best. It includes exercise, sleep, nutrition, hygiene, and avoiding harmful substances.</p>
+    <div class="two-col" style="margin-top:14px;">
+      <div class="mini-card" style="background:#E8F7F5;">
+        <strong>✅ Habits that HELP</strong>
+        <ul style="padding-left:16px;font-size:0.83rem;margin-top:4px;">
+          <li>60+ minutes of physical activity daily</li>
+          <li>8–10 hours of sleep for teens</li>
+          <li>Eating a balanced, colorful diet</li>
+          <li>Regular hand-washing and hygiene</li>
+          <li>Drinking 6–8 glasses of water daily</li>
+        </ul>
+      </div>
+      <div class="mini-card" style="background:#FFF0F0;">
+        <strong>❌ Habits that HARM</strong>
+        <ul style="padding-left:16px;font-size:0.83rem;margin-top:4px;">
+          <li>Too much screen time and sitting</li>
+          <li>Skipping meals or eating junk food</li>
+          <li>Irregular sleep schedules</li>
+          <li>Ignoring body pain or illness</li>
+          <li>Substance use or smoking</li>
+        </ul>
+      </div>
+    </div>
+    <h3>🏋️ Did You Know?</h3>
+    <p>The Philippine Department of Health recommends at least <strong>60 minutes of moderate to vigorous physical activity</strong> every day for children and youth. Even walking, dancing, or playing traditional games like <em>patintero</em> and <em>tumbang preso</em> count!</p>
+    <div class="activity-box" style="margin-top:14px;">
+      <h4>🔎 Investigate: My Physical Activity Log</h4>
+      <p>Track your physical activities over the past 3 days. Be honest!</p>
+      <textarea class="reflect-area" placeholder="Day 1: ___&#10;Day 2: ___&#10;Day 3: ___&#10;&#10;Total minutes: ___&#10;Did I meet the 60-minute goal? Why or why not?"></textarea>
+      <button class="reflect-btn" onclick="saveDraft(this)">✅ Save My Log</button>
+      <div class="reflect-feedback">✨ Logged! Awareness is the first step to change.</div>
+    </div>
+  </div>
+
+  <!-- Mental/Intellectual Wellness -->
+  <div class="section-card">
+    <h2>🧠 Mental / Intellectual Wellness</h2>
+    <p><strong>Mental/Intellectual wellness</strong> means keeping your mind active, curious, and healthy. It includes learning, critical thinking, problem-solving, creativity, and managing mental health.</p>
+    <div class="info-box amber">
+      <strong>Mental wellness ≠ Mental illness.</strong> Mental wellness is about how you think and process the world. You can be mentally well even while facing challenges if you have good coping strategies and seek help when needed.
+    </div>
+    <h3>📚 Components of Mental Wellness</h3>
+    <table class="content-table">
+      <tr><th>Component</th><th>What It Looks Like</th></tr>
+      <tr><td><strong>Intellectual curiosity</strong></td><td>Asking questions, exploring new ideas, reading</td></tr>
+      <tr><td><strong>Critical thinking</strong></td><td>Analyzing information before believing it, evaluating sources</td></tr>
+      <tr><td><strong>Problem-solving</strong></td><td>Breaking down challenges into manageable steps</td></tr>
+      <tr><td><strong>Mental health literacy</strong></td><td>Recognizing signs of stress, anxiety, depression; knowing when to seek help</td></tr>
+      <tr><td><strong>Mindfulness</strong></td><td>Paying focused attention to the present moment without judgment</td></tr>
+    </table>
+    <div class="activity-box">
+      <h4>🧩 Critical Thinking Challenge</h4>
+      <p>You see a post on social media that says: <em>"Drinking 5 cups of coffee a day makes you smarter and improves focus!"</em></p>
+      <p style="margin-top:8px;font-weight:700;">Analyze this claim. What questions would a mentally well, critical thinker ask before sharing or believing this?</p>
+      <textarea class="reflect-area" placeholder="List at least 3 questions you would ask and why..."></textarea>
+      <button class="reflect-btn" onclick="saveDraft(this)">✅ Submit Analysis</button>
+      <div class="reflect-feedback">✨ Excellent critical thinking!</div>
+    </div>
+  </div>
+
+  <!-- Emotional Wellness -->
+  <div class="section-card">
+    <h2>❤️ Emotional Wellness</h2>
+    <p><strong>Emotional wellness</strong> is the ability to understand, manage, and express your feelings in healthy ways. It also means being able to handle life's challenges without being overwhelmed.</p>
+    <h3>🎭 Emotion vs. Reaction</h3>
+    <div class="two-col">
+      <div class="mini-card" style="background:#FFF0F0;">
+        <strong>😤 Unhealthy Emotional Coping</strong>
+        <ul style="padding-left:16px;font-size:0.83rem;margin-top:4px;">
+          <li>Bottling up feelings until you explode</li>
+          <li>Hurting yourself or others when angry</li>
+          <li>Withdrawing completely from friends</li>
+          <li>Denying that you have any emotions</li>
+        </ul>
+      </div>
+      <div class="mini-card" style="background:#E8F7F5;">
+        <strong>😊 Healthy Emotional Coping</strong>
+        <ul style="padding-left:16px;font-size:0.83rem;margin-top:4px;">
+          <li>Naming your emotions ("I feel anxious")</li>
+          <li>Talking to a trusted person</li>
+          <li>Physical activity to release tension</li>
+          <li>Journaling, drawing, or creative outlets</li>
+        </ul>
+      </div>
+    </div>
+    <div class="activity-box" style="margin-top:14px;">
+      <h4>💬 Emotional Scenario Analysis</h4>
+      <p><strong>Situation:</strong> Your best friend forgot your birthday and didn't apologize. You feel hurt and angry. You have two choices: (A) Post something mean about them online, or (B) Wait until you're calm and then tell them how you feel.</p>
+      <p style="margin-top:8px;font-weight:700;">Analyze both choices. What are the short-term and long-term consequences of each? Which is more emotionally well? Why?</p>
+      <textarea class="reflect-area" placeholder="Analyze both choices with consequences and recommend the better option with reasoning..."></textarea>
+      <button class="reflect-btn" onclick="saveDraft(this)">✅ Save Analysis</button>
+      <div class="reflect-feedback">✨ Thoughtful emotional reasoning!</div>
+    </div>
+  </div>
+
+  <!-- Inquiry Closure -->
+  <div class="section-card">
+    <h2>🔄 Answering Our Driving Question</h2>
+    <p>Now that you've learned about all three dimensions, let's revisit our driving question:</p>
+    <div class="info-box amber">
+      <strong>"How do our daily habits shape our physical, mental, and emotional health — and how do these three dimensions affect each other?"</strong>
+    </div>
+    <textarea class="reflect-area" placeholder="Write your complete answer using at least 3 specific examples from what you learned today..."></textarea>
+    <button class="reflect-btn" onclick="saveDraft(this)">✅ Submit My Answer</button>
+    <div class="reflect-feedback">✨ Great inquiry conclusion!</div>
+  </div>
+
+  <!-- Quiz Day 2 -->
+  <div class="quiz-section" id="quiz-2">
+    <h2>📝 Day 2 Test</h2>
+    <p class="quiz-subtitle">5 items · Physical, Mental &amp; Emotional Wellness · LOTS and HOTS</p>
+    <div class="progress-bar-wrap"><div class="progress-bar-fill" id="q2-prog" style="width:0%"></div></div>
+    <div id="q2-container"></div>
+    <div class="quiz-submit-area">
+      <button class="quiz-submit-btn" onclick="submitQuiz(2)" id="q2-submit">Submit Answers</button>
+      <div class="quiz-score" id="q2-score"></div>
+      <button class="quiz-retry-btn" onclick="retryQuiz(2)" id="q2-retry">↺ Try Again</button>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== DAY 3 ==================== -->
+<div id="day-3" class="day-page" data-color="d3">
+  <div class="day-hero" data-emoji="🌍">
+    <div class="day-label">Day 3 — Jigsaw Method</div>
+    <h1>Social, Spiritual, Cultural/Creative &amp; Environmental Wellness</h1>
+    <p>Each of us becomes an expert in one area and teaches others — everyone has a piece of the puzzle!</p>
+    <span class="method-tag">🧩 Jigsaw Cooperative Learning</span>
+  </div>
+
+  <div class="section-card">
+    <h2>🎯 Learning Objectives</h2>
+    <ul>
+      <li>Define and explain social, spiritual, cultural/creative, and environmental wellness.</li>
+      <li>Compare how these dimensions affect different aspects of daily life in the Philippines.</li>
+      <li>Evaluate how neglecting these dimensions impacts overall well-being.</li>
+      <li>Create a brief "expert summary" for one dimension to teach others.</li>
+    </ul>
+  </div>
+
+  <div class="section-card">
+    <h2>🧩 How Jigsaw Works</h2>
+    <div class="info-box purple">
+      In the Jigsaw Method, each student becomes an <strong>"expert"</strong> in one topic, then teaches it to others. Today, read all four expert sections below. As you read each one, imagine you are that expert and must be ready to explain it clearly to a friend.
+    </div>
+  </div>
+
+  <!-- Social Wellness -->
+  <div class="section-card">
+    <h2>👥 Expert Group 1: Social Wellness</h2>
+    <p><strong>Social wellness</strong> refers to the quality of your relationships and your ability to connect meaningfully with others. It involves communication, empathy, respect, and building a support network.</p>
+    <h3>Key Elements of Social Wellness</h3>
+    <ul>
+      <li><strong>Healthy communication</strong> — Expressing yourself clearly and listening actively</li>
+      <li><strong>Empathy</strong> — Understanding and sharing the feelings of others</li>
+      <li><strong>Setting boundaries</strong> — Knowing your limits in relationships</li>
+      <li><strong>Community involvement</strong> — Participating in barangay, school, and family life</li>
+      <li><strong>Conflict resolution</strong> — Solving disagreements peacefully</li>
+    </ul>
+    <div class="info-box purple">
+      <strong>Filipino Context:</strong> In Philippine culture, the concept of <em>"kapwa"</em> (shared identity with others) is central to social wellness. We are inherently connected. Family ("pamilya") and community ("komunidad") are deeply valued.
+    </div>
+    <div class="activity-box">
+      <h4>🗺️ My Social Network Map</h4>
+      <p>List the 5 most important people in your life and describe how each relationship supports your social wellness. Then identify one relationship you want to improve and how.</p>
+      <textarea class="reflect-area" placeholder="Person 1: ___ — How they support me: ___&#10;Person 2: ___ — How they support me: ___&#10;Person 3: ...&#10;&#10;Relationship I want to improve: ___&#10;My plan to improve it: ___"></textarea>
+      <button class="reflect-btn" onclick="saveDraft(this)">✅ Save My Map</button>
+      <div class="reflect-feedback">✨ Mapping your social wellness!</div>
+    </div>
+  </div>
+
+  <!-- Spiritual Wellness -->
+  <div class="section-card">
+    <h2>🙏 Expert Group 2: Spiritual Wellness</h2>
+    <p><strong>Spiritual wellness</strong> means having a sense of purpose, meaning, and values that guide your life. It does NOT have to be religious — it includes your personal beliefs, ethics, and what you feel is important.</p>
+    <div class="accordion">
+      <div class="acc-header" onclick="toggleAcc(this)">
+        What does spiritual wellness look like? <span class="acc-arrow">▼</span>
+      </div>
+      <div class="acc-body">
+        <ul>
+          <li>Having a personal code of values (honesty, compassion, fairness)</li>
+          <li>Finding meaning in daily activities, not just big events</li>
+          <li>Practicing gratitude — noticing and appreciating what you have</li>
+          <li>Feeling a sense of connection to something greater than yourself (nature, community, God, or the universe)</li>
+          <li>Being able to ask deep questions about life, suffering, and purpose</li>
+        </ul>
+      </div>
+    </div>
+    <div class="accordion" style="margin-top:8px;">
+      <div class="acc-header" onclick="toggleAcc(this)">
+        How does spiritual wellness affect health? <span class="acc-arrow">▼</span>
+      </div>
+      <div class="acc-body">
+        <p>Research shows that people with a strong sense of purpose tend to:</p>
+        <ul>
+          <li>Recover faster from illness and surgery</li>
+          <li>Live longer, healthier lives</li>
+          <li>Handle stress and grief better</li>
+          <li>Make healthier lifestyle choices</li>
+          <li>Feel more satisfied with their relationships</li>
+        </ul>
+      </div>
+    </div>
+    <div class="activity-box" style="margin-top:14px;">
+      <h4>🌟 Values Clarification</h4>
+      <p>List your <strong>top 5 personal values</strong> (e.g., respect, honesty, courage, love, justice). Then explain: How do these values guide your daily decisions? Give one real example.</p>
+      <textarea class="reflect-area" placeholder="My top 5 values:&#10;1. ___  2. ___  3. ___  4. ___  5. ___&#10;&#10;How they guide me: ___&#10;&#10;Real example: ___"></textarea>
+      <button class="reflect-btn" onclick="saveDraft(this)">✅ Save Values</button>
+      <div class="reflect-feedback">✨ Knowing your values is powerful!</div>
+    </div>
+  </div>
+
+  <!-- Cultural/Creative Wellness -->
+  <div class="section-card">
+    <h2>🎨 Expert Group 3: Cultural / Creative Wellness</h2>
+    <p><strong>Cultural wellness</strong> means appreciating, respecting, and participating in the arts, culture, and traditions of your community. <strong>Creative wellness</strong> means expressing yourself through creative activities.</p>
+    <table class="content-table">
+      <tr><th>Cultural Wellness</th><th>Creative Wellness</th></tr>
+      <tr><td>Learning Philippine folk dances (Tinikling, Pandanggo)</td><td>Drawing, painting, sculpting</td></tr>
+      <tr><td>Respecting elders' traditions ("mano po" culture)</td><td>Writing stories, poetry, or music</td></tr>
+      <tr><td>Celebrating local festivals (Sinulog, Ati-Atihan)</td><td>Acting, dancing, performing arts</td></tr>
+      <tr><td>Knowing your regional language and dialects</td><td>Photography, video-making, crafts</td></tr>
+      <tr><td>Understanding Filipino history and heritage</td><td>Cooking traditional recipes</td></tr>
+    </table>
+    <div class="info-box purple">
+      <strong>Why it matters:</strong> Cultural and creative activities reduce stress, boost self-esteem, preserve identity, and help you process emotions. Even 15 minutes of creative expression daily can significantly improve mental health.
+    </div>
+    <div class="activity-box">
+      <h4>🎭 Creative Expression Mini-Task</h4>
+      <p>Choose ONE creative activity to do right now or this week:</p>
+      <ul>
+        <li>Draw a picture that represents your wellness journey</li>
+        <li>Write a short poem (at least 4 lines) about health and happiness</li>
+        <li>Describe a Filipino cultural tradition that positively impacts wellness</li>
+        <li>Create a wellness slogan in Filipino (Tagalog, Visayan, Ilocano, or your dialect)</li>
+      </ul>
+      <textarea class="reflect-area" placeholder="Share your creative work here..."></textarea>
+      <button class="reflect-btn" onclick="saveDraft(this)">✅ Share My Creation</button>
+      <div class="reflect-feedback">✨ Beautifully done!</div>
+    </div>
+  </div>
+
+  <!-- Environmental Wellness -->
+  <div class="section-card">
+    <h2>🌿 Expert Group 4: Environmental Wellness</h2>
+    <p><strong>Environmental wellness</strong> means living in harmony with your surroundings — creating safe, clean, and inspiring spaces — and caring for the natural world around you.</p>
+    <h3>Two Levels of Environment</h3>
+    <div class="two-col">
+      <div class="mini-card" style="background:#F2EEFF;">
+        <strong>🏠 Personal Environment</strong>
+        <p>Your home, bedroom, school, and barangay. A clean, organized, and safe personal environment reduces stress and supports focus and sleep.</p>
+      </div>
+      <div class="mini-card" style="background:#ECFDF5;">
+        <strong>🌱 Natural Environment</strong>
+        <p>Air, water, forests, oceans, and biodiversity. As a Filipino, living near nature (mountains, beaches, forests) is a unique wellness resource!</p>
+      </div>
+    </div>
+    <div class="activity-box" style="margin-top:14px;">
+      <h4>🏡 Environmental Wellness Audit</h4>
+      <p>Rate your home/school environment. For each item, answer: Is this supporting or harming your wellness? What can YOU do to improve it?</p>
+      <table class="content-table" style="font-size:0.82rem;">
+        <tr><th>Environmental Factor</th><th>Supports ✅ or Harms ❌?</th><th>My Action</th></tr>
+        <tr><td>Cleanliness of my room/space</td><td></td><td></td></tr>
+        <tr><td>Air quality in my neighborhood</td><td></td><td></td></tr>
+        <tr><td>Access to nature/green spaces</td><td></td><td></td></tr>
+        <tr><td>Noise levels at home</td><td></td><td></td></tr>
+        <tr><td>Waste management in my barangay</td><td></td><td></td></tr>
+      </table>
+      <textarea class="reflect-area" placeholder="Fill in the table above, then write 2-3 sentences about which environmental factor affects your wellness the most and what you plan to do about it..."></textarea>
+      <button class="reflect-btn" onclick="saveDraft(this)">✅ Save Audit</button>
+      <div class="reflect-feedback">✨ Environmental awareness starts with you!</div>
+    </div>
+  </div>
+
+  <!-- Jigsaw Share-Out -->
+  <div class="section-card">
+    <h2>🧩 Jigsaw Share-Out: Teach What You Learned</h2>
+    <p>Now that you've read all four expert sections, choose the ONE dimension you understand best and write a short "mini-lesson" as if you were teaching it to a younger student or a family member who has never heard of it.</p>
+    <div class="activity-box">
+      <h4>📚 My Mini-Lesson</h4>
+      <textarea class="reflect-area" style="min-height:120px;" placeholder="My Expert Topic: ___&#10;&#10;What it means (in simple words):&#10;&#10;Why it matters for health:&#10;&#10;One thing everyone should start doing:&#10;&#10;One Filipino example of this dimension:"></textarea>
+      <button class="reflect-btn" onclick="saveDraft(this)">✅ Submit My Mini-Lesson</button>
+      <div class="reflect-feedback">✨ You're an expert now!</div>
+    </div>
+  </div>
+
+  <!-- Quiz Day 3 -->
+  <div class="quiz-section" id="quiz-3">
+    <h2>📝 Day 3 Test</h2>
+    <p class="quiz-subtitle">5 items · Social, Spiritual, Cultural &amp; Environmental Wellness · LOTS and HOTS</p>
+    <div class="progress-bar-wrap"><div class="progress-bar-fill" id="q3-prog" style="width:0%"></div></div>
+    <div id="q3-container"></div>
+    <div class="quiz-submit-area">
+      <button class="quiz-submit-btn" onclick="submitQuiz(3)" id="q3-submit">Submit Answers</button>
+      <div class="quiz-score" id="q3-score"></div>
+      <button class="quiz-retry-btn" onclick="retryQuiz(3)" id="q3-retry">↺ Try Again</button>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== DAY 4 ==================== -->
+<div id="day-4" class="day-page" data-color="d4">
+  <div class="day-hero" data-emoji="🎮">
+    <div class="day-label">Day 4 — Game-Based Learning + Case Analysis</div>
+    <h1>Occupational/Vocational &amp; Financial Wellness; Interdependence of Dimensions</h1>
+    <p>Level up your wellness knowledge through games, case studies, and critical analysis of how all nine dimensions connect!</p>
+    <span class="method-tag">🎮 Game-Based Learning</span>
+  </div>
+
+  <div class="section-card">
+    <h2>🎯 Learning Objectives</h2>
+    <ul>
+      <li>Define occupational/vocational and financial wellness.</li>
+      <li>Explain how these dimensions affect overall health and life satisfaction.</li>
+      <li>Analyze a real-life case where multiple wellness dimensions interact.</li>
+      <li>Evaluate how a person's well-being is affected when one dimension fails.</li>
+      <li>Propose solutions to restore holistic wellness balance in a case study.</li>
+    </ul>
+  </div>
+
+  <!-- Occupational Wellness -->
+  <div class="section-card">
+    <h2>🛠️ Occupational / Vocational Wellness</h2>
+    <p><strong>Occupational wellness</strong> means finding personal satisfaction and purpose in your work, studies, or activities. Even as a Grade 6 student, your "occupation" is being a student — and how you feel about it matters!</p>
+    <div class="two-col" style="margin-top:12px;">
+      <div class="mini-card" style="background:#FFF0F0;">
+        <strong>Signs of Poor Occupational Wellness</strong>
+        <ul style="padding-left:14px;font-size:0.82rem;margin-top:4px;">
+          <li>Dreading going to school every day</li>
+          <li>Feeling like your work has no purpose</li>
+          <li>No goals or ambitions for the future</li>
+          <li>Burnout — feeling exhausted and unmotivated</li>
+          <li>Poor work-life balance (all work, no play)</li>
+        </ul>
+      </div>
+      <div class="mini-card" style="background:#E8F7F5;">
+        <strong>Signs of Strong Occupational Wellness</strong>
+        <ul style="padding-left:14px;font-size:0.82rem;margin-top:4px;">
+          <li>Excited to learn new things</li>
+          <li>Doing tasks that match your skills and interests</li>
+          <li>Having career goals and working toward them</li>
+          <li>Finding balance between school, hobbies, and rest</li>
+          <li>Feeling valued and respected for your efforts</li>
+        </ul>
+      </div>
+    </div>
+    <div class="info-box coral">
+      <strong>For Filipino Students:</strong> Many young Filipinos carry the hope of their family. While this can be motivating, it can also create pressure. Occupational wellness means finding YOUR purpose — not just fulfilling expectations.
+    </div>
+    <div class="activity-box">
+      <h4>🔮 Career Wellness Reflection</h4>
+      <p>Think about what you want to be when you grow up. Answer:</p>
+      <ol style="padding-left:16px;font-size:0.88rem;margin-top:6px;">
+        <li>What career or work interests you and why?</li>
+        <li>What skills are you already developing that will help you?</li>
+        <li>How will this career contribute to the well-being of others?</li>
+        <li>What is one thing you can do <em>this week</em> to move toward that dream?</li>
+      </ol>
+      <textarea class="reflect-area" placeholder="Write your answers here..."></textarea>
+      <button class="reflect-btn" onclick="saveDraft(this)">✅ Save My Career Reflection</button>
+      <div class="reflect-feedback">✨ Your future starts with your choices today!</div>
+    </div>
+  </div>
+
+  <!-- Financial Wellness -->
+  <div class="section-card">
+    <h2>💰 Financial Wellness</h2>
+    <p><strong>Financial wellness</strong> means having a healthy relationship with money — understanding how to earn it, save it, spend it wisely, and not letting financial stress ruin your health.</p>
+    <table class="content-table">
+      <tr><th>Concept</th><th>Definition</th><th>Example for Grade 6</th></tr>
+      <tr><td><strong>Budget</strong></td><td>A plan for how to use your money</td><td>Deciding how to spend your ₱50 baon wisely</td></tr>
+      <tr><td><strong>Saving</strong></td><td>Setting aside money for future needs</td><td>Saving ₱10 from your allowance each day</td></tr>
+      <tr><td><strong>Needs vs. Wants</strong></td><td>Distinguishing what is necessary from what is desired</td><td>Lunch (need) vs. new stickers (want)</td></tr>
+      <tr><td><strong>Financial stress</strong></td><td>Anxiety caused by money problems</td><td>Worrying about school fees — which can hurt sleep and focus</td></tr>
+      <tr><td><strong>Financial literacy</strong></td><td>Knowledge and skills to make good money decisions</td><td>Understanding how interest works when borrowing</td></tr>
+    </table>
+    <div class="activity-box" style="margin-top:14px;">
+      <h4>💡 My Mini Budget Plan</h4>
+      <p>Imagine you receive ₱200 as a birthday gift. Plan how you would spend it wisely. Apply the 50-30-20 rule:</p>
+      <ul>
+        <li><strong>50%</strong> = Needs (food, school supplies)</li>
+        <li><strong>30%</strong> = Wants (games, snacks)</li>
+        <li><strong>20%</strong> = Savings</li>
+      </ul>
+      <textarea class="reflect-area" placeholder="Needs (₱100): ___&#10;Wants (₱60): ___&#10;Savings (₱40): ___&#10;&#10;Why I made these choices: ___"></textarea>
+      <button class="reflect-btn" onclick="saveDraft(this)">✅ Save My Budget</button>
+      <div class="reflect-feedback">✨ Smart money habits start young!</div>
+    </div>
+  </div>
+
+  <!-- Interdependence Game -->
+  <div class="section-card">
+    <h2>🎮 Game: Wellness Domino Challenge</h2>
+    <p>In the Wellness Domino Challenge, we see how ONE dimension falling out of balance creates a chain reaction through all the others. Click each scenario to see the domino effect!</p>
+    <div class="game-board" id="domino-game">
+      <div class="game-card" style="background:#FFF0F0;border-color:#FF6B6B;" onclick="showDomino('A')">
+        <span class="gc-icon">😴</span>
+        <div><strong>Scenario A</strong></div>
+        <div class="gc-label">"Juan only sleeps 4 hours because he games all night"</div>
+      </div>
+      <div class="game-card" style="background:#FFF8EC;border-color:#F5A623;" onclick="showDomino('B')">
+        <span class="gc-icon">💸</span>
+        <div><strong>Scenario B</strong></div>
+        <div class="gc-label">"Maria's family lost their job and can't pay for school"</div>
+      </div>
+      <div class="game-card" style="background:#F2EEFF;border-color:#7C5CBF;" onclick="showDomino('C')">
+        <span class="gc-icon">👊</span>
+        <div><strong>Scenario C</strong></div>
+        <div class="gc-label">"Pedro got into a big fight with all his friends"</div>
+      </div>
+      <div class="game-card" style="background:#E8F7F5;border-color:#0E9F8E;" onclick="showDomino('D')">
+        <span class="gc-icon">🏭</span>
+        <div><strong>Scenario D</strong></div>
+        <div class="gc-label">"Their factory neighborhood has very polluted air and water"</div>
+      </div>
+    </div>
+    <div id="domino-result" style="margin-top:14px;"></div>
+    <div class="activity-box" style="margin-top:14px;">
+      <h4>🎯 Your Analysis</h4>
+      <p>After reading the domino effects above, choose ONE scenario and explain: Which dimension failed first? What was the chain reaction? How many dimensions were eventually affected? What could have prevented this?</p>
+      <textarea class="reflect-area" placeholder="I chose Scenario ___&#10;&#10;First dimension that failed: ___&#10;Chain reaction: ___&#10;Total dimensions affected: ___&#10;Prevention strategy: ___"></textarea>
+      <button class="reflect-btn" onclick="saveDraft(this)">✅ Save Analysis</button>
+      <div class="reflect-feedback">✨ Excellent systems thinking!</div>
+    </div>
+  </div>
+
+  <!-- Case Analysis -->
+  <div class="section-card">
+    <h2>🔍 Case Analysis: The Story of Carlo</h2>
+    <div class="case-box" style="border-color:#FF6B6B;background:#FFF0F0;">
+      <h4>📋 Case Background</h4>
+      <p>Carlo is a 13-year-old from a small barangay in Cebu. His father recently lost his job at a local factory that closed down. Carlo's family is now struggling financially. Carlo had to start selling snacks outside school to help earn money. He is tired, stressed, and skipping his homework. He has been avoiding his friends because he feels ashamed. He stopped attending their community's folk dance practices, which he used to love. He has been eating less because they can't always afford full meals.</p>
+    </div>
+    <h3>Case Analysis Questions</h3>
+    <div class="activity-box">
+      <h4>📌 Question 1: Identify the Affected Dimensions</h4>
+      <p>List ALL the wellness dimensions you can identify being affected in Carlo's story. For each one, provide specific evidence from the case.</p>
+      <textarea class="reflect-area" placeholder="Dimension 1: ___ — Evidence: ___&#10;Dimension 2: ___ — Evidence: ___&#10;Dimension 3: ..."></textarea>
+      <button class="reflect-btn" onclick="saveDraft(this)">✅ Save</button>
+      <div class="reflect-feedback">✨ Saved!</div>
+    </div>
+    <div class="activity-box" style="margin-top:12px;">
+      <h4>📌 Question 2: Evaluate the Root Cause</h4>
+      <p>Which single dimension's decline do you think caused the biggest chain reaction in Carlo's life? Justify your answer using at least 3 pieces of evidence from the case.</p>
+      <textarea class="reflect-area" placeholder="I believe the root cause was ___&#10;&#10;Evidence 1: ___&#10;Evidence 2: ___&#10;Evidence 3: ___"></textarea>
+      <button class="reflect-btn" onclick="saveDraft(this)">✅ Save</button>
+      <div class="reflect-feedback">✨ Saved!</div>
+    </div>
+    <div class="activity-box" style="margin-top:12px;">
+      <h4>📌 Question 3: Design a Wellness Recovery Plan for Carlo</h4>
+      <p>You are a wellness advisor. Create a realistic, specific plan to help Carlo recover his holistic wellness over the next 30 days. Address at least 4 dimensions.</p>
+      <textarea class="reflect-area" style="min-height:120px;" placeholder="Week 1 — Focus: ___&#10;Week 2 — Focus: ___&#10;Week 3 — Focus: ___&#10;Week 4 — Focus: ___&#10;&#10;Community resources that could help: ___"></textarea>
+      <button class="reflect-btn" onclick="saveDraft(this)">✅ Save Plan</button>
+      <div class="reflect-feedback">✨ Excellent wellness planning!</div>
+    </div>
+  </div>
+
+  <!-- Quiz Day 4 -->
+  <div class="quiz-section" id="quiz-4">
+    <h2>📝 Day 4 Test</h2>
+    <p class="quiz-subtitle">5 items · Occupational, Financial &amp; Interdependence · LOTS and HOTS</p>
+    <div class="progress-bar-wrap"><div class="progress-bar-fill" id="q4-prog" style="width:0%"></div></div>
+    <div id="q4-container"></div>
+    <div class="quiz-submit-area">
+      <button class="quiz-submit-btn" onclick="submitQuiz(4)" id="q4-submit">Submit Answers</button>
+      <div class="quiz-score" id="q4-score"></div>
+      <button class="quiz-retry-btn" onclick="retryQuiz(4)" id="q4-retry">↺ Try Again</button>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== DAY 5 ==================== -->
+<div id="day-5" class="day-page" data-color="d5">
+  <div class="day-hero" data-emoji="🌟">
+    <div class="day-label">Day 5 — Performance Task &amp; Synthesis</div>
+    <h1>Applying Holistic Wellness in Daily Life</h1>
+    <p>Everything comes together today. Reflect, synthesize, and commit to living a holistically well life — starting now!</p>
+    <span class="method-tag">🎓 Performance Task + Synthesis</span>
+  </div>
+
+  <div class="section-card">
+    <h2>🎯 Learning Objectives</h2>
+    <ul>
+      <li>Synthesize all nine dimensions of wellness into a personal understanding.</li>
+      <li>Evaluate your own wellness profile and identify priority areas.</li>
+      <li>Create a concrete, realistic personal wellness plan for 30 days.</li>
+      <li>Reflect on how holistic wellness connects to your roles as a student, family member, and community member.</li>
+    </ul>
+  </div>
+
+  <!-- Week Review -->
+  <div class="section-card">
+    <h2>🗺️ Our Wellness Journey This Week</h2>
+    <table class="content-table">
+      <tr><th>Day</th><th>Topic</th><th>Key Method</th><th>Big Idea</th></tr>
+      <tr><td>Day 1</td><td>Intro to Holistic Wellness + 9 Dimensions</td><td>Think–Pair–Share</td><td>Wellness is whole-person health with 9 connected dimensions</td></tr>
+      <tr><td>Day 2</td><td>Physical, Mental/Intellectual, Emotional</td><td>Inquiry-Based Learning</td><td>Daily habits shape these 3 core dimensions</td></tr>
+      <tr><td>Day 3</td><td>Social, Spiritual, Cultural, Environmental</td><td>Jigsaw Method</td><td>Community, purpose, creativity &amp; environment complete wellness</td></tr>
+      <tr><td>Day 4</td><td>Occupational, Financial; Interdependence</td><td>Game-Based + Case Analysis</td><td>All dimensions are linked — one falling affects all others</td></tr>
+      <tr><td>Day 5</td><td>Applying Holistic Wellness</td><td>Performance Task</td><td>Wellness is lived, not just known — action is everything</td></tr>
+    </table>
+  </div>
+
+  <!-- Synthesis Reflection -->
+  <div class="section-card">
+    <h2>🧠 Synthesis: The Big Picture</h2>
+    <p>Before your performance task, complete these synthesis questions that pull everything together:</p>
+    <div class="activity-box">
+      <h4>💡 Question 1: Connect the Dimensions</h4>
+      <p>Explain, in your own words, how THREE of the nine dimensions are interconnected. Use a real-life example from your own experience or observation to illustrate the connection.</p>
+      <textarea class="reflect-area" style="min-height:100px;" placeholder="The three dimensions I'm connecting: ___, ___, ___&#10;&#10;How they connect:&#10;&#10;My real-life example:"></textarea>
+      <button class="reflect-btn" onclick="saveDraft(this)">✅ Save</button>
+      <div class="reflect-feedback">✨ Saved!</div>
+    </div>
+    <div class="activity-box" style="margin-top:12px;">
+      <h4>💡 Question 2: Evaluate and Critique</h4>
+      <p>Some people say: <em>"As long as you're physically healthy, everything else will follow."</em> Do you agree or disagree? Use evidence from our 5-day lessons to support your position.</p>
+      <textarea class="reflect-area" placeholder="I (agree/disagree) because...&#10;&#10;Evidence from Day 1: ___&#10;Evidence from Day 2 or 3: ___&#10;Evidence from Day 4: ___"></textarea>
+      <button class="reflect-btn" onclick="saveDraft(this)">✅ Save</button>
+      <div class="reflect-feedback">✨ Saved!</div>
+    </div>
+    <div class="activity-box" style="margin-top:12px;">
+      <h4>💡 Question 3: Create a Wellness Philosophy</h4>
+      <p>Write your personal <strong>wellness philosophy</strong> — a short statement (3–5 sentences) that describes what wellness means to YOU and how you plan to live it out. Make it specific, personal, and meaningful.</p>
+      <textarea class="reflect-area" placeholder="My Personal Wellness Philosophy:&#10;&#10;I believe wellness means...&#10;For me, being well looks like...&#10;I commit to..."></textarea>
+      <button class="reflect-btn" onclick="saveDraft(this)">✅ Save My Philosophy</button>
+      <div class="reflect-feedback">✨ A philosophy to live by!</div>
+    </div>
+  </div>
+
+  <!-- Performance Task -->
+  <div class="perf-task">
+    <h2>⭐ Performance Task: My 30-Day Holistic Wellness Plan</h2>
+    <p>This is your main output for the week. Create a detailed, realistic, and personal wellness plan that covers ALL nine dimensions. This is your commitment to living a healthier, more balanced life.</p>
+    <div style="margin-top:16px;background:rgba(255,255,255,0.07);border-radius:12px;padding:18px;">
+      <p style="font-weight:800;color:var(--amber);margin-bottom:10px;">📋 Your Plan Must Include:</p>
+      <ul>
+        <li>At least <strong>ONE specific goal</strong> per dimension (9 goals total)</li>
+        <li><strong>Concrete, measurable actions</strong> (not vague goals like "be healthier")</li>
+        <li>A <strong>weekly schedule</strong> showing when you'll work on each dimension</li>
+        <li>One <strong>Filipino value or tradition</strong> that connects to your wellness plan</li>
+        <li>One <strong>challenge you expect</strong> and how you plan to overcome it</li>
+      </ul>
+    </div>
+    <div class="rubric-grid">
+      <div class="rubric-item">
+        <strong>Completeness (25%)</strong>
+        All 9 dimensions addressed with specific goals
+      </div>
+      <div class="rubric-item">
+        <strong>Realism (25%)</strong>
+        Goals are achievable for a Grade 6 student
+      </div>
+      <div class="rubric-item">
+        <strong>Depth (25%)</strong>
+        Goals show understanding of the dimensions and their connections
+      </div>
+      <div class="rubric-item">
+        <strong>Reflection (25%)</strong>
+        Personal values and cultural context are incorporated
+      </div>
+    </div>
+  </div>
+
+  <!-- Plan Builder -->
+  <div class="section-card">
+    <h2>📝 Build Your Wellness Plan</h2>
+    <p>Fill in your 30-day goal for each dimension below:</p>
+    <div id="plan-builder"></div>
+    <div style="margin-top:18px;">
+      <h3>🗓️ My Weekly Wellness Schedule</h3>
+      <textarea class="reflect-area" style="min-height:130px;" placeholder="Monday: ___&#10;Tuesday: ___&#10;Wednesday: ___&#10;Thursday: ___&#10;Friday: ___&#10;Saturday: ___&#10;Sunday: ___"></textarea>
+      <h3 style="margin-top:16px;">🇵🇭 Filipino Value/Tradition I'm Including</h3>
+      <textarea class="reflect-area" placeholder="Value/Tradition: ___&#10;How I'll practice it: ___"></textarea>
+      <h3 style="margin-top:16px;">⚠️ Challenge I Expect &amp; My Solution</h3>
+      <textarea class="reflect-area" placeholder="Challenge: ___&#10;My plan to overcome it: ___"></textarea>
+      <button class="reflect-btn" onclick="saveDraft(this)" style="margin-top:10px;background:var(--green);">✅ Save My Full Plan</button>
+      <div class="reflect-feedback">✨ Your wellness journey begins now!</div>
+    </div>
+  </div>
+
+  <!-- Letter to Future Self -->
+  <div class="section-card">
+    <h2>💌 Letter to My Future Self</h2>
+    <p>Write a short letter to yourself to open in 30 days. Include your hopes, goals, and a promise about your wellness journey.</p>
+    <div class="activity-box">
+      <h4>✍️ Dear Future Me...</h4>
+      <textarea class="reflect-area" style="min-height:140px;" placeholder="Dear Future Me,&#10;&#10;Right now (today's date: ___), I am committing to...&#10;&#10;My biggest wellness goal is...&#10;&#10;In 30 days, I hope to see these changes:&#10;&#10;I promise myself that I will...&#10;&#10;With love,&#10;___"></textarea>
+      <button class="reflect-btn" onclick="saveDraft(this)" style="background:var(--green);">💌 Seal My Letter</button>
+      <div class="reflect-feedback">✨ Your future self will thank you!</div>
+    </div>
+  </div>
+
+  <!-- Final Quiz Day 5 -->
+  <div class="quiz-section" id="quiz-5">
+    <h2>📝 Day 5 Final Test — Synthesis &amp; Application</h2>
+    <p class="quiz-subtitle">5 items · Higher-Order Thinking Focus · Apply everything you've learned!</p>
+    <div class="progress-bar-wrap"><div class="progress-bar-fill" id="q5-prog" style="width:0%"></div></div>
+    <div id="q5-container"></div>
+    <div class="quiz-submit-area">
+      <button class="quiz-submit-btn" onclick="submitQuiz(5)" id="q5-submit">Submit Final Test</button>
+      <div class="quiz-score" id="q5-score"></div>
+      <button class="quiz-retry-btn" onclick="retryQuiz(5)" id="q5-retry">↺ Try Again</button>
+    </div>
+  </div>
+
+  <!-- Congratulations -->
+  <div class="section-card" style="text-align:center;padding:36px 24px;">
+    <div style="font-size:3rem;margin-bottom:12px;">🎓</div>
+    <h2 style="font-family:'Fredoka One',cursive;font-size:1.6rem;color:var(--green);justify-content:center;">Congratulations!</h2>
+    <p style="margin-top:10px;max-width:420px;margin-left:auto;margin-right:auto;">You've completed the 5-Day Holistic Wellness module. Remember: <strong>Wellness is not a destination — it's a daily commitment.</strong> Every small step counts. <em>Mabuhay!</em> 🇵🇭</p>
+  </div>
+</div>
+
+<script>
+// =============================================
+// QUIZ DATA
+// =============================================
+const quizzes = {
+  1: [
+    {
+      type: 'mc',
+      level: 'LOTS',
+      q: 'What does the word "holistic" mean in the context of wellness?',
+      options: [
+        { text: 'Focusing only on physical health through exercise', correct: false },
+        { text: 'Addressing the whole person — body, mind, spirit, and community', correct: true },
+        { text: 'Having perfect health in at least one area of life', correct: false },
+        { text: 'Avoiding all diseases and illnesses through medicine', correct: false },
+      ],
+      feedback: 'Correct! "Holistic" comes from the Greek word "holos" meaning whole. Holistic wellness means caring for every dimension of a person, not just the body.',
+    },
+    {
+      type: 'mc',
+      level: 'LOTS',
+      q: 'Which of the following is NOT one of the nine dimensions of wellness?',
+      options: [
+        { text: 'Environmental wellness', correct: false },
+        { text: 'Financial wellness', correct: false },
+        { text: 'Political wellness', correct: true },
+        { text: 'Spiritual wellness', correct: false },
+      ],
+      feedback: '"Political wellness" is not one of the nine dimensions. The nine are: Physical, Mental/Intellectual, Emotional, Social, Spiritual, Cultural/Creative, Environmental, Occupational/Vocational, and Financial.',
+    },
+    {
+      type: 'mc',
+      level: 'HOTS',
+      q: 'Alicia is an excellent student (mental wellness) but she has no friends (social wellness) and feels sad every day (emotional wellness). What does this BEST illustrate about the nine dimensions?',
+      options: [
+        { text: 'Mental wellness is the most important dimension of all', correct: false },
+        { text: 'The nine dimensions are independent — one can be strong without affecting others', correct: false },
+        { text: 'The nine dimensions are interdependent — being strong in one does not guarantee overall wellness', correct: true },
+        { text: 'Social and emotional wellness are more important than mental wellness', correct: false },
+      ],
+      feedback: 'Excellent! This shows interdependence — even though Alicia excels mentally, deficits in social and emotional wellness prevent her from achieving holistic wellness. All dimensions matter.',
+    },
+    {
+      type: 'mc',
+      level: 'HOTS',
+      q: 'A student argues: "I only need to focus on passing my exams. Other things like friendship, spirituality, and creativity are just extra and not really part of health." How would you EVALUATE this claim?',
+      options: [
+        { text: 'The student is correct — academics directly determine physical health outcomes', correct: false },
+        { text: 'The student is partially correct — the most important dimensions are physical and intellectual', correct: false },
+        { text: 'The student is incorrect — wellness requires balance across all nine dimensions for true well-being', correct: true },
+        { text: 'The student is correct — holistic wellness only matters for adults, not students', correct: false },
+      ],
+      feedback: 'The student\'s claim is a common misconception. Research shows that social isolation, lack of purpose, and absence of creativity all lead to poorer health outcomes — even for excellent students. Wellness is always multidimensional.',
+    },
+    {
+      type: 'written',
+      level: 'HOTS',
+      q: 'Imagine a person who exercises daily, eats well, and sleeps 8 hours (strong physical wellness) but feels deeply lonely, has no sense of purpose, and is stressed about money. Are they holistically well? Explain your reasoning using at least two specific wellness dimensions.',
+      placeholder: 'Write your answer here. Use specific wellness dimensions to support your reasoning...',
+      feedback: 'Great response! A holistically well person needs balance across all dimensions. Despite strong physical wellness, poor social, spiritual, and financial wellness prevents true holistic health.',
+    },
+  ],
+
+  2: [
+    {
+      type: 'mc',
+      level: 'LOTS',
+      q: 'Which of the following is an example of physical wellness behavior recommended for Grade 6 students?',
+      options: [
+        { text: 'Playing video games for 6 hours without moving', correct: false },
+        { text: 'Getting at least 60 minutes of moderate to vigorous physical activity daily', correct: true },
+        { text: 'Eating only rice to save money and simplify meals', correct: false },
+        { text: 'Skipping sleep to finish homework and study more', correct: false },
+      ],
+      feedback: 'The Philippine Department of Health recommends at least 60 minutes of daily moderate to vigorous physical activity for children and youth.',
+    },
+    {
+      type: 'mc',
+      level: 'LOTS',
+      q: 'Mental/Intellectual wellness includes which of the following skills?',
+      options: [
+        { text: 'Avoiding all forms of media and information', correct: false },
+        { text: 'Accepting everything you read online without questioning', correct: false },
+        { text: 'Critical thinking, problem-solving, and mindfulness', correct: true },
+        { text: 'Memorizing facts without understanding their meaning', correct: false },
+      ],
+      feedback: 'Mental wellness involves active intellectual engagement: questioning, analyzing, solving problems, and being mindful — not passive absorption of information.',
+    },
+    {
+      type: 'mc',
+      level: 'HOTS',
+      q: 'Maya gets 4 hours of sleep every night because she watches videos until 2 AM. She\'s been forgetting things at school, feeling irritable, and crying easily. Which BEST explains what is happening?',
+      options: [
+        { text: 'Maya\'s emotional wellness problems are causing her physical wellness to decline', correct: false },
+        { text: 'Maya\'s physical wellness deficit (sleep) is causing a chain reaction in her mental and emotional wellness', correct: true },
+        { text: 'Maya has emotional wellness problems unrelated to her sleep habits', correct: false },
+        { text: 'Sleep is only related to physical wellness and has no effect on emotions or thinking', correct: false },
+      ],
+      feedback: 'Sleep deprivation is a physical wellness issue that directly impairs cognitive function (mental wellness) and emotional regulation (emotional wellness) — a clear example of interdependence.',
+    },
+    {
+      type: 'mc',
+      level: 'HOTS',
+      q: 'Your classmate says: "I don\'t need help — I\'m fine!" but you notice they have been sad for weeks, isolating themselves, and no longer doing activities they used to love. Applying emotional wellness principles, what does this behavior MOST LIKELY indicate?',
+      options: [
+        { text: 'They are simply introverted and prefer being alone — this is always normal', correct: false },
+        { text: 'They may be bottling up emotions and could benefit from support or professional help', correct: true },
+        { text: 'Sadness lasting several weeks is always normal for Grade 6 students', correct: false },
+        { text: 'As long as they say they are fine, there is no cause for concern', correct: false },
+      ],
+      feedback: 'Key warning signs of emotional wellness struggles include persistent sadness, social withdrawal, and loss of interest in enjoyable activities (anhedonia). Emotionally well people do not bottle up feelings — they express them and seek support.',
+    },
+    {
+      type: 'written',
+      level: 'HOTS',
+      q: 'You see a social media post claiming: "Science proves that skipping breakfast SPEEDS UP your brain and makes you smarter." As a mentally and emotionally well student, what steps would you take before believing and sharing this claim? What dimensions of wellness are you using in this decision-making process?',
+      placeholder: 'Describe the steps you would take and which wellness dimensions you are using...',
+      feedback: 'Excellent! Critical thinking, media literacy, emotional regulation (not sharing out of excitement without checking), and mental wellness all play roles here.',
+    },
+  ],
+
+  3: [
+    {
+      type: 'mc',
+      level: 'LOTS',
+      q: 'The Filipino concept of "kapwa" is MOST closely related to which dimension of wellness?',
+      options: [
+        { text: 'Financial wellness', correct: false },
+        { text: 'Environmental wellness', correct: false },
+        { text: 'Social wellness', correct: true },
+        { text: 'Physical wellness', correct: false },
+      ],
+      feedback: '"Kapwa" means shared identity and interconnectedness with others — a foundational Filipino value that directly reflects social wellness: building and maintaining meaningful, respectful relationships.',
+    },
+    {
+      type: 'mc',
+      level: 'LOTS',
+      q: 'Which of the following activities BEST demonstrates cultural/creative wellness?',
+      options: [
+        { text: 'Jogging 5 km every morning before school', correct: false },
+        { text: 'Participating in the Sinulog festival by learning traditional dances', correct: true },
+        { text: 'Depositing allowance savings in a school savings program', correct: false },
+        { text: 'Analyzing a math problem using multiple strategies', correct: false },
+      ],
+      feedback: 'Participating in Sinulog through traditional dance combines both cultural wellness (heritage, tradition, community celebration) and creative wellness (artistic expression and performance).',
+    },
+    {
+      type: 'mc',
+      level: 'HOTS',
+      q: 'A student has strong grades and good physical health but feels that nothing she does has any meaning or importance. She has no personal values or sense of purpose. Which dimension of wellness is MOST at risk, and what is the LIKELY long-term consequence?',
+      options: [
+        { text: 'Physical wellness; she will likely develop chronic disease', correct: false },
+        { text: 'Spiritual wellness; she may experience existential emptiness, depression, and poor resilience', correct: true },
+        { text: 'Social wellness; she will lose all her friends eventually', correct: false },
+        { text: 'Financial wellness; she will make poor money decisions', correct: false },
+      ],
+      feedback: 'Without spiritual wellness — a sense of purpose and personal meaning — people experience existential emptiness. Research links low sense of purpose to depression, higher mortality rates, and poor stress resilience.',
+    },
+    {
+      type: 'mc',
+      level: 'HOTS',
+      q: 'A family lives near a heavily polluted river in their barangay. They suffer from frequent respiratory illness, their children can\'t sleep due to noise and foul smell, and they feel anxious about their safety. EVALUATE which statement BEST explains the situation using a wellness framework.',
+      options: [
+        { text: 'Only physical wellness is affected since the problem is disease', correct: false },
+        { text: 'Environmental wellness failure is creating cascading negative effects on physical, mental, and emotional wellness', correct: true },
+        { text: 'The family\'s spiritual wellness is the root cause of their suffering', correct: false },
+        { text: 'Financial wellness is the only dimension relevant when pollution is caused by factories', correct: false },
+      ],
+      feedback: 'This is a clear case of cascading wellness failure. Environmental wellness deficits (pollution, unsafe surroundings) directly cause physical illness, mental stress (anxiety), and emotional distress — demonstrating the interdependence of dimensions.',
+    },
+    {
+      type: 'written',
+      level: 'HOTS',
+      q: 'In the Jigsaw Method, "every student is both a learner and a teacher." Using what you learned about the four dimensions in Day 3 (social, spiritual, cultural/creative, environmental), explain how IMPROVING environmental wellness in your barangay could also improve THREE other dimensions of wellness. Give specific, realistic examples from a Filipino community context.',
+      placeholder: 'Explain the connection between environmental wellness and 3 other dimensions with specific Filipino examples...',
+      feedback: 'Excellent! Cleaning up a barangay can boost social wellness (community cooperation), environmental wellness directly, emotional wellness (reduced stress), and cultural wellness (pride in local identity and heritage).',
+    },
+  ],
+
+  4: [
+    {
+      type: 'mc',
+      level: 'LOTS',
+      q: 'For a Grade 6 student, which example BEST represents healthy occupational/vocational wellness?',
+      options: [
+        { text: 'Studying only subjects chosen by parents with no personal interest', correct: false },
+        { text: 'Having future career goals and exploring activities that develop related skills', correct: true },
+        { text: 'Working part-time jobs every day instead of attending school', correct: false },
+        { text: 'Avoiding all work and responsibilities to reduce stress', correct: false },
+      ],
+      feedback: 'Occupational wellness for students includes having purpose, developing skills, and exploring interests aligned with future goals — not just academic pressure or total avoidance of responsibility.',
+    },
+    {
+      type: 'mc',
+      level: 'LOTS',
+      q: 'In the 50-30-20 budgeting rule, what does the "20" represent?',
+      options: [
+        { text: 'Percentage to spend on wants and entertainment', correct: false },
+        { text: 'Percentage of income to save or invest', correct: true },
+        { text: 'Percentage to spend on needs like food and shelter', correct: false },
+        { text: 'The minimum age to start managing money', correct: false },
+      ],
+      feedback: 'In the 50-30-20 rule: 50% goes to needs, 30% to wants, and 20% to savings or investments. The savings portion is essential for financial security and long-term wellness.',
+    },
+    {
+      type: 'mc',
+      level: 'HOTS',
+      q: 'In Carlo\'s case study, his father lost his job (financial/occupational wellness collapse). This led Carlo to stop eating properly, withdraw from friends, and drop his folk dance activities. This scenario BEST demonstrates which concept?',
+      options: [
+        { text: 'That financial problems only affect financial wellness', correct: false },
+        { text: 'That occupational and financial wellness are the least important dimensions', correct: false },
+        { text: 'The domino effect: one dimension\'s collapse can cascade through multiple other dimensions', correct: true },
+        { text: 'That Carlo needs to develop better mental wellness before any other dimension can improve', correct: false },
+      ],
+      feedback: 'Carlo\'s case is a textbook domino effect. Financial/occupational collapse → physical wellness (poor nutrition) → social wellness (isolation) → cultural wellness (stopped folk dancing) → emotional wellness (shame, stress). All connected.',
+    },
+    {
+      type: 'mc',
+      level: 'HOTS',
+      q: 'A teenager works extremely hard to save money (strong financial wellness) but spends 16 hours a day working, skips school, eats poorly, and has no time for friends, hobbies, or rest. EVALUATE this situation: Is this person experiencing holistic wellness? What is the most accurate assessment?',
+      options: [
+        { text: 'Yes — financial wellness is the most critical dimension and all others will follow from money', correct: false },
+        { text: 'Yes — hard work and financial responsibility always lead to overall wellness', correct: false },
+        { text: 'No — the extreme pursuit of one dimension at the cost of physical, social, occupational, and emotional wellness results in overall wellness imbalance', correct: true },
+        { text: 'It depends entirely on the teenager\'s personal preferences and lifestyle choices', correct: false },
+      ],
+      feedback: 'This illustrates a critical HOTS concept: over-investing in ONE wellness dimension while neglecting others actually destroys holistic wellness. True wellness requires intentional balance across all nine dimensions.',
+    },
+    {
+      type: 'written',
+      level: 'HOTS',
+      q: 'Design a "Wellness Recovery Plan" for a fictional 15-year-old student named Ana who: (1) dropped out of school due to family poverty, (2) is experiencing depression and isolation, (3) has stopped participating in community activities she used to love. Your plan must address at least FOUR wellness dimensions, include specific and realistic interventions for the Philippine context, and explain why you prioritized those dimensions in that order.',
+      placeholder: 'Write your wellness recovery plan for Ana with at least 4 dimensions, specific interventions, and your prioritization reasoning...',
+      feedback: 'Excellent planning! Strong answers address financial/occupational support first (economic root cause), then social (reconnect with community), emotional (mental health support), and cultural/creative (re-engage with activities she loves).',
+    },
+  ],
+
+  5: [
+    {
+      type: 'mc',
+      level: 'HOTS',
+      q: 'After completing this 5-day module, which statement BEST represents a synthesized understanding of holistic wellness?',
+      options: [
+        { text: 'Wellness is primarily about being free from disease and maintaining a healthy weight', correct: false },
+        { text: 'Wellness is a balanced, dynamic state of well-being across all nine interconnected dimensions of life', correct: true },
+        { text: 'Wellness means achieving excellence in at least 5 of the nine dimensions', correct: false },
+        { text: 'Wellness is a fixed state you achieve once and maintain forever without effort', correct: false },
+      ],
+      feedback: 'Excellent synthesis! Holistic wellness is dynamic (always changing), balanced (all dimensions matter), and interconnected (each dimension affects the others). It requires ongoing, intentional effort across all nine dimensions.',
+    },
+    {
+      type: 'mc',
+      level: 'HOTS',
+      q: 'A community leader wants to improve overall wellness in their barangay. EVALUATE which approach would be MOST effective based on what you learned about holistic wellness.',
+      options: [
+        { text: 'Build one new gym to address physical wellness as the foundation of all other wellness', correct: false },
+        { text: 'Focus only on economic development since financial wellness determines all other dimensions', correct: false },
+        { text: 'Implement integrated programs that simultaneously address multiple wellness dimensions: health clinics, livelihood programs, cultural events, and green spaces', correct: true },
+        { text: 'Focus first on spiritual wellness since it gives people purpose to pursue the other dimensions', correct: false },
+      ],
+      feedback: 'Because wellness dimensions are interdependent, the most effective community health programs address multiple dimensions simultaneously. Single-dimension approaches always leave gaps that undermine overall wellness.',
+    },
+    {
+      type: 'mc',
+      level: 'HOTS',
+      q: 'Reflect on the following scenario and EVALUATE: Luis is 12 years old. He exercises daily, reads books, manages his emotions well, has good friends, prays regularly, loves Philippine folk art, keeps his room clean, dreams of being a doctor, and saves part of his weekly allowance. Compared to a classmate who only exercises, what conclusion can you draw?',
+      options: [
+        { text: 'Luis is only slightly healthier than his classmate who exercises more', correct: false },
+        { text: 'Luis demonstrates holistic wellness by actively nurturing all nine dimensions, while his classmate focuses on only one', correct: true },
+        { text: 'Both students are equally well since physical health is the most important dimension', correct: false },
+        { text: 'Luis is overextending himself by paying attention to too many areas at once', correct: false },
+      ],
+      feedback: 'Luis demonstrates true holistic wellness — intentional, balanced effort across all nine dimensions. His classmate has strong physical wellness but is likely missing critical dimensions that support a flourishing life.',
+    },
+    {
+      type: 'mc',
+      level: 'HOTS',
+      q: 'A Grade 6 student says: "Learning about wellness in school is a waste of time because real wellness habits are learned at home, not in class." CRITICALLY EVALUATE this statement.',
+      options: [
+        { text: 'Fully agree — schools should focus only on academic subjects and leave wellness to families', correct: false },
+        { text: 'Partially agree — home is more important than school for wellness education', correct: false },
+        { text: 'Disagree — schools play a critical role in building wellness knowledge and habits, especially when home environments do not always model healthy wellness behaviors', correct: true },
+        { text: 'Fully agree — students who have wellness problems at home cannot be helped by school programs', correct: false },
+      ],
+      feedback: 'Critical thinking point: Not all families model healthy wellness behaviors. Schools serve as equalizers — providing evidence-based wellness knowledge to all students regardless of their home environment. Both settings are important and complementary.',
+    },
+    {
+      type: 'written',
+      level: 'HOTS',
+      q: 'SYNTHESIS TASK: Write a 5–8 sentence paragraph that: (1) defines holistic wellness in your own words, (2) explains the interdependence of at least three dimensions using a real or fictional example, (3) identifies which dimension YOU personally need to develop most and why, and (4) states one specific, measurable action you will take within the next 7 days to improve that dimension.',
+      placeholder: 'Write your synthesis paragraph here — aim for 5–8 thoughtful sentences that show mastery of holistic wellness...',
+      feedback: 'Outstanding synthesis! Your ability to define, explain, personalize, and apply holistic wellness demonstrates the highest level of understanding. This is what lifelong wellness learning looks like!',
+    },
+  ],
+};
+
+// Shuffle array (Fisher-Yates)
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+// Render all quizzes
+function renderAllQuizzes() {
+  for (let d = 1; d <= 5; d++) {
+    renderQuiz(d);
+  }
+}
+
+function renderQuiz(day) {
+  const container = document.getElementById(`q${day}-container`);
+  if (!container) return;
+  container.innerHTML = '';
+  const questions = quizzes[day];
+  questions.forEach((q, idx) => {
+    const div = document.createElement('div');
+    div.className = 'quiz-question';
+    div.dataset.idx = idx;
+    div.dataset.answered = '0';
+
+    const levelBadge = q.level === 'HOTS'
+      ? `<span class="hots-badge">🔥 HOTS</span>`
+      : `<span class="lots-badge">💡 LOTS</span>`;
+
+    let inner = `<div class="q-label">Question ${idx + 1} of 5 ${levelBadge}</div>`;
+    inner += `<div class="q-text">${q.q}</div>`;
+
+    if (q.type === 'mc') {
+      const shuffled = shuffle(q.options);
+      const letters = ['A','B','C','D'];
+      inner += `<div class="mc-options">`;
+      shuffled.forEach((opt, oi) => {
+        inner += `<div class="mc-option" data-correct="${opt.correct}" onclick="selectOption(this, ${day})">
+          <span class="opt-letter">${letters[oi]}</span>
+          <span>${opt.text}</span>
+        </div>`;
+      });
+      inner += `</div>`;
+    } else {
+      inner += `<textarea class="written-answer" placeholder="${q.placeholder}" oninput="markWritten(this, ${day}, ${idx})"></textarea>`;
+    }
+
+    inner += `<div class="q-feedback" id="q${day}-fb-${idx}"></div>`;
+    div.innerHTML = inner;
+    container.appendChild(div);
+  });
+}
+
+function selectOption(el, day) {
+  if (el.classList.contains('locked')) return;
+  const opts = el.parentElement.querySelectorAll('.mc-option');
+  opts.forEach(o => o.classList.remove('selected'));
+  el.classList.add('selected');
+  const qDiv = el.closest('.quiz-question');
+  qDiv.dataset.answered = '1';
+  updateProgress(day);
+}
+
+function markWritten(el, day, idx) {
+  const qDiv = el.closest('.quiz-question');
+  qDiv.dataset.answered = el.value.trim().length > 10 ? '1' : '0';
+  updateProgress(day);
+}
+
+function updateProgress(day) {
+  const questions = document.querySelectorAll(`#q${day}-container .quiz-question`);
+  let answered = 0;
+  questions.forEach(q => { if (q.dataset.answered === '1') answered++; });
+  const pct = (answered / questions.length) * 100;
+  const bar = document.getElementById(`q${day}-prog`);
+  if (bar) bar.style.width = pct + '%';
+}
+
+function submitQuiz(day) {
+  const questions = document.querySelectorAll(`#q${day}-container .quiz-question`);
+  let score = 0;
+  let total = questions.length;
+
+  questions.forEach((qDiv, idx) => {
+    const q = quizzes[day][idx];
+    const fbEl = document.getElementById(`q${day}-fb-${idx}`);
+
+    if (q.type === 'mc') {
+      const opts = qDiv.querySelectorAll('.mc-option');
+      let userCorrect = false;
+      opts.forEach(opt => {
+        opt.classList.add('locked');
+        const isCorrect = opt.dataset.correct === 'true';
+        const isSelected = opt.classList.contains('selected');
+        if (isCorrect) opt.classList.add('correct');
+        if (isSelected && !isCorrect) opt.classList.add('wrong');
+        if (isSelected && isCorrect) { userCorrect = true; opt.classList.add('correct'); }
+      });
+      if (userCorrect) {
+        score++;
+        fbEl.className = 'q-feedback correct';
+        fbEl.textContent = '✅ Correct! ' + q.feedback;
+      } else {
+        fbEl.className = 'q-feedback wrong';
+        fbEl.textContent = '❌ ' + q.feedback;
+      }
+      fbEl.style.display = 'block';
+    } else {
+      const ta = qDiv.querySelector('.written-answer');
+      ta.disabled = true;
+      const hasAnswer = ta.value.trim().length > 10;
+      if (hasAnswer) {
+        score++;
+        fbEl.className = 'q-feedback info';
+        fbEl.textContent = '📝 Answer recorded for teacher review. ' + q.feedback;
+      } else {
+        fbEl.className = 'q-feedback wrong';
+        fbEl.textContent = '✏️ Please write a more complete answer (at least 2 sentences).';
+      }
+      fbEl.style.display = 'block';
+    }
+  });
+
+  const submitBtn = document.getElementById(`q${day}-submit`);
+  const scoreEl = document.getElementById(`q${day}-score`);
+  const retryBtn = document.getElementById(`q${day}-retry`);
+
+  submitBtn.disabled = true;
+  scoreEl.style.display = 'block';
+  retryBtn.style.display = 'inline-block';
+
+  const pct = Math.round((score / total) * 100);
+  if (pct >= 80) {
+    scoreEl.className = 'quiz-score good';
+    scoreEl.textContent = `🎉 ${score}/${total} — Excellent! (${pct}%)`;
+  } else if (pct >= 60) {
+    scoreEl.className = 'quiz-score ok';
+    scoreEl.textContent = `👍 ${score}/${total} — Good effort! (${pct}%)`;
+  } else {
+    scoreEl.className = 'quiz-score low';
+    scoreEl.textContent = `📚 ${score}/${total} — Review and try again! (${pct}%)`;
+  }
+
+  document.getElementById(`q${day}-prog`).style.width = '100%';
+}
+
+function retryQuiz(day) {
+  const submitBtn = document.getElementById(`q${day}-submit`);
+  const scoreEl = document.getElementById(`q${day}-score`);
+  const retryBtn = document.getElementById(`q${day}-retry`);
+  submitBtn.disabled = false;
+  scoreEl.style.display = 'none';
+  retryBtn.style.display = 'none';
+  document.getElementById(`q${day}-prog`).style.width = '0%';
+  renderQuiz(day);
+}
+
+// =============================================
+// TAB NAVIGATION
+// =============================================
+function showDay(day) {
+  document.querySelectorAll('.day-page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(`day-${day}`).classList.add('active');
+  document.querySelector(`.tab-btn[data-day="${day}"]`).classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// =============================================
+// SCROLL-HIDE HEADER
+// =============================================
+let lastScrollY = 0;
+const header = document.getElementById('site-header');
+window.addEventListener('scroll', () => {
+  const cur = window.scrollY;
+  if (cur > lastScrollY && cur > 80) {
+    header.classList.add('hidden');
+  } else {
+    header.classList.remove('hidden');
+  }
+  lastScrollY = cur;
+}, { passive: true });
+
+// =============================================
+// REFLECT BUTTON
+// =============================================
+function saveDraft(btn) {
+  const fb = btn.nextElementSibling;
+  if (fb) { fb.style.display = 'block'; }
+}
+
+// =============================================
+// ACCORDION
+// =============================================
+function toggleAcc(header) {
+  const body = header.nextElementSibling;
+  header.classList.toggle('open');
+  body.classList.toggle('open');
+}
+
+// =============================================
+// WELLNESS WHEEL
+// =============================================
+const dimensions = [
+  { key: 'physical', label: '💪 Physical', color: '#0E9F8E' },
+  { key: 'mental', label: '🧠 Mental/Intellectual', color: '#F5A623' },
+  { key: 'emotional', label: '❤️ Emotional', color: '#FF6B6B' },
+  { key: 'social', label: '👥 Social', color: '#3AAFDA' },
+  { key: 'spiritual', label: '🙏 Spiritual', color: '#7C5CBF' },
+  { key: 'environmental', label: '🌍 Environmental', color: '#27AE60' },
+  { key: 'cultural', label: '🎨 Cultural/Creative', color: '#F97316' },
+  { key: 'occupational', label: '🛠️ Occupational', color: '#14B8A6' },
+  { key: 'financial', label: '💰 Financial', color: '#EAB308' },
+];
+
+function buildWheelSliders() {
+  const container = document.getElementById('wellness-wheel');
+  if (!container) return;
+  let html = '';
+  dimensions.forEach(d => {
+    html += `<div style="margin-bottom:12px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
+        <label style="font-size:0.85rem;font-weight:700;color:${d.color};">${d.label}</label>
+        <span id="val-${d.key}" style="font-size:0.85rem;font-weight:800;color:${d.color};">3</span>
+      </div>
+      <input type="range" min="1" max="5" value="3" style="width:100%;accent-color:${d.color};"
+        oninput="document.getElementById('val-${d.key}').textContent=this.value" data-dim="${d.key}">
+    </div>`;
+  });
+  container.innerHTML = html;
+}
+
+function calcWheelScore() {
+  const sliders = document.querySelectorAll('#wellness-wheel input[type=range]');
+  let total = 0;
+  let lowest = { label: '', val: 6 };
+  sliders.forEach(s => {
+    const v = parseInt(s.value);
+    total += v;
+    const dim = dimensions.find(d => d.key === s.dataset.dim);
+    if (v < lowest.val) { lowest.val = v; lowest.label = dim.label; }
+  });
+  const avg = (total / sliders.length).toFixed(1);
+  const result = document.getElementById('wheel-result');
+  result.style.display = 'block';
+  let msg = `<strong>Your Average Wellness Score: ${avg} / 5</strong><br>`;
+  if (avg >= 4) msg += '🌟 Your wellness wheel is in great shape! Keep it up and continue balanced growth.';
+  else if (avg >= 3) msg += '👍 You\'re doing well overall! Focus on building your weaker areas.';
+  else msg += '💪 There\'s lots of room to grow — and that\'s exciting! Start with one small step today.';
+  msg += `<br><br>💡 <strong>Dimension to focus on most:</strong> ${lowest.label} (scored ${lowest.val}/5)`;
+  result.innerHTML = msg;
+}
+
+// =============================================
+// DOMINO GAME
+// =============================================
+const dominoData = {
+  A: {
+    title: '😴 Scenario A — Sleep Deprivation',
+    chain: [
+      { icon: '💪', dim: 'Physical Wellness', effect: 'Chronic sleep deprivation weakens the immune system, increases risk of obesity, and reduces coordination.' },
+      { icon: '🧠', dim: 'Mental/Intellectual Wellness', effect: 'Lack of sleep impairs memory consolidation, focus, and problem-solving ability — grades drop.' },
+      { icon: '❤️', dim: 'Emotional Wellness', effect: 'Sleep-deprived people are irritable, more prone to anxiety and depression, and struggle to regulate emotions.' },
+      { icon: '👥', dim: 'Social Wellness', effect: 'Poor emotional regulation causes conflicts with friends and family, leading to isolation.' },
+      { icon: '🛠️', dim: 'Occupational/Vocational Wellness', effect: 'Declining grades and motivation destroy Juan\'s sense of purpose and academic achievement.' },
+    ]
+  },
+  B: {
+    title: '💸 Scenario B — Financial/Occupational Crisis',
+    chain: [
+      { icon: '💰', dim: 'Financial Wellness', effect: 'Family loses income; cannot pay for school fees, food, and basic needs.' },
+      { icon: '💪', dim: 'Physical Wellness', effect: 'Food insecurity leads to poor nutrition, malnutrition, and physical weakness.' },
+      { icon: '🧠', dim: 'Mental/Intellectual Wellness', effect: 'Cannot afford school materials; anxiety about poverty impairs learning and focus.' },
+      { icon: '❤️', dim: 'Emotional Wellness', effect: 'Constant financial stress causes anxiety, shame, and depression in both parents and children.' },
+      { icon: '🌍', dim: 'Environmental Wellness', effect: 'May need to move to a smaller, less safe living space with poorer conditions.' },
+    ]
+  },
+  C: {
+    title: '👊 Scenario C — Social Conflict',
+    chain: [
+      { icon: '👥', dim: 'Social Wellness', effect: 'Pedro loses his entire friend group — his primary support system disappears.' },
+      { icon: '❤️', dim: 'Emotional Wellness', effect: 'Without social support, Pedro feels lonely, sad, and deeply hurt. Depression risk rises.' },
+      { icon: '🙏', dim: 'Spiritual Wellness', effect: 'Pedro begins to question his worth and purpose: "Why does nobody like me?" Loss of meaning.' },
+      { icon: '🎨', dim: 'Cultural/Creative Wellness', effect: 'Pedro stops participating in group activities, clubs, and creative pursuits he shared with friends.' },
+      { icon: '💪', dim: 'Physical Wellness', effect: 'Emotional distress causes poor sleep, loss of appetite, and reduced energy for physical activity.' },
+    ]
+  },
+  D: {
+    title: '🏭 Scenario D — Environmental Pollution',
+    chain: [
+      { icon: '🌍', dim: 'Environmental Wellness', effect: 'Polluted air and water in the neighborhood create a toxic, unsafe living environment.' },
+      { icon: '💪', dim: 'Physical Wellness', effect: 'Residents develop respiratory disease, skin conditions, and waterborne illnesses.' },
+      { icon: '❤️', dim: 'Emotional Wellness', effect: 'Constant exposure to illness and uncertainty about safety creates chronic stress and anxiety.' },
+      { icon: '💰', dim: 'Financial Wellness', effect: 'Medical bills from pollution-related illnesses drain family savings and create debt.' },
+      { icon: '👥', dim: 'Social Wellness', effect: 'Fear, illness, and financial stress fracture community bonds and lead to people moving away.' },
+    ]
+  }
+};
+
+function showDomino(key) {
+  const data = dominoData[key];
+  let html = `<div class="section-card animate-in">
+    <h2 style="color:var(--coral);">🎯 ${data.title}</h2>
+    <p style="font-size:0.85rem;margin-bottom:14px;opacity:0.7;">Watch how ONE dimension failing creates a chain reaction…</p>`;
+  data.chain.forEach((step, i) => {
+    html += `<div style="display:flex;align-items:flex-start;gap:12px;margin-bottom:12px;">
+      <div style="flex-shrink:0;font-size:1.4rem;">${step.icon}</div>
+      <div>
+        <div style="font-weight:800;font-size:0.85rem;color:var(--coral);">→ ${step.dim}</div>
+        <div style="font-size:0.83rem;line-height:1.6;color:#374151;">${step.effect}</div>
+      </div>
+    </div>`;
+    if (i < data.chain.length - 1) {
+      html += `<div style="text-align:center;color:#D1D5DB;font-size:1.2rem;margin:-4px 0 8px;">⬇️</div>`;
+    }
+  });
+  html += `</div>`;
+  document.getElementById('domino-result').innerHTML = html;
+}
+
+// =============================================
+// PLAN BUILDER (Day 5)
+// =============================================
+function buildPlanBuilder() {
+  const container = document.getElementById('plan-builder');
+  if (!container) return;
+  let html = '';
+  const planDims = [
+    { icon: '💪', label: 'Physical Wellness', placeholder: 'E.g., Walk or exercise for 30 minutes every day after school' },
+    { icon: '🧠', label: 'Mental/Intellectual Wellness', placeholder: 'E.g., Read for 20 minutes each night or learn one new fact daily' },
+    { icon: '❤️', label: 'Emotional Wellness', placeholder: 'E.g., Write in a journal every evening about how I felt that day' },
+    { icon: '👥', label: 'Social Wellness', placeholder: 'E.g., Call or message a friend at least 3 times per week' },
+    { icon: '🙏', label: 'Spiritual Wellness', placeholder: 'E.g., Spend 5 minutes daily in quiet reflection or gratitude practice' },
+    { icon: '🌍', label: 'Environmental Wellness', placeholder: 'E.g., Clean my room every Saturday and pick up litter in my barangay once a week' },
+    { icon: '🎨', label: 'Cultural/Creative Wellness', placeholder: 'E.g., Practice folk dance or draw for 15 minutes twice a week' },
+    { icon: '🛠️', label: 'Occupational/Vocational Wellness', placeholder: 'E.g., Research my dream career and identify 2 skills I need to develop' },
+    { icon: '💰', label: 'Financial Wellness', placeholder: 'E.g., Save ₱5 of my daily allowance and track spending in a notebook' },
+  ];
+  planDims.forEach(d => {
+    html += `<div style="margin-bottom:14px;">
+      <label style="font-size:0.88rem;font-weight:800;color:var(--green);display:flex;align-items:center;gap:6px;margin-bottom:5px;">
+        <span>${d.icon}</span> ${d.label}
+      </label>
+      <textarea class="reflect-area" style="min-height:60px;" placeholder="${d.placeholder}"></textarea>
+    </div>`;
+  });
+  container.innerHTML = html;
+}
+
+// =============================================
+// INIT
+// =============================================
+document.addEventListener('DOMContentLoaded', () => {
+  renderAllQuizzes();
+  buildWheelSliders();
+  buildPlanBuilder();
+});
+</script>
+</body>
+</html>
